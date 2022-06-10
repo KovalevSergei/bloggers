@@ -13,7 +13,7 @@
     "dev": "nodemon --inspect dist/test.js",
     "watch": "tsc -w",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/test.js"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
