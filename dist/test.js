@@ -29,8 +29,9 @@ app.get("/bloggers/:bloggersid", (req, res) => {
     }
 });
 app.post("/bloggers", (req, res) => {
-    let title = req.body.title;
-    if (!title || typeof title !== 'string' || !title.trim()) {
+    const name = req.body.name;
+    const youtubeUrl = req.body.youtubeUrl;
+    if (!name || typeof name !== 'string' || !name.trim()) {
         res.status(400).send({
             "errorsMessages": [
                 {
@@ -41,8 +42,6 @@ app.post("/bloggers", (req, res) => {
         });
         return;
     }
-    const name = req.body.name;
-    const youtubeUrl = req.body.youtubeUrl;
     const bloggersnew = {
         id: +(new Date()),
         name: name,
@@ -76,15 +75,14 @@ app.put('/bloggers/:id', (req, res) => {
         });
         return;
     }
-    // put your code here
     const id = +req.params.id;
     const bloggersnew = bloggers.find(v => v.id === id);
     if (!bloggersnew) {
         res.sendStatus(404);
     }
     else {
-        bloggers[id] = req.body.name;
-        bloggers[id] = req.body.youtubeUrl;
+        bloggers[id].name = req.body.name;
+        bloggers[id].youtubeUrl = req.body.youtubeUrl;
         res.status(204);
         res.json(bloggers);
     }
