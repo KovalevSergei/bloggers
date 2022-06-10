@@ -1,6 +1,6 @@
-import express, {Request, response, Response} from 'express';
+import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser'
-import { send } from 'process';
+
 //import { ReadableStreamBYOBRequest } from 'stream/web';
 //import { request } from 'http';
 
@@ -97,7 +97,7 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     bloggers[id].youtubeUrl=req.body.youtubeUrl;
     res.status(204)
 
-    res.json(bloggers).send(bloggers[id])
+    res.json(bloggers)
   }
 })
  
