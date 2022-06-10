@@ -1,5 +1,6 @@
 import express, {Request, response, Response} from 'express';
 import bodyParser from 'body-parser'
+import { send } from 'process';
 //import { ReadableStreamBYOBRequest } from 'stream/web';
 //import { request } from 'http';
 
@@ -25,8 +26,10 @@ app.get("/bloggers/:bloggersid", (req : Request, res : Response) =>{
   }
 })
 app.post("/bloggers", (req : Request, res: Response)=>{
-  let title= req.body.title
-  if(!title || typeof title !=='string' || !title.trim()){
+  const name = req.body.name
+  const youtubeUrl = req.body.youtubeUrl
+  
+  if(!name || typeof name !=='string' || !name.trim()){
     res.status(400).send({
       "errorsMessages": [
         {
@@ -39,8 +42,7 @@ app.post("/bloggers", (req : Request, res: Response)=>{
 
 
   }
-  const name = req.body.name
-  const youtubeUrl = req.body.youtubeUrl
+ 
 
   const bloggersnew = {
     id: +(new Date()),
@@ -83,7 +85,7 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     return
   }
          
-  // put your code here
+
   const id=+req.params.id;
   const bloggersnew=bloggers.find(v=> v.id===id)
 
@@ -91,11 +93,11 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     res.sendStatus(404)
   }else{
 
-    bloggers[id]= req.body.name;
-    bloggers[id]=req.body.youtubeUrl;
+    bloggers[id].name= req.body.name;
+    bloggers[id].youtubeUrl=req.body.youtubeUrl;
     res.status(204)
 
-    res.json(bloggers)
+    res.json(bloggers).send(bloggers[id])
   }
 })
  
