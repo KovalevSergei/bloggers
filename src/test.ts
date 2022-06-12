@@ -125,8 +125,8 @@ let posts=[
 
 
  app.get('/posts/:id', (req : Request, res : Response)=>{
-  const idz=+req.params.id;
-  const postsid=posts.find(v => v.id===idz);
+  const id=+req.params.id;
+  const postsid=posts.find(v => v.id===id);
   if(!postsid){
     res.sendStatus(404)
     res.sendStatus(400)
@@ -167,6 +167,8 @@ let posts=[
       bloggerId: title4,
       bloggerName: "ole"
     }
+    posts.push(postnew)
+    res.sendStatus(201).send(postnew)
 
   }
  })
