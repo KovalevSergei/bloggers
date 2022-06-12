@@ -35,7 +35,9 @@ app.post("/bloggers", (req : Request, res: Response)=>{
         {
           "message": "string",
           "field": "string"
-        }
+        },
+        { message: "privet", field: "privet" }
+
       ]
     })
     return
@@ -78,7 +80,8 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     res.status(400).send({
       "errorsMessages": [{
           "message": "Incorrect title",
-          "field": "title" }
+          "field": "title" },
+          { message: "privet2", field: "privet2" }
       ],
     
     })
