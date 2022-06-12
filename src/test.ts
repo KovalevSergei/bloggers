@@ -139,8 +139,37 @@ let posts=[
  })
 
  app.put('/posts/:id',(req : Request, res : Response)=>{
-  let title = req.body.id
+  let title= req.body.title;
+  let title2= req.body.shortDescription;
+  let title3= req.body.content;
+  let title4= req.body.bloggerId;
+  if (!title || typeof title !=='string' || !title.trim() || title.length > 30 || 
+      !title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 || 
+      !title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000 ||
+      !title4 || typeof title4 !=='number') {
+        res.status(400).send({
+          "errorsMessages": [
+            {
+              "message": "neverno",
+              "field": "neverno"
+            }
+          ]
+        })
+        return
+      }
+ let id= +req.params.id;
+ const postsnew =posts.find(v => v.id === id)
+ if (!postsnew){
+  res.sendStatus(404)
 
+ }else{
+  postsnew.title = title
+  postsnew.shortDescription=title2
+  postsnew.content=title3
+  postsnew.bloggerId=title4
+  res.status(204).send(postsnew)
+  res.json(postsnew)
+ }
  })
  app.post('/posts', (req : Request, res : Response)=>{
   let title= req.body.title;
