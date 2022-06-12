@@ -84,12 +84,11 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     res.status(400).send({
       "errorsMessages": [{
           "message": "Incorrect title",
-          "field": "title" },
-          { message: "privet2", field: "privet2" }
+          "field": "title" }
       ],
     
     })
-    return
+  return
   }
          
 
