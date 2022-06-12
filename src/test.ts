@@ -16,12 +16,14 @@ const bloggers=[
 ]
 app.get("/bloggers", (req: Request, res: Response) => {
   res.send(bloggers);
+  res.sendStatus(200)
 })
 app.get("/bloggers/:bloggersid", (req : Request, res : Response) =>{
   const id= +req.params.bloggersid;
   const blog=bloggers.find(v => v.id===id)
   if (blog){
     res.json(blog)
+    res.sendStatus(200)
   }else{
     res.sendStatus(404)
   }
@@ -118,6 +120,7 @@ let posts=[
 ]
  app.get('/posts', ( req : Request, res : Response)=>{
   res.send(posts)
+  res.sendStatus(200)
  })
 
 
@@ -129,6 +132,7 @@ let posts=[
     res.sendStatus(400)
   }else{
    res.json(postsid)
+   res.sendStatus(200)
 
   }
  })
