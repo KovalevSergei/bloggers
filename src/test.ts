@@ -29,7 +29,7 @@ app.post("/bloggers", (req : Request, res: Response)=>{
   const name = req.body.name
   const youtubeUrl = req.body.youtubeUrl
   
-  if(!name || typeof name !=='string' || !name.trim()){
+  if(!name || typeof name !=='string' || !name.trim() || name>15 || youtubeUrl>100){
     res.status(400).send({
       "errorsMessages": [
         {
@@ -76,7 +76,7 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
 
   let title= req.body.name
   let urll=req.body.youtubeUrl
-  if (!title || typeof title !=='string' || !title.trim() || !urll || typeof urll !=="string" || !urll.trim()){
+  if (!title || typeof title !=='string' || !title.trim() || !urll || typeof urll !=="string" || !urll.trim() || title.length>15 || urll.length>100){
     res.status(400).send({
       "errorsMessages": [{
           "message": "Incorrect title",
