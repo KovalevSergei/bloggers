@@ -1,5 +1,6 @@
 import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser'
+import { send } from 'process';
 
 //import { ReadableStreamBYOBRequest } from 'stream/web';
 //import { request } from 'http';
@@ -103,7 +104,49 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     res.json(bloggers)
   }
 })
- 
+
+
+let posts=[
+  {
+    id: 0,
+    title: "pety",
+    shortDescription: "va",
+    content: "bog",
+    bloggerId: 0,
+    bloggerName: "ole"
+  }
+]
+ app.get('/posts', ( req : Request, res : Response)=>{
+  res.send(posts)
+ })
+
+
+ app.get('/posts/:id', (req : Request, res : Response)=>{
+  const idz=+req.params.id;
+  const postsid=posts.find(v => v.id===idz);
+  if(!postsid){
+    res.sendStatus(404)
+    res.sendStatus(400)
+  }else{
+   res.json(postsid)
+
+  }
+ })
+
+// app.put('/posts/:id',(req : Request, res : Response)=>{
+
+ //})
+
+ app.delete('/posts/:id', (req : Request, res : Response)=>{
+  const id= +req.params.id;
+  const ind=posts.findIndex(v => v.id=== id)
+  if (ind===-1){
+    res.sendStatus(404)
+  }else{
+    posts.splice(ind,1)
+    res.sendStatus(204)
+  }
+ })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
