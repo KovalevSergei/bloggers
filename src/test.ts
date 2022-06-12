@@ -30,9 +30,10 @@ app.get("/bloggers/:bloggersid", (req : Request, res : Response) =>{
 })
 app.post("/bloggers", (req : Request, res: Response)=>{
   const name = req.body.name
-  const youtubeUrl = req.body.youtubeUrl
+  const yout = req.body.youtubeUrl
   
-  if(!name || typeof name !=='string' || !name.trim() || name.length>15 || youtubeUrl.length>100){
+  if(!name || typeof name !=='string' || !name.trim() || name.length>15 || 
+  !yout|| typeof yout !=='string' || !yout.trim() || yout.length > 100){
     res.status(400).send({
       "errorsMessages": [
         {
@@ -52,7 +53,7 @@ app.post("/bloggers", (req : Request, res: Response)=>{
   const bloggersnew = {
     id: +(new Date()),
     name: name,
-    youtubeUrl: youtubeUrl
+    youtubeUrl: yout
 }
 
   bloggers.push(bloggersnew)
@@ -137,9 +138,10 @@ let posts=[
   }
  })
 
-// app.put('/posts/:id',(req : Request, res : Response)=>{
+ app.put('/posts/:id',(req : Request, res : Response)=>{
+  let title = req.body.id
 
- //})
+ })
  app.post('/posts', (req : Request, res : Response)=>{
   let title= req.body.title;
   let title2= req.body.shortDescription;
