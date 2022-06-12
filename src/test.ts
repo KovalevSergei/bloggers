@@ -29,7 +29,7 @@ app.post("/bloggers", (req : Request, res: Response)=>{
   const name = req.body.name
   const youtubeUrl = req.body.youtubeUrl
   
-  if(!name || typeof name !=='string' || !name.trim() || name>15 || youtubeUrl>100){
+  if(!name || typeof name !=='string' || !name.trim() || name.length>15 || youtubeUrl.length>100){
     res.status(400).send({
       "errorsMessages": [
         {
