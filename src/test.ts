@@ -148,7 +148,7 @@ let posts=[
   if (!title || typeof title !=='string' || !title.trim() || title.length > 30 || 
       !title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 || 
       !title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000 ||
-      !title4 || typeof title !=='number') {
+      !title4 || typeof title4 !=='number') {
         res.status(400).send({
           "errorsMessages": [
             {
