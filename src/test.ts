@@ -99,11 +99,11 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     res.sendStatus(404)
   }else{
 
-    bloggers[id].name= req.body.name;
-    bloggers[id].youtubeUrl=req.body.youtubeUrl;
+    bloggersnew.name= req.body.name;
+    bloggersnew.youtubeUrl=req.body.youtubeUrl;
     res.status(204)
 
-    res.json(bloggers)
+    res.json(bloggersnew)
   }
 })
 
