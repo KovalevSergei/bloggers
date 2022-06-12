@@ -140,6 +140,36 @@ let posts=[
 // app.put('/posts/:id',(req : Request, res : Response)=>{
 
  //})
+ app.post('/posts', (req : Request, res : Response)=>{
+  let title= req.body.title;
+  let title2= req.body.shortDescription;
+  let title3= req.body.content;
+  let title4= req.body.bloggerId;
+  if (!title || typeof title !=='string' || !title.trim() || title.length > 30 || 
+      !title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 || 
+      !title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000 ||
+      !title4 || typeof title !=='number') {
+        res.status(400).send({
+          "errorsMessages": [
+            {
+              "message": "neverno",
+              "field": "neverno"
+            }
+          ]
+        })
+
+  }else{
+    const postnew={
+      id: +(new Date()),
+      title: title,
+      shortDescription: title2,
+      content: title3,
+      bloggerId: title4,
+      bloggerName: "ole"
+    }
+
+  }
+ })
 
  app.delete('/posts/:id', (req : Request, res : Response)=>{
   const id= +req.params.id;
