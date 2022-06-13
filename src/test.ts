@@ -171,6 +171,8 @@ let posts=[
  }
  })
  app.post('/posts', (req : Request, res : Response)=>{
+  console.log('!!!!!');
+  
   let title= req.body.title;
   let title2= req.body.shortDescription;
   let title3= req.body.content;
@@ -183,7 +185,7 @@ let posts=[
           "errorsMessages": [
             {
               "message": "neverno",
-              "field": "neverno"
+              "field": "content"
             }
           ]
         })
@@ -198,8 +200,7 @@ let posts=[
       bloggerName: "ole"
     }
     posts.push(postnew)
-    res.sendStatus(201).send(postnew)
-
+    res.status(201).send(postnew)
   }
  })
 
