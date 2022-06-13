@@ -164,7 +164,7 @@ app.post('/posts', (req, res) => {
             "errorsMessages": [
                 {
                     "message": "neverno",
-                    "field": "neverno"
+                    "field": "content"
                 }
             ]
         });
