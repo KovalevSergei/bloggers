@@ -173,7 +173,7 @@ let posts=[
  let id= +req.params.id;
  const postsnew =posts.find(v => v.id === id)
  if (!postsnew){
-  res.sendStatus(400)
+  res.sendStatus(404)
 
  }else{
   postsnew.title = title
@@ -223,7 +223,7 @@ let posts=[
     posts.push(postnew)
     res.status(201).send(postnew)
   }else{
-    res.sendStatus(400)
+    res.sendStatus(404)
 
   }
  })
