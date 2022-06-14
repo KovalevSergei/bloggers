@@ -179,7 +179,7 @@ let posts=[
   postsnew.title = title
   postsnew.shortDescription=title2
   postsnew.content=title3
-  postsnew.bloggerId=postsnew.id
+  postsnew.bloggerId=title4
   res.status(204).send(postsnew)
   res.json(postsnew)
  }
@@ -223,7 +223,7 @@ let posts=[
     posts.push(postnew)
     res.status(201).send(postnew)
   }else{
-    res.sendStatus(404)
+    res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })
 
   }
  })
