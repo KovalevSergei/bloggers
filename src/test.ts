@@ -38,7 +38,7 @@ app.post("/bloggers", (req : Request, res: Response)=>{
     errors.push({message: 'Incorrect name', field: 'name'})
   } 
  if (!yout|| typeof yout !=='string' || !yout.trim() || yout.length > 100 || !yout.match(urlRegExp)){
-  errors.push ( {message: 'Incorrect url', field: 'url'}) 
+  errors.push ( {message: 'Incorrect url', field: 'youtubeUrl'}) 
   
  }
  if (errors.length>0){
@@ -88,7 +88,7 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     errors.push({message: 'Incorrect name', field: 'name'})
   } 
  if (!yout|| typeof yout !=='string' || !yout.trim() || yout.length > 100 || !yout.match(urlRegExp)){
-  errors.push ({message: 'Incorrect url', field: 'url'})
+  errors.push ({message: 'Incorrect url', field: 'youtubeUrl'})
   
  }
  if (errors.length>0){
@@ -158,7 +158,7 @@ let posts=[
     errs2.push({message: 'title', field: 'title'})
   }
   if (!title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 ){
-    errs2.push({message: 'shortDes', field: 'shortDes'})
+    errs2.push({message: 'shortDes', field: 'shortDescription'})
   }
   if (!title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000){
     errs2.push({message: 'content', field: 'content'})
@@ -197,7 +197,7 @@ let posts=[
     errs2.push({message: 'title', field: 'title'})
   }
   if (!title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 ){
-    errs2.push({message: 'shortDes', field: 'shortDes'})
+    errs2.push({message: 'shortDes', field: 'shortDescription'})
   }
   if (!title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000){
     errs2.push({message: 'content', field: 'content'})
