@@ -168,8 +168,20 @@ let posts=[
         res.status(400).send({
           errorsMessages: errs2
         })
-        return
+        return 
       }
+      const nameblog=bloggers.find(v=> v.id===title4)
+      if (! nameblog){
+      
+      res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })
+      return
+    }
+
+
+
+
+
+
  let id= +req.params.id;
  const postsnew =posts.find(v => v.id === id)
  if (!postsnew){
