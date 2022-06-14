@@ -35,15 +35,15 @@ app.post("/bloggers", (req : Request, res: Response)=>{
   const yout = req.body.youtubeUrl
   const errors=[]
   if(!name || typeof name !=='string' || !name.trim() || name.length>15){
-    errors.push( {message: 'Incorrect name', field: 'name'})
+    errors.push({message: 'Incorrect name', field: 'name'})
   } 
  if (!yout|| typeof yout !=='string' || !yout.trim() || yout.length > 100 || !yout.match(urlRegExp)){
   errors.push ( {message: 'Incorrect url', field: 'url'}) 
   
  }
  if (errors.length>0){
-    res.status(400).send({
-      "errorsMessages": errors
+    res.status(400).json({
+      errorsMessages: errors
     })
     
 
@@ -93,7 +93,7 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
  }
  if (errors.length>0){
     res.status(400).send({
-      "errorsMessages": errors
+      errorsMessages: errors
     })
   }
 
