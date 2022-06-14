@@ -179,42 +179,52 @@ let posts=[
   postsnew.title = title
   postsnew.shortDescription=title2
   postsnew.content=title3
-  postsnew.bloggerId=title4
+  postsnew.bloggerId=postsnew.id
   res.status(204).send(postsnew)
   res.json(postsnew)
  }
  })
  app.post('/posts', (req : Request, res : Response)=>{
-  console.log('!!!!!');
+  
   
   let title= req.body.title;
   let title2= req.body.shortDescription;
   let title3= req.body.content;
   let title4= req.body.bloggerId;
-  if (!title || typeof title !=='string' || !title.trim() || title.length > 30 || 
-      !title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 || 
-      !title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000 ||
-      !title4 || typeof title4 !=='number') {
-        res.status(400).send({
-          "errorsMessages": [
-            {
-              "message": "neverno",
-              "field": "content"
-            }
-          ]
-        })
+  const errs2=[]
 
-  }else{
+  if (!title || typeof title !=='string' || !title.trim() || title.length > 30){
+    errs2.push({message: 'title', field: 'title'})
+  }
+  if (!title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 ){
+    errs2.push({message: 'shortDes', field: 'shortDes'})
+  }
+  if (!title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000){
+    errs2.push({message: 'content', field: 'content'})
+  }
+  if(errs2.length>0)
+    {
+        res.status(400).send({
+          errorsMessages: errs2
+        })
+        return
+      }
+  
+    const nameblog=bloggers.find(v=> v.id===title4)
+    if (nameblog){
     const postnew={
       id: +(new Date()),
       title: title,
       shortDescription: title2,
       content: title3,
-      bloggerId: title4,
-      bloggerName: "ole"
+      bloggerId: nameblog.id,
+      bloggerName: nameblog.name
     }
     posts.push(postnew)
     res.status(201).send(postnew)
+  }else{
+    res.sendStatus(404)
+
   }
  })
 
