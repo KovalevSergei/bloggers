@@ -152,17 +152,21 @@ let posts=[
   let title2= req.body.shortDescription;
   let title3= req.body.content;
   let title4= req.body.bloggerId;
-  if (!title || typeof title !=='string' || !title.trim() || title.length > 30 || 
-      !title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 || 
-      !title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000 ||
-      !title4 || typeof title4 !=='number') {
+  const errs2=[]
+
+  if (!title || typeof title !=='string' || !title.trim() || title.length > 30){
+    errs2.push({message: 'title', field: 'title'})
+  }
+  if (!title2 || typeof title2 !=='string' || !title2.trim() || title2.length > 100 ){
+    errs2.push({message: 'shortDes', field: 'shortDes'})
+  }
+  if (!title3 || typeof title3 !=='string' || !title3.trim() || title3.length > 1000){
+    errs2.push({message: 'content', field: 'content'})
+  }
+  if(errs2.length>0)
+    {
         res.status(400).send({
-          "errorsMessages": [
-            {
-              "message": "neverno",
-              "field": "neverno"
-            }
-          ]
+          errorsMessages: errs2
         })
         return
       }
