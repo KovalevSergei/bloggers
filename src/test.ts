@@ -8,6 +8,8 @@ import { send } from 'process';
 const app = express();
 const port = process.env.PORT ||5000;
 app.use(bodyParser.json())
+
+const urlRegExp=/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/
   
 const bloggers=[
   {id: 1, name: "Vasy", youtubeUrl:"dvjdjvf"},
@@ -31,23 +33,22 @@ app.get("/bloggers/:bloggersid", (req : Request, res : Response) =>{
 app.post("/bloggers", (req : Request, res: Response)=>{
   const name = req.body.name
   const yout = req.body.youtubeUrl
+  const errors=[]
+  if(!name || typeof name !=='string' || !name.trim() || name.length>15){
+    errors.push({message: 'Incorrect name', field: 'name'})
+  } 
+ if (!yout|| typeof yout !=='string' || !yout.trim() || yout.length > 100 || !yout.match(urlRegExp)){
+  errors.push ({message: 'Incorrect url', field: 'url'}) 
   
-  if(!name || typeof name !=='string' || !name.trim() || name.length>15 || 
-  !yout|| typeof yout !=='string' || !yout.trim() || yout.length > 100){
+ }
+ if (errors.length>0){
     res.status(400).send({
-      "errorsMessages": [
-        {
-          "message": "string",
-          "field": "string"
-        },
-        { message: "privet", field: "privet" }
-
-      ]
+      "errorsMessages": errors
     })
-    return
+    
 
 
-  }
+  }else{
  
 
   const bloggersnew = {
@@ -58,6 +59,8 @@ app.post("/bloggers", (req : Request, res: Response)=>{
 
   bloggers.push(bloggersnew)
   res.status(201).send(bloggersnew)
+}
+
 })
 
 app.delete('/bloggers/:id',(req: Request, res: Response)=>{
@@ -78,18 +81,24 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
 
  app.put('/bloggers/:id',(req: Request, res: Response)=>{
 
-  let title= req.body.name
-  let urll=req.body.youtubeUrl
-  if (!title || typeof title !=='string' || !title.trim() || !urll || typeof urll !=="string" || !urll.trim() || title.length>15 || urll.length>100){
+  let name= req.body.name
+  let yout=req.body.youtubeUrl
+  const errors=[]
+  if(!name || typeof name !=='string' || !name.trim() || name.length>15){
+    errors.push({message: 'Incorrect name', field: 'name'})
+  } 
+ if (!yout|| typeof yout !=='string' || !yout.trim() || yout.length > 100 || !yout.match(urlRegExp)){
+  errors.push ({message: 'Incorrect url', field: 'url'})
+  
+ }
+ if (errors.length>0){
     res.status(400).send({
-      "errorsMessages": [{
-          "message": "Incorrect title",
-          "field": "title" }
-      ],
-    
+      "errorsMessages": errors
     })
-  return
   }
+
+
+  
          
 
   const id=+req.params.id;
@@ -106,6 +115,7 @@ app.delete('/bloggers/:id',(req: Request, res: Response)=>{
     res.json(bloggersnew)
   }
 })
+
 
 
 let posts=[
