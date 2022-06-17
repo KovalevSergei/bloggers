@@ -4,7 +4,7 @@ export const postsRouter=Router()
 import {inputValidation} from '../middleware/validation'
 import {body, validationResult} from 'express-validator'
 import { title } from "process"
-import {basicAuthMiddlewareBuilder} from '../middleware/basicAuth';
+import {basicAuthMiddlewareBuilder} from '../middleware/basicAuth';  
 
 
 
