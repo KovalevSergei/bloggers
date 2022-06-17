@@ -15,7 +15,7 @@ exports.bloggersRouter.get("/", (req, res) => {
     res.send(getBloggers);
 });
 exports.bloggersRouter.get("/:bloggersid", (req, res) => {
-    const blog = bloggers_repository_1.bloggersRepository.getBloggersById(+req.params.bloggerId);
+    const blog = bloggers_repository_1.bloggersRepository.getBloggersById(+req.params.bloggersId);
     if (blog) {
         res.json(blog);
         res.sendStatus(200);
