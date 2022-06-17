@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsRouter = void 0;
 const express_1 = require("express");
@@ -6,7 +9,7 @@ const posts_repository_1 = require("../repositories/posts-repository");
 exports.postsRouter = (0, express_1.Router)();
 const validation_1 = require("../middleware/validation");
 const express_validator_1 = require("express-validator");
-const basicAuth_1 = require("../middleware/basicAuth");
+const basicAuth_1 = __importDefault(require("../middleware/basicAuth"));
 const titleValidation = (0, express_validator_1.body)("title").trim().isLength({ min: 1, max: 30 }).isString();
 const shortDescriptionValidation = (0, express_validator_1.body)("shortDescription").trim().isString().isLength({ min: 1, max: 100 });
 const contentValidation = (0, express_validator_1.body)("title").isString().trim().isLength({ min: 1, max: 1000 });
@@ -26,7 +29,7 @@ exports.postsRouter.get('/:id', (req, res) => {
         res.sendStatus(200);
     }
 });
-exports.postsRouter.put('/:id', titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
+exports.postsRouter.put('/:id', basicAuth_1.default, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
     const postsnew = posts_repository_1.postsRepository.updatePostsId(+req.body.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postsnew) {
         res.status(204).send(postsnew);
@@ -62,8 +65,7 @@ exports.postsRouter.put('/:id', titleValidation, shortDescriptionValidation, con
           }
        */
 });
-exports.postsRouter.use(basicAuth_1.basicAuthMiddlewareBuilder);
-exports.postsRouter.post('/posts', titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
+exports.postsRouter.post('/posts', basicAuth_1.default, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
     const postnew = posts_repository_1.postsRepository.createPosts(+req.body.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postnew) {
         res.status(201).send(postnew);
@@ -94,7 +96,7 @@ exports.postsRouter.post('/posts', titleValidation, shortDescriptionValidation, 
           return
         } */
 });
-exports.postsRouter.delete('/:id', (req, res) => {
+exports.postsRouter.delete('/:id', basicAuth_1.default, (req, res) => {
     const isdelete = posts_repository_1.postsRepository.deletePosts(+req.params.id);
     if (isdelete) {
         res.sendStatus(204);

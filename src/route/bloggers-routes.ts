@@ -4,10 +4,10 @@ export const bloggersRouter=Router()
 import {body, validationResult} from 'express-validator'
 import {inputValidation} from '../middleware/validation'
 import basicAuth from "../middleware/basicAuth"
-
-const urlRegExp=/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/
-const nameValidation=body('name').isLength({min:1, max: 15}).trim().isString()
-const youtubeUrlValidation=body("youtubeUrl").isString().trim().matches(urlRegExp).isLength({min:1, max: 100})
+const maxNameLength = 15;
+const urlRegExp="^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$"
+const nameValidation=body('name').exists().trim().notEmpty().isLength({min:1, max: 15}).withMessage(`Name should be less than ${maxNameLength} symbols`);
+const youtubeUrlValidation=body("youtubeUrl").exists().trim().notEmpty().isString().matches(urlRegExp).isLength({min:1, max: 100})
 
 bloggersRouter.get("/", (req: Request, res: Response) => {
     const getBloggers=bloggersRepository.getBloggers();
