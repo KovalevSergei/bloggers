@@ -1,6 +1,6 @@
 import basicAuth from 'express-basic-auth';
 
-export const basicAuthMiddlewareBuilder = basicAuth({
+export default basicAuth({
     users:{ admin: 'qwerty'},
     challenge: true,
 });

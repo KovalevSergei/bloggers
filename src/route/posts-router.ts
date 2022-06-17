@@ -4,7 +4,7 @@ export const postsRouter=Router()
 import {inputValidation} from '../middleware/validation'
 import {body, validationResult} from 'express-validator'
 import { title } from "process"
-import {basicAuthMiddlewareBuilder} from '../middleware/basicAuth';  
+import basicAuth from "../middleware/basicAuth"
 
 
 
@@ -12,6 +12,7 @@ import {basicAuthMiddlewareBuilder} from '../middleware/basicAuth';
 const titleValidation=body("title").trim().isLength({min:1, max:30}).isString()
 const shortDescriptionValidation=body("shortDescription").trim().isString().isLength({min:1, max:100})
 const contentValidation=body("title").isString().trim().isLength({min:1, max:1000})
+
 postsRouter.get('/', ( req : Request, res : Response)=>{
     const getPosts=postsRepository.getPosts()
     res.send(getPosts)
@@ -31,8 +32,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
     }
    })
 
-
-   postsRouter.put('/:id',titleValidation,shortDescriptionValidation,contentValidation, inputValidation, (req : Request, res : Response)=>{
+   postsRouter.put('/:id',basicAuth,titleValidation,shortDescriptionValidation,contentValidation, inputValidation, (req : Request, res : Response)=>{
     const postsnew=postsRepository.updatePostsId(+req.body.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
     if(postsnew){
     res.status(204).send(postsnew)
@@ -68,9 +68,9 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
    */
   
    })
-   postsRouter.use(basicAuthMiddlewareBuilder)
+ 
 
-   postsRouter.post('/posts',titleValidation,shortDescriptionValidation,contentValidation,inputValidation,(req : Request, res : Response)=>{
+   postsRouter.post('/posts', basicAuth, titleValidation, shortDescriptionValidation,contentValidation,inputValidation,(req : Request, res : Response)=>{
     const postnew=postsRepository.createPosts(+req.body.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
   if(postnew){
     res.status(201).send(postnew)
@@ -105,7 +105,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
    })
   
 
-   postsRouter.delete('/:id', (req : Request, res : Response)=>{
+   postsRouter.delete('/:id',basicAuth, (req : Request, res : Response)=>{
     const isdelete=postsRepository.deletePosts(+req.params.id)
     if (isdelete){
         res.sendStatus(204)

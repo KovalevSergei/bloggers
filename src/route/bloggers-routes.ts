@@ -3,11 +3,11 @@ import { bloggersRepository } from "../repositories/bloggers-repository"
 export const bloggersRouter=Router()
 import {body, validationResult} from 'express-validator'
 import {inputValidation} from '../middleware/validation'
+import basicAuth from "../middleware/basicAuth"
 
 const urlRegExp=/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/
 const nameValidation=body('name').isLength({min:1, max: 15}).trim().isString()
 const youtubeUrlValidation=body("youtubeUrl").isString().trim().matches(urlRegExp).isLength({min:1, max: 100})
-import {basicAuthMiddlewareBuilder} from '../middleware/basicAuth';
 
 bloggersRouter.get("/", (req: Request, res: Response) => {
     const getBloggers=bloggersRepository.getBloggers();
@@ -24,7 +24,7 @@ bloggersRouter.get("/:bloggersid", (req : Request, res : Response) =>{
     }
   })
 
-bloggersRouter.delete('/:id',(req: Request, res: Response)=>{
+bloggersRouter.delete('/:id', basicAuth, (req: Request, res: Response)=>{
     const bloggerdel=bloggersRepository.deleteBloggersById(+req.params.id)
     if (bloggerdel){
     res.sendStatus(204)
@@ -33,8 +33,7 @@ bloggersRouter.delete('/:id',(req: Request, res: Response)=>{
     }
    
    })
-   bloggersRouter.use(basicAuthMiddlewareBuilder)
-   bloggersRouter.post("/",nameValidation,youtubeUrlValidation,inputValidation, (req : Request, res: Response)=>{
+   bloggersRouter.post("/", basicAuth, nameValidation,youtubeUrlValidation,inputValidation, (req : Request, res: Response)=>{
     const bloggersnew=bloggersRepository.createBloggers(req.body.name,req.body.youtubeUrl )
     if (bloggersnew){
     res.status(201).send(bloggersnew)   
@@ -43,7 +42,7 @@ bloggersRouter.delete('/:id',(req: Request, res: Response)=>{
   })
   
 
-  bloggersRouter.put('/:id',nameValidation,youtubeUrlValidation,inputValidation,(req: Request, res: Response)=>{
+  bloggersRouter.put('/:id', basicAuth, nameValidation,youtubeUrlValidation,inputValidation,(req: Request, res: Response)=>{
     const bloggersnew=bloggersRepository.updateBloggers(+req.params.id, req.params.name, req.params.youtubeUrl)
     if(bloggersnew){
         res.status(204)
