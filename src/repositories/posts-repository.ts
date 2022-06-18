@@ -22,7 +22,7 @@ updatePostsId(id: number, title: string, shortDescription:string, content:string
     postsnew.title = title
     postsnew.shortDescription=shortDescription
     postsnew.content=content
-    postsnew.bloggerId=+bloggerId
+    
     return postsnew
    
    }

@@ -20,7 +20,6 @@ exports.postsRepository = {
             postsnew.title = title;
             postsnew.shortDescription = shortDescription;
             postsnew.content = content;
-            postsnew.bloggerId = +bloggerId;
             return postsnew;
         }
     },
