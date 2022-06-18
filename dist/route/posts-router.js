@@ -31,7 +31,7 @@ exports.postsRouter.get('/:postsid', (req, res) => {
     }
 });
 exports.postsRouter.put('/:id', basicAuth_1.default, BlogerIdValidation, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
-    const postsnew = posts_repository_1.postsRepository.updatePostsId(+req.body.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
+    const postsnew = posts_repository_1.postsRepository.updatePostsId(+req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postsnew) {
         res.status(204).send(postsnew);
         res.json(postsnew);

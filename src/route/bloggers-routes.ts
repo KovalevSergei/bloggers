@@ -4,6 +4,8 @@ export const bloggersRouter=Router()
 import {body, validationResult} from 'express-validator'
 import {inputValidation} from '../middleware/validation'
 import basicAuth from "../middleware/basicAuth"
+
+
 const maxNameLength = 15;
 const urlRegExp="^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$"
 const nameValidation=body('name').exists().trim().notEmpty().isLength({min:1, max: 15}).withMessage(`Name should be less than ${maxNameLength} symbols`);
@@ -43,7 +45,7 @@ bloggersRouter.delete('/:id', basicAuth, (req: Request, res: Response)=>{
   
 
   bloggersRouter.put('/:id', basicAuth, nameValidation,youtubeUrlValidation,inputValidation,(req: Request, res: Response)=>{
-    const bloggersnew=bloggersRepository.updateBloggers(+req.params.id, req.params.name, req.params.youtubeUrl)
+    const bloggersnew=bloggersRepository.updateBloggers(+req.params.id, req.body.name, req.body.youtubeUrl)
     if(bloggersnew){
         res.status(204)
         res.json(bloggersnew)
