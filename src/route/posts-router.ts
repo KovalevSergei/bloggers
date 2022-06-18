@@ -35,11 +35,15 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
 
    postsRouter.put('/:id',basicAuth,titleValidation,shortDescriptionValidation,contentValidation, inputValidation, (req : Request, res : Response)=>{
     const postsnew=postsRepository.updatePostsId(+req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
-    if(postsnew){
-    res.status(204).send(postsnew)
+    if(postsnew===false){ 
+      res.sendStatus(404)  
+    }else if(postsnew===null){
+      res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })
+    
+    
     
     }else{
-        res.sendStatus(404)  
+      res.status(204).send(postsnew)  
     }
 /*     let title= req.body.title;
     let title2= req.body.shortDescription;

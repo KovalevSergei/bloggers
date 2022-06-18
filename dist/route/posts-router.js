@@ -29,11 +29,14 @@ exports.postsRouter.get('/:postsid', (req, res) => {
 });
 exports.postsRouter.put('/:id', basicAuth_1.default, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
     const postsnew = posts_repository_1.postsRepository.updatePostsId(+req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
-    if (postsnew) {
-        res.status(204).send(postsnew);
+    if (postsnew === false) {
+        res.sendStatus(404);
+    }
+    else if (postsnew === null) {
+        res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] });
     }
     else {
-        res.sendStatus(404);
+        res.status(204).send(postsnew);
     }
     /*     let title= req.body.title;
         let title2= req.body.shortDescription;
