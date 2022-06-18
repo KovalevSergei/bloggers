@@ -33,7 +33,7 @@ exports.postsRouter.put('/:id', basicAuth_1.default, BlogerIdValidation, titleVa
         res.status(204).send(postsnew);
     }
     else {
-        res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] });
+        res.sendStatus(404);
     }
     /*     let title= req.body.title;
         let title2= req.body.shortDescription;
@@ -65,7 +65,7 @@ exports.postsRouter.put('/:id', basicAuth_1.default, BlogerIdValidation, titleVa
 exports.postsRouter.post('/', basicAuth_1.default, BlogerIdValidation, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
     const postnew = posts_repository_1.postsRepository.createPosts(req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postnew) {
-        res.sendStatus(201);
+        res.status(201).json(postnew);
     }
     else {
         res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] });

@@ -39,7 +39,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
     res.status(204).send(postsnew)
     
     }else{
-        res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })   
+        res.sendStatus(404)  
     }
 /*     let title= req.body.title;
     let title2= req.body.shortDescription;
@@ -74,7 +74,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
    postsRouter.post('/', basicAuth, BlogerIdValidation, titleValidation, shortDescriptionValidation,contentValidation,inputValidation,(req : Request, res : Response)=>{
     const postnew=postsRepository.createPosts( req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
   if(postnew){
-    res.sendStatus(201)
+    res.status(201).json(postnew)
   }else{
     res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })
   }
