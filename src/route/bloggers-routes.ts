@@ -15,7 +15,7 @@ bloggersRouter.get("/", (req: Request, res: Response) => {
 })
 
 bloggersRouter.get("/:bloggersid", (req : Request, res : Response) =>{
-    const blog=bloggersRepository.getBloggersById(+req.params.bloggersId)
+    const blog=bloggersRepository.getBloggersById(+req.params.bloggersid)
     if (blog){
       res.json(blog)
       res.sendStatus(200)
@@ -48,7 +48,8 @@ bloggersRouter.delete('/:id', basicAuth, (req: Request, res: Response)=>{
         res.status(204)
         res.json(bloggersnew)
     }else{
-        res.sendStatus(404)   
+        res.sendStatus(404) 
+       
     }
 
  

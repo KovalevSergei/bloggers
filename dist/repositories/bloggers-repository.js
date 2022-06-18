@@ -30,14 +30,17 @@ exports.bloggersRepository = {
         return bloggersnew;
     },
     updateBloggers(id, name, youtubeUrl) {
-        const bloggersnew = db_1.bloggers.find(v => v.id === id);
-        if (!bloggersnew) {
+        const bloggersnew2 = db_1.bloggers.find(v => v.id === id);
+        if (!bloggersnew2) {
             return false;
         }
         else {
-            bloggersnew.name = name;
-            bloggersnew.youtubeUrl = youtubeUrl;
-            return bloggersnew;
+            const bloggersnew2 = {
+                id: id,
+                name: name,
+                youtubeUrl: youtubeUrl
+            };
+            return bloggersnew2;
         }
     },
 };

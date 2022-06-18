@@ -10,16 +10,16 @@ exports.postsRouter = (0, express_1.Router)();
 const validation_1 = require("../middleware/validation");
 const express_validator_1 = require("express-validator");
 const basicAuth_1 = __importDefault(require("../middleware/basicAuth"));
-const titleValidation = (0, express_validator_1.body)("title").trim().isLength({ min: 1, max: 30 }).isString();
-const shortDescriptionValidation = (0, express_validator_1.body)("shortDescription").trim().isString().isLength({ min: 1, max: 100 });
-const contentValidation = (0, express_validator_1.body)("title").isString().trim().isLength({ min: 1, max: 1000 });
+const titleValidation = (0, express_validator_1.body)("title").exists().trim().notEmpty().isLength({ min: 1, max: 30 }).isString();
+const shortDescriptionValidation = (0, express_validator_1.body)("shortDescription").exists().trim().notEmpty().isString().isLength({ min: 1, max: 100 });
+const contentValidation = (0, express_validator_1.body)("title").exists().isString().trim().notEmpty().isLength({ min: 1, max: 1000 });
 exports.postsRouter.get('/', (req, res) => {
     const getPosts = posts_repository_1.postsRepository.getPosts();
     res.send(getPosts);
     res.sendStatus(200);
 });
-exports.postsRouter.get('/:id', (req, res) => {
-    const postsid = posts_repository_1.postsRepository.getpostsId(+req.params.id);
+exports.postsRouter.get('/:postsid', (req, res) => {
+    const postsid = posts_repository_1.postsRepository.getpostsId(+req.params.postsid);
     if (!postsid) {
         res.sendStatus(404);
         res.sendStatus(400);

@@ -34,14 +34,13 @@ createBloggers(name: string, youtubeUrl: string){
 },
 
 updateBloggers(id: number, name: string, youtubeUrl: string){
-    const bloggersnew=bloggers.find(v=> v.id===id)
-  
+    const bloggersnew=bloggers.find(v=> v.id===id);
+    
     if(!bloggersnew){
         return false
     }else{
-  
-      bloggersnew.name= name;
-      bloggersnew.youtubeUrl=youtubeUrl;
+       bloggersnew.name=name
+       bloggersnew.youtubeUrl=youtubeUrl
       
       return bloggersnew
 }

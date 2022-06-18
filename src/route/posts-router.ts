@@ -9,9 +9,9 @@ import basicAuth from "../middleware/basicAuth"
 
 
 
-const titleValidation=body("title").trim().isLength({min:1, max:30}).isString()
-const shortDescriptionValidation=body("shortDescription").trim().isString().isLength({min:1, max:100})
-const contentValidation=body("title").isString().trim().isLength({min:1, max:1000})
+const titleValidation=body("title").exists().trim().notEmpty().isLength({min:1, max:30}).isString()
+const shortDescriptionValidation=body("shortDescription").exists().trim().notEmpty().isString().isLength({min:1, max:100})
+const contentValidation=body("title").exists().isString().trim().notEmpty().isLength({min:1, max:1000})
 
 postsRouter.get('/', ( req : Request, res : Response)=>{
     const getPosts=postsRepository.getPosts()
@@ -20,8 +20,8 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
    })
   
 
-   postsRouter.get('/:id', (req : Request, res : Response)=>{
-    const postsid=postsRepository.getpostsId(+req.params.id)
+   postsRouter.get('/:postsid', (req : Request, res : Response)=>{
+    const postsid=postsRepository.getpostsId(+req.params.postsid)
     if(!postsid){
       res.sendStatus(404)
       res.sendStatus(400)
