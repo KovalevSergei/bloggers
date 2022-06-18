@@ -28,7 +28,7 @@ updatePostsId(id: number, title: string, shortDescription:string, content:string
    }
   
 },
-createPosts(id: number, title: string, shortDescription:string, content:string, bloggerId:number){
+createPosts(id: number, title: string, shortDescription:string, content:string){
     const nameblog=bloggers.find(v=> v.id===id)
     if (nameblog){
     const postnew={
