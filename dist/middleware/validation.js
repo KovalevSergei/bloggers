@@ -8,7 +8,7 @@ const inputValidation = (req, res, next) => {
         const errorsArray = errors.array({ onlyFirstError: true }).map((error) => {
             return { message: error.msg, field: error.param };
         });
-        res.status(400).json({ errorsMessages: errorsArray });
+        res.status(404).json({ errorsMessages: errorsArray });
     }
     else {
         next();
