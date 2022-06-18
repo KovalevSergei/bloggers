@@ -23,7 +23,6 @@ exports.postsRouter.get('/:postsid', (req, res) => {
     const postsid = posts_repository_1.postsRepository.getpostsId(+req.params.postsid);
     if (!postsid) {
         res.sendStatus(404);
-        res.sendStatus(400);
     }
     else {
         res.json(postsid);

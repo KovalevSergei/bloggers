@@ -25,7 +25,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
     const postsid=postsRepository.getpostsId(+req.params.postsid)
     if(!postsid){
       res.sendStatus(404)
-      res.sendStatus(400)
+     
     }else{
      res.json(postsid)
      res.sendStatus(200)
