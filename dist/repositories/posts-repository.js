@@ -24,7 +24,7 @@ exports.postsRepository = {
             return true;
         }
     },
-    createPosts(id, title, shortDescription, content) {
+    createPosts(id, title, shortDescription, content, bloggerId) {
         const nameblog = db_1.bloggers.find(v => v.id === id);
         if (nameblog) {
             const postnew = {
@@ -32,7 +32,7 @@ exports.postsRepository = {
                 title: title,
                 shortDescription: shortDescription,
                 content: content,
-                bloggerId: nameblog.id,
+                bloggerId: bloggerId,
                 bloggerName: nameblog.name
             };
             db_2.posts.push(postnew);

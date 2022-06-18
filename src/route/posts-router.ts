@@ -72,7 +72,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
  
 
    postsRouter.post('/', basicAuth, BlogerIdValidation, titleValidation, shortDescriptionValidation,contentValidation,inputValidation,(req : Request, res : Response)=>{
-    const postnew=postsRepository.createPosts(req.body.id, req.body.title, req.body.shortDescription, req.body.content)
+    const postnew=postsRepository.createPosts(req.body.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
   if(postnew){
     res.status(201).send(postnew)
   }else{
