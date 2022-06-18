@@ -19,8 +19,7 @@ bloggersRouter.get("/", (req: Request, res: Response) => {
 bloggersRouter.get("/:bloggersid", (req : Request, res : Response) =>{
     const blog=bloggersRepository.getBloggersById(+req.params.bloggersid)
     if (blog){
-      res.json(blog)
-      res.sendStatus(200)
+      res.status(200).json(blog)
     }else{
       res.sendStatus(404)
     }
@@ -47,8 +46,8 @@ bloggersRouter.delete('/:id', basicAuth, (req: Request, res: Response)=>{
   bloggersRouter.put('/:id', basicAuth, nameValidation,youtubeUrlValidation,inputValidation,(req: Request, res: Response)=>{
     const bloggersnew=bloggersRepository.updateBloggers(+req.params.id, req.body.name, req.body.youtubeUrl)
     if(bloggersnew){
-        res.status(204)
-        res.json(bloggersnew)
+        res.status(204).json(bloggersnew)
+        
     }else{
         res.sendStatus(404) 
        

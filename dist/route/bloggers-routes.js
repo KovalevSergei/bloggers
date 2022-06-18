@@ -21,8 +21,7 @@ exports.bloggersRouter.get("/", (req, res) => {
 exports.bloggersRouter.get("/:bloggersid", (req, res) => {
     const blog = bloggers_repository_1.bloggersRepository.getBloggersById(+req.params.bloggersid);
     if (blog) {
-        res.json(blog);
-        res.sendStatus(200);
+        res.status(200).json(blog);
     }
     else {
         res.sendStatus(404);
@@ -46,8 +45,7 @@ exports.bloggersRouter.post("/", basicAuth_1.default, nameValidation, youtubeUrl
 exports.bloggersRouter.put('/:id', basicAuth_1.default, nameValidation, youtubeUrlValidation, validation_1.inputValidation, (req, res) => {
     const bloggersnew = bloggers_repository_1.bloggersRepository.updateBloggers(+req.params.id, req.body.name, req.body.youtubeUrl);
     if (bloggersnew) {
-        res.status(204);
-        res.json(bloggersnew);
+        res.status(204).json(bloggersnew);
     }
     else {
         res.sendStatus(404);
