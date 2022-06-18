@@ -11,7 +11,7 @@ import basicAuth from "../middleware/basicAuth"
 
 const titleValidation=body("title").exists().trim().notEmpty().isLength({min:1, max:30}).isString()
 const shortDescriptionValidation=body("shortDescription").exists().trim().notEmpty().isString().isLength({min:1, max:100})
-const contentValidation=body("title").exists().isString().trim().notEmpty().isLength({min:1, max:1000})
+const contentValidation=body("content").exists().isString().trim().notEmpty().isLength({min:1, max:1000})
 
 postsRouter.get('/', ( req : Request, res : Response)=>{
     const getPosts=postsRepository.getPosts()
