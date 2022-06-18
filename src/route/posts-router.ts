@@ -12,12 +12,12 @@ import basicAuth from "../middleware/basicAuth"
 const titleValidation=body("title").exists().trim().notEmpty().isLength({min:1, max:30}).isString()
 const shortDescriptionValidation=body("shortDescription").exists().trim().notEmpty().isString().isLength({min:1, max:100})
 const contentValidation=body("content").exists().isString().trim().notEmpty().isLength({min:1, max:1000})
-const BlogerIdValidation=body("bloggerId").trim()
+const BlogerIdValidation=body("bloggerId").trim().notEmpty()
 
 postsRouter.get('/', ( req : Request, res : Response)=>{
     const getPosts=postsRepository.getPosts()
-    res.send(getPosts)
-    res.sendStatus(200)
+    
+    res.status(200).send(getPosts)
    })
   
 
@@ -27,9 +27,9 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
       res.sendStatus(404)
      
     }else{
-     res.json(postsid)
-     res.sendStatus(200)
-  
+     
+     res.status(200).json(postsid)
+     
     }
    })
 
@@ -37,7 +37,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
     const postsnew=postsRepository.updatePostsId(+req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
     if(postsnew){
     res.status(204).send(postsnew)
-    res.json(postsnew)
+    
     }else{
         res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })   
     }
