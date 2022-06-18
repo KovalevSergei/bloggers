@@ -33,7 +33,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
     }
    })
 
-   postsRouter.put('/:id',basicAuth,BlogerIdValidation,titleValidation,shortDescriptionValidation,contentValidation, inputValidation, (req : Request, res : Response)=>{
+   postsRouter.put('/:id',basicAuth,titleValidation,shortDescriptionValidation,contentValidation, inputValidation, (req : Request, res : Response)=>{
     const postsnew=postsRepository.updatePostsId(+req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
     if(postsnew){
     res.status(204).send(postsnew)
