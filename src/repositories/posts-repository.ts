@@ -22,7 +22,7 @@ updatePostsId(id: number, title: string, shortDescription:string, content:string
     postsnew.title = title
     postsnew.shortDescription=shortDescription
     postsnew.content=content
-    postsnew.bloggerId=bloggerId
+    postsnew.bloggerId=+bloggerId
     return postsnew
    
    }
@@ -31,14 +31,14 @@ updatePostsId(id: number, title: string, shortDescription:string, content:string
 createPosts( title: string, shortDescription:string, content:string, bloggerId:number){
 
     const nameblog=bloggers.find(v =>+ v.id=== +bloggerId)
-    console.log(bloggerId,bloggers.map(v=> v.id),nameblog)
+  
     if (nameblog){
     const postnew={
       id: +(new Date()),
       title: title,
       shortDescription: shortDescription,
       content: content,
-      bloggerId: bloggerId,
+      bloggerId: +bloggerId,
       bloggerName: nameblog.name
     }
     posts.push(postnew)

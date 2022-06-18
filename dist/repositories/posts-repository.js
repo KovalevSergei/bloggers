@@ -20,20 +20,19 @@ exports.postsRepository = {
             postsnew.title = title;
             postsnew.shortDescription = shortDescription;
             postsnew.content = content;
-            postsnew.bloggerId = bloggerId;
+            postsnew.bloggerId = +bloggerId;
             return postsnew;
         }
     },
     createPosts(title, shortDescription, content, bloggerId) {
         const nameblog = db_1.bloggers.find(v => +v.id === +bloggerId);
-        console.log(bloggerId, db_1.bloggers.map(v => v.id), nameblog);
         if (nameblog) {
             const postnew = {
                 id: +(new Date()),
                 title: title,
                 shortDescription: shortDescription,
                 content: content,
-                bloggerId: bloggerId,
+                bloggerId: +bloggerId,
                 bloggerName: nameblog.name
             };
             db_2.posts.push(postnew);
