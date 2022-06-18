@@ -23,7 +23,7 @@ updatePostsId(id: number, title: string, shortDescription:string, content:string
     postsnew.shortDescription=shortDescription
     postsnew.content=content
     postsnew.bloggerId=bloggerId
-    return true
+    return postsnew
    
    }
   
@@ -42,7 +42,7 @@ createPosts( title: string, shortDescription:string, content:string, bloggerId:n
       bloggerName: nameblog.name
     }
     posts.push(postnew)
-    return true
+    return postnew
    
   }else{
     return false

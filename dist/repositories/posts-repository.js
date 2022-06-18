@@ -21,7 +21,7 @@ exports.postsRepository = {
             postsnew.shortDescription = shortDescription;
             postsnew.content = content;
             postsnew.bloggerId = bloggerId;
-            return true;
+            return postsnew;
         }
     },
     createPosts(title, shortDescription, content, bloggerId) {
@@ -37,7 +37,7 @@ exports.postsRepository = {
                 bloggerName: nameblog.name
             };
             db_2.posts.push(postnew);
-            return true;
+            return postnew;
         }
         else {
             return false;
