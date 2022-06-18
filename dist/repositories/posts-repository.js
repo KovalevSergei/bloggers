@@ -25,6 +25,7 @@ exports.postsRepository = {
         }
     },
     createPosts(title, shortDescription, content, bloggerId) {
+        console.log(bloggerId, db_1.bloggers);
         const nameblog = db_1.bloggers.find(v => v.id === bloggerId);
         if (nameblog) {
             const postnew = {
