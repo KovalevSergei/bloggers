@@ -13,7 +13,7 @@ const basicAuth_1 = __importDefault(require("../middleware/basicAuth"));
 const titleValidation = (0, express_validator_1.body)("title").exists().trim().notEmpty().isLength({ min: 1, max: 30 }).isString();
 const shortDescriptionValidation = (0, express_validator_1.body)("shortDescription").exists().trim().notEmpty().isString().isLength({ min: 1, max: 100 });
 const contentValidation = (0, express_validator_1.body)("content").exists().isString().trim().notEmpty().isLength({ min: 1, max: 1000 });
-const BlogerIdValidation = (0, express_validator_1.body)("bloggerId").trim().notEmpty();
+//const BlogerIdValidation=body("bloggerId").trim().notEmpty()
 exports.postsRouter.get('/', (req, res) => {
     const getPosts = posts_repository_1.postsRepository.getPosts();
     res.status(200).send(getPosts);
@@ -62,7 +62,7 @@ exports.postsRouter.put('/:id', basicAuth_1.default, titleValidation, shortDescr
           }
        */
 });
-exports.postsRouter.post('/', basicAuth_1.default, BlogerIdValidation, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
+exports.postsRouter.post('/', basicAuth_1.default, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
     const postnew = posts_repository_1.postsRepository.createPosts(req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postnew) {
         console.log(postnew);

@@ -12,7 +12,7 @@ import basicAuth from "../middleware/basicAuth"
 const titleValidation=body("title").exists().trim().notEmpty().isLength({min:1, max:30}).isString()
 const shortDescriptionValidation=body("shortDescription").exists().trim().notEmpty().isString().isLength({min:1, max:100})
 const contentValidation=body("content").exists().isString().trim().notEmpty().isLength({min:1, max:1000})
-const BlogerIdValidation=body("bloggerId").trim().notEmpty()
+//const BlogerIdValidation=body("bloggerId").trim().notEmpty()
 
 postsRouter.get('/', ( req : Request, res : Response)=>{
     const getPosts=postsRepository.getPosts()
@@ -71,7 +71,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
    })
  
 
-   postsRouter.post('/', basicAuth, BlogerIdValidation, titleValidation, shortDescriptionValidation,contentValidation,inputValidation,(req : Request, res : Response)=>{
+   postsRouter.post('/', basicAuth , titleValidation, shortDescriptionValidation,contentValidation,inputValidation,(req : Request, res : Response)=>{
     const postnew=postsRepository.createPosts( req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
   if(postnew){
     console.log(postnew)
