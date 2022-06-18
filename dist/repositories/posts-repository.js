@@ -24,8 +24,8 @@ exports.postsRepository = {
             return true;
         }
     },
-    createPosts(id, title, shortDescription, content, bloggerId) {
-        const nameblog = db_1.bloggers.find(v => v.id === id);
+    createPosts(title, shortDescription, content, bloggerId) {
+        const nameblog = db_1.bloggers.find(v => v.id === bloggerId);
         if (nameblog) {
             const postnew = {
                 id: +(new Date()),
