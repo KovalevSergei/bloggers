@@ -6,6 +6,7 @@ exports.bloggers = [
     { id: 2, name: "Pety", youtubeUrl: "dvjdjvf123" },
     { id: 3, name: "Sergei", youtubeUrl: "dvjdjvfgdsfg" },
 ];
+exports.bloggers = [];
 exports.posts = [
     {
         id: 0,
@@ -16,4 +17,5 @@ exports.posts = [
         bloggerName: "ole"
     }
 ];
+exports.posts = [];
 //# sourceMappingURL=db.js.map
