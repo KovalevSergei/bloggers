@@ -30,8 +30,8 @@ updatePostsId(id: number, title: string, shortDescription:string, content:string
 },
 createPosts( title: string, shortDescription:string, content:string, bloggerId:number){
 
-    const nameblog=bloggers.find(v=> v.id===bloggerId)
-    console.log(bloggerId,bloggers,nameblog)
+    const nameblog=bloggers.find(v =>+ v.id=== +bloggerId)
+    console.log(bloggerId,bloggers.map(v=> v.id),nameblog)
     if (nameblog){
     const postnew={
       id: +(new Date()),
