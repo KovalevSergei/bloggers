@@ -66,7 +66,7 @@ exports.postsRouter.post('/', basicAuth_1.default, BlogerIdValidation, titleVali
     const postnew = posts_repository_1.postsRepository.createPosts(req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postnew) {
         console.log(postnew);
-        res.status(201).json(postnew);
+        res.status(201).send(postnew);
     }
     else {
         res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] });

@@ -75,7 +75,7 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
     const postnew=postsRepository.createPosts( req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
   if(postnew){
     console.log(postnew)
-    res.status(201).json(postnew)
+    res.status(201).send(postnew)
   }else{
     res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })
   }
