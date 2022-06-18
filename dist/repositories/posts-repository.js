@@ -13,6 +13,11 @@ exports.postsRepository = {
     },
     updatePostsId(id, title, shortDescription, content, bloggerId) {
         const postsnew = db_2.posts.find(v => v.id === id);
+        const nameblog = db_1.bloggers.find(v => +v.id === +bloggerId);
+        console.log(postsnew, nameblog, bloggerId);
+        if (!nameblog) {
+            return null;
+        }
         if (!postsnew) {
             return false;
         }
@@ -20,6 +25,7 @@ exports.postsRepository = {
             postsnew.title = title;
             postsnew.shortDescription = shortDescription;
             postsnew.content = content;
+            postsnew.bloggerId = +bloggerId;
             return postsnew;
         }
     },

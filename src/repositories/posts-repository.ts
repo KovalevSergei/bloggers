@@ -14,6 +14,12 @@ export const postsRepository={
 
 updatePostsId(id: number, title: string, shortDescription:string, content:string, bloggerId:number){
     const postsnew =posts.find(v => v.id === id)
+    const nameblog=bloggers.find(v =>+ v.id=== +bloggerId)
+    console.log(postsnew, nameblog, bloggerId)
+    if(!nameblog){
+      return null
+
+    }
    if (!postsnew){
     return false
     
@@ -22,7 +28,7 @@ updatePostsId(id: number, title: string, shortDescription:string, content:string
     postsnew.title = title
     postsnew.shortDescription=shortDescription
     postsnew.content=content
-    
+    postsnew.bloggerId=+bloggerId
     return postsnew
    
    }
