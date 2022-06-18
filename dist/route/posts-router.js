@@ -67,7 +67,7 @@ exports.postsRouter.put('/:id', basicAuth_1.default, BlogerIdValidation, titleVa
        */
 });
 exports.postsRouter.post('/', basicAuth_1.default, BlogerIdValidation, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => {
-    const postnew = posts_repository_1.postsRepository.createPosts(req.body.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
+    const postnew = posts_repository_1.postsRepository.createPosts(req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postnew) {
         res.status(201).send(postnew);
     }
