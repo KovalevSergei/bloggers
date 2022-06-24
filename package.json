@@ -9,7 +9,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "express-basic-auth": "^1.2.1",
-    "express-validator": "^6.14.1"
+    "express-validator": "^6.14.1",
+    "mongodb": "^4.7.0"
   },
   "scripts": {
     "dev": "nodemon --inspect dist/test.js",

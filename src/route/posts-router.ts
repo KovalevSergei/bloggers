@@ -1,51 +1,73 @@
-import { Router,Request, Response} from "express"
-import { postsRepository } from "../repositories/posts-repository"
-export const postsRouter=Router()
-import {inputValidation} from '../middleware/validation'
-import {body, validationResult} from 'express-validator'
-import { title } from "process"
-import basicAuth from "../middleware/basicAuth"
+import { Router, Request, Response } from "express";
+export const postsRouter = Router();
+import { inputValidation } from "../middleware/validation";
+import { body, validationResult } from "express-validator";
+import { title } from "process";
+import basicAuth from "../middleware/basicAuth";
+import { postsServis } from "../domain/posts-servis";
+export { titleValidation, shortDescriptionValidation, contentValidation };
 
+const titleValidation = body("title")
+  .exists()
+  .trim()
+  .notEmpty()
+  .isLength({ min: 1, max: 30 })
+  .isString();
+const shortDescriptionValidation = body("shortDescription")
+  .exists()
+  .trim()
+  .notEmpty()
+  .isString()
+  .isLength({ min: 1, max: 100 });
+const contentValidation = body("content")
+  .exists()
+  .isString()
+  .trim()
+  .notEmpty()
+  .isLength({ min: 1, max: 1000 });
 
+postsRouter.get("/", async (req: Request, res: Response) => {
+  const pageNumber = Number(req.query.pageNumber) || 1;
+  const pageSize = Number(req.query.pageSize) || 10;
+  const getPosts = await postsServis.getPosts(pageNumber, pageSize);
 
+  res.status(200).send(getPosts);
+});
 
-const titleValidation=body("title").exists().trim().notEmpty().isLength({min:1, max:30}).isString()
-const shortDescriptionValidation=body("shortDescription").exists().trim().notEmpty().isString().isLength({min:1, max:100})
-const contentValidation=body("content").exists().isString().trim().notEmpty().isLength({min:1, max:1000})
-//const BlogerIdValidation=body("bloggerId").trim().notEmpty()
+postsRouter.get("/:postsid", async (req: Request, res: Response) => {
+  const postsid = await postsServis.getpostsId(+req.params.postsid);
+  if (!postsid) {
+    res.sendStatus(404);
+  } else {
+    res.status(200).json(postsid);
+  }
+});
 
-postsRouter.get('/', ( req : Request, res : Response)=>{
-    const getPosts=postsRepository.getPosts()
-    
-    res.status(200).send(getPosts)
-   }) 
-  
-
-   postsRouter.get('/:postsid', (req : Request, res : Response)=>{
-    const postsid=postsRepository.getpostsId(+req.params.postsid)
-    if(!postsid){
-      res.sendStatus(404)
-     
-    }else{
-     
-     res.status(200).json(postsid)
-     
+postsRouter.put(
+  "/:id",
+  basicAuth,
+  titleValidation,
+  shortDescriptionValidation,
+  contentValidation,
+  inputValidation,
+  async (req: Request, res: Response) => {
+    const postsnew = await postsServis.updatePostsId(
+      +req.params.id,
+      req.body.title,
+      req.body.shortDescription,
+      req.body.content,
+      req.body.bloggerId
+    );
+    if (postsnew === false) {
+      res.sendStatus(404);
+    } else if (postsnew === null) {
+      res
+        .status(400)
+        .send({ errorsMessages: [{ message: "bloger", field: "bloggerId" }] });
+    } else {
+      res.status(204).send(postsnew);
     }
-   })
-
-   postsRouter.put('/:id',basicAuth,titleValidation,shortDescriptionValidation,contentValidation, inputValidation, (req : Request, res : Response)=>{
-    const postsnew=postsRepository.updatePostsId(+req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
-    if(postsnew===false){ 
-      res.sendStatus(404)  
-    }else if(postsnew===null){
-      res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })
-    
-    
-    
-    }else{
-      res.status(204).send(postsnew)  
-    }
-/*     let title= req.body.title;
+    /*     let title= req.body.title;
     let title2= req.body.shortDescription;
     let title3= req.body.content;
     let title4= req.body.bloggerId;
@@ -71,19 +93,31 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
         return
       }
    */
-  
-   })
- 
-
-   postsRouter.post('/', basicAuth , titleValidation, shortDescriptionValidation,contentValidation,inputValidation,(req : Request, res : Response)=>{
-    const postnew=postsRepository.createPosts( req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId)
-  if(postnew){
- 
-    res.status(201).send(postnew)
-  }else{
-    res.status(400).send({ errorsMessages: [{ message: 'bloger', field: "bloggerId" }] })
   }
-  
+);
+
+postsRouter.post(
+  "/",
+  basicAuth,
+  titleValidation,
+  shortDescriptionValidation,
+  contentValidation,
+  inputValidation,
+  async (req: Request, res: Response) => {
+    const postnew = await postsServis.createPosts(
+      req.body.title,
+      req.body.shortDescription,
+      req.body.content,
+      +req.body.bloggerId
+    );
+    if (postnew) {
+      res.status(201).send(postnew);
+    } else {
+      res
+        .status(400)
+        .send({ errorsMessages: [{ message: "bloger", field: "bloggerId" }] });
+    }
+
     /* let title= req.body.title;
     let title2= req.body.shortDescription;
     let title3= req.body.content;
@@ -106,19 +140,24 @@ postsRouter.get('/', ( req : Request, res : Response)=>{
           })
           return
         } */
-    
-      
-   })
-  
+  }
+);
 
-   postsRouter.delete('/:id',basicAuth, (req : Request, res : Response)=>{
-    const isdelete=postsRepository.deletePosts(+req.params.id)
-    if (isdelete){
-        res.sendStatus(204)
-    }else{
-        res.sendStatus(404)
-    }
-   
-   })
-  
-  
+postsRouter.delete("/:id", basicAuth, async (req: Request, res: Response) => {
+  const isdelete = await postsServis.deletePosts(+req.params.id);
+  if (isdelete) {
+    res.sendStatus(204);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+/*   export const bloggerIdValidation = body('bloggerId')
+   .trim().notEmpty().withMessage('Missing a required parameter')
+   .custom(async (value, {req}) => {
+       const isBloggerExists = await postsService.isUserExists(+req.body.bloggerId)
+       if (!isBloggerExists) {
+           throw new Error(`Blogger with id ${req.body.bloggerId} doesn't exist`);
+       }
+       return true;
+   }); */

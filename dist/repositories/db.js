@@ -1,21 +1,34 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.posts = exports.bloggers = void 0;
-exports.bloggers = [
-    { id: 1, name: "Vasy", youtubeUrl: "dvjdjvf" },
-    { id: 2, name: "Pety", youtubeUrl: "dvjdjvf123" },
-    { id: 3, name: "Sergei", youtubeUrl: "dvjdjvfgdsfg" },
-];
-exports.bloggers = [];
-exports.posts = [
-    {
-        id: 0,
-        title: "pety",
-        shortDescription: "va",
-        content: "bog",
-        bloggerId: 0,
-        bloggerName: "ole"
-    }
-];
-exports.posts = [];
+exports.runDb = exports.postsCollection = exports.bloggersCollection = exports.client = void 0;
+const mongodb_1 = require("mongodb");
+const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
+exports.client = new mongodb_1.MongoClient(mongoUri);
+let db = exports.client.db("lesson03");
+exports.bloggersCollection = db.collection("bloggers");
+exports.postsCollection = db.collection("posts");
+function runDb() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            // Connect the client to the server
+            yield exports.client.connect();
+            console.log("Connected successfully to mongo server");
+        }
+        catch (_a) {
+            console.log("Can't connect to db");
+            // Ensures that the client will close when you finish/error
+            yield exports.client.close();
+        }
+    });
+}
+exports.runDb = runDb;
 //# sourceMappingURL=db.js.map

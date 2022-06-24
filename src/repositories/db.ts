@@ -1,18 +1,24 @@
-export let bloggers=[
-    {id: 1, name: "Vasy", youtubeUrl:"dvjdjvf"},
-    {id: 2, name: "Pety", youtubeUrl:"dvjdjvf123"},
-    {id: 3, name: "Sergei", youtubeUrl:"dvjdjvfgdsfg"},
-  ]
-bloggers=[]
-export let posts=[
-    {
-       id: 0,
-      title: "pety",
-      shortDescription: "va",
-      content: "bog",
-      bloggerId: 0,
-      bloggerName: "ole" 
-    }]  
+import { MongoClient } from "mongodb";
 
+import { bloggersWithIdType, postsWithIdType } from "./types";
 
-    posts=[]
+const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
+
+export const client = new MongoClient(mongoUri);
+
+let db = client.db("lesson03");
+
+export const bloggersCollection = db.collection<bloggersWithIdType>("bloggers");
+export const postsCollection = db.collection<postsWithIdType>("posts");
+
+export async function runDb() {
+  try {
+    // Connect the client to the server
+    await client.connect();
+    console.log("Connected successfully to mongo server");
+  } catch {
+    console.log("Can't connect to db");
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
