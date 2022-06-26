@@ -15,15 +15,14 @@ export const bloggersRepository = {
   async getBloggers(
     pageSize: number,
     pageNumber: number,
-    SearhName: string | null
+    SearhName: string
   ): Promise<bloggersReturn> {
-    let filter = {} as { name: { $regex: string } };
-    if (SearhName) filter.name = { $regex: SearhName };
-
-    const totalCount = await bloggersCollection.countDocuments();
+    const totalCount = await bloggersCollection.countDocuments({
+      name: { $regex: SearhName },
+    });
 
     const items = await bloggersCollection
-      .find(filter, { projection: { _id: 0 } })
+      .find({ name: { $regex: SearhName } }, { projection: { _id: 0 } })
       .limit(pageSize)
       .skip((pageNumber - 1) * pageSize)
       .toArray();

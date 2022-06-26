@@ -15,7 +15,7 @@ export const bloggersServis = {
   async getBloggers(
     pageSize: number,
     pageNumber: number,
-    SearhName: string | null
+    SearhName: string
   ): Promise<bloggersDBType> {
     const { items, totalCount } = await bloggersRepository.getBloggers(
       pageSize,

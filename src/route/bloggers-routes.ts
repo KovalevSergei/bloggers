@@ -30,7 +30,7 @@ const youtubeUrlValidation = body("youtubeUrl")
 bloggersRouter.get("/", async (req: Request, res: Response) => {
   const pageSize: number = Number(req.query.PageSize) || 10;
   const pageNumber = Number(req.query.PageNumber) || 1;
-  const SearhName = req.query.SearchNameTerm || null;
+  const SearhName = req.query.SearchNameTerm || "";
   console.log(pageSize, pageNumber);
   if (typeof SearhName === "string" || !SearhName) {
     const getBloggers = await bloggersServis.getBloggers(

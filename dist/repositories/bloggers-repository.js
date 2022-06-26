@@ -15,12 +15,11 @@ const db_1 = require("./db");
 exports.bloggersRepository = {
     getBloggers(pageSize, pageNumber, SearhName) {
         return __awaiter(this, void 0, void 0, function* () {
-            let filter = {};
-            if (SearhName)
-                filter.name = { $regex: SearhName };
-            const totalCount = yield db_1.bloggersCollection.countDocuments();
+            const totalCount = yield db_1.bloggersCollection.countDocuments({
+                name: { $regex: SearhName },
+            });
             const items = yield db_1.bloggersCollection
-                .find(filter, { projection: { _id: 0 } })
+                .find({ name: { $regex: SearhName } }, { projection: { _id: 0 } })
                 .limit(pageSize)
                 .skip((pageNumber - 1) * pageSize)
                 .toArray();
