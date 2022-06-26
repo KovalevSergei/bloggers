@@ -38,7 +38,7 @@ const youtubeUrlValidation = (0, express_validator_1.body)("youtubeUrl")
 exports.bloggersRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pageSize = Number(req.query.PageSize) || 10;
     const pageNumber = Number(req.query.PageNumber) || 1;
-    const SearhName = req.query.SearhNameTerm || null;
+    const SearhName = req.query.SearchNameTerm || null;
     console.log(pageSize, pageNumber);
     if (typeof SearhName === "string" || !SearhName) {
         const getBloggers = yield bloggers_servis_1.bloggersServis.getBloggers(pageSize, pageNumber, SearhName);
