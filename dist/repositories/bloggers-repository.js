@@ -72,7 +72,7 @@ exports.bloggersRepository = {
     },
     createBloggersPost(postnew) {
         return __awaiter(this, void 0, void 0, function* () {
-            const items = yield db_1.postsCollection.insertOne(Object.assign(Object.assign({}, postnew), { _id: new mongodb_1.ObjectId() }));
+            yield db_1.postsCollection.insertOne(Object.assign(Object.assign({}, postnew), { _id: new mongodb_1.ObjectId() }));
             return postnew;
         });
     },

@@ -87,7 +87,7 @@ export const bloggersRepository = {
   },
 
   async createBloggersPost(postnew: postsType): Promise<postsType> {
-    const items = await postsCollection.insertOne({
+    await postsCollection.insertOne({
       ...postnew,
       _id: new ObjectId(),
     });
