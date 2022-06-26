@@ -41,8 +41,8 @@ const contentValidation = (0, express_validator_1.body)("content")
     .isLength({ min: 1, max: 1000 });
 exports.contentValidation = contentValidation;
 exports.postsRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pageNumber = Number(req.query.pageNumber) || 1;
-    const pageSize = Number(req.query.pageSize) || 10;
+    const pageNumber = Number(req.query.PageNumber) || 1;
+    const pageSize = Number(req.query.PageSize) || 10;
     const getPosts = yield posts_servis_1.postsServis.getPosts(pageNumber, pageSize);
     res.status(200).send(getPosts);
 }));

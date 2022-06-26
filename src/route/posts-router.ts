@@ -27,8 +27,8 @@ const contentValidation = body("content")
   .isLength({ min: 1, max: 1000 });
 
 postsRouter.get("/", async (req: Request, res: Response) => {
-  const pageNumber = Number(req.query.pageNumber) || 1;
-  const pageSize = Number(req.query.pageSize) || 10;
+  const pageNumber = Number(req.query.PageNumber) || 1;
+  const pageSize = Number(req.query.PageSize) || 10;
   const getPosts = await postsServis.getPosts(pageNumber, pageSize);
 
   res.status(200).send(getPosts);
