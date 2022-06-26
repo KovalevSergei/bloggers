@@ -36,9 +36,10 @@ const youtubeUrlValidation = (0, express_validator_1.body)("youtubeUrl")
     .matches(urlRegExp)
     .isLength({ min: 1, max: 100 });
 exports.bloggersRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pageSize = Number(req.query.pageSize) || 10;
-    const pageNumber = Number(req.query.pageNumber) || 1;
+    const pageSize = Number(req.query.PageSize) || 10;
+    const pageNumber = Number(req.query.PageNumber) || 1;
     const SearhName = req.query.SearhNameTerm || null;
+    console.log(pageSize, pageNumber);
     if (typeof SearhName === "string" || !SearhName) {
         const getBloggers = yield bloggers_servis_1.bloggersServis.getBloggers(pageSize, pageNumber, SearhName);
         return res.send(getBloggers);
@@ -79,8 +80,8 @@ exports.bloggersRouter.put("/:id", basicAuth_1.default, nameValidation, youtubeU
     }
 }));
 exports.bloggersRouter.get("/:bloggerId/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pageSize = Number(req.query.pageSize) || 10;
-    const pageNumber = Number(req.query.pageNumber) || 1;
+    const pageSize = Number(req.query.PageSize) || 10;
+    const pageNumber = Number(req.query.PageNumber) || 1;
     const bloggerId = +req.params.bloggerId;
     const getPostBlogger = yield bloggers_servis_1.bloggersServis.getBloggersPost(bloggerId, pageSize, pageNumber);
     if (getPostBlogger === false) {

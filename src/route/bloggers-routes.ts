@@ -28,9 +28,10 @@ const youtubeUrlValidation = body("youtubeUrl")
   .isLength({ min: 1, max: 100 });
 
 bloggersRouter.get("/", async (req: Request, res: Response) => {
-  const pageSize: number = Number(req.query.pageSize) || 10;
-  const pageNumber = Number(req.query.pageNumber) || 1;
+  const pageSize: number = Number(req.query.PageSize) || 10;
+  const pageNumber = Number(req.query.PageNumber) || 1;
   const SearhName = req.query.SearhNameTerm || null;
+  console.log(pageSize, pageNumber);
   if (typeof SearhName === "string" || !SearhName) {
     const getBloggers = await bloggersServis.getBloggers(
       pageSize,
@@ -103,8 +104,8 @@ bloggersRouter.put(
 );
 
 bloggersRouter.get("/:bloggerId/posts", async (req: Request, res: Response) => {
-  const pageSize: number = Number(req.query.pageSize) || 10;
-  const pageNumber = Number(req.query.pageNumber) || 1;
+  const pageSize: number = Number(req.query.PageSize) || 10;
+  const pageNumber = Number(req.query.PageNumber) || 1;
   const bloggerId = +req.params.bloggerId;
 
   const getPostBlogger = await bloggersServis.getBloggersPost(
