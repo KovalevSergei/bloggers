@@ -29,7 +29,7 @@ exports.postsRepository = {
     },
     getpostsId(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return db_1.postsCollection.findOne({ id: id });
+            return db_1.postsCollection.findOne({ id: id }, { projection: { _id: 0 } });
         });
     },
     updatePostsId(id, title, shortDescription, content, bloggerId) {
