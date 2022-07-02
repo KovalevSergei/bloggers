@@ -24,7 +24,7 @@ exports.UsersRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             const totalCount = yield db_1.userscollection.countDocuments();
             const items = yield db_1.userscollection
-                .find()
+                .find({}, { projection: { _id: 0, passwordHash: 0, passwordSalt: 0 } })
                 .skip((PageNumber - 1) * PageSize)
                 .limit(PageSize)
                 .toArray();

@@ -28,7 +28,7 @@ usersRouter.post(
 
     const newUser = await UsersServis.createUser(login, password);
     if (newUser) {
-      res.status(201).send(newUser);
+      res.status(200).send(newUser);
     } else {
       res.status(400).json({
         errorsMessages: { message: "login is use", field: "give new login" },

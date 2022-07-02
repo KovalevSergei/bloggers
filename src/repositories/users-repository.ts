@@ -20,7 +20,7 @@ export const UsersRepository = {
   async getUsers(PageSize: number, PageNumber: number): Promise<usersReturn> {
     const totalCount = await userscollection.countDocuments();
     const items = await userscollection
-      .find()
+      .find({}, { projection: { _id: 0, passwordHash: 0, passwordSalt: 0 } })
       .skip((PageNumber - 1) * PageSize)
       .limit(PageSize)
       .toArray();
