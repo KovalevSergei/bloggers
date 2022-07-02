@@ -28,7 +28,7 @@ const passwordValidation = (0, express_validator_1.body)("password")
     .exists()
     .trim()
     .notEmpty()
-    .isLength({ min: 6, max: 30 });
+    .isLength({ min: 6, max: 20 });
 exports.usersRouter.post("/", basicAuth_1.default, loginValidation, passwordValidation, validation_1.inputValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const login = req.body.login;
     const password = req.body.password;

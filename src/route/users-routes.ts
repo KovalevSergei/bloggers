@@ -14,7 +14,7 @@ const passwordValidation = body("password")
   .exists()
   .trim()
   .notEmpty()
-  .isLength({ min: 6, max: 30 });
+  .isLength({ min: 6, max: 20 });
 
 usersRouter.post(
   "/",
