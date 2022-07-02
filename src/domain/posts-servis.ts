@@ -22,16 +22,16 @@ export const postsServis = {
     return result;
   },
 
-  async getpostsId(id: number): Promise<postsType | null> {
+  async getpostsId(id: string): Promise<postsType | null> {
     return await postsRepository.getpostsId(id);
   },
 
   async updatePostsId(
-    id: number,
+    id: string,
     title: string,
     shortDescription: string,
     content: string,
-    bloggerId: number
+    bloggerId: string
   ): Promise<boolean | null> {
     const nameblog = await bloggersRepository.getBloggersById(bloggerId);
 
@@ -51,13 +51,13 @@ export const postsServis = {
     title: string,
     shortDescription: string,
     content: string,
-    bloggerId: number
+    bloggerId: string
   ): Promise<boolean | postsType> {
     const nameblog = await bloggersRepository.getBloggersById(bloggerId);
 
     if (nameblog) {
       const postnew = {
-        id: +new Date(),
+        id: Number(new Date()).toString(),
         title: title,
         shortDescription: shortDescription,
         content: content,
@@ -72,7 +72,7 @@ export const postsServis = {
     }
   },
 
-  async deletePosts(id: number): Promise<boolean> {
+  async deletePosts(id: string): Promise<boolean> {
     return postsRepository.deletePosts(id);
   },
 };

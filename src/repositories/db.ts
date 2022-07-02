@@ -1,6 +1,11 @@
 import { MongoClient } from "mongodb";
 
-import { bloggersWithIdType, postsWithIdType } from "./types";
+import {
+  bloggersWithIdType,
+  postsWithIdType,
+  UsersDBTypeWithId,
+  commentsDBTypeWithId,
+} from "./types";
 
 const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
 
@@ -10,6 +15,9 @@ let db = client.db("lesson03");
 
 export const bloggersCollection = db.collection<bloggersWithIdType>("bloggers");
 export const postsCollection = db.collection<postsWithIdType>("posts");
+export const userscollection = db.collection<UsersDBTypeWithId>("users");
+export const commentsCollection =
+  db.collection<commentsDBTypeWithId>("comments");
 
 export async function runDb() {
   try {

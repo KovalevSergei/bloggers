@@ -9,13 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runDb = exports.postsCollection = exports.bloggersCollection = exports.client = void 0;
+exports.runDb = exports.commentsCollection = exports.userscollection = exports.postsCollection = exports.bloggersCollection = exports.client = void 0;
 const mongodb_1 = require("mongodb");
 const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
 exports.client = new mongodb_1.MongoClient(mongoUri);
 let db = exports.client.db("lesson03");
 exports.bloggersCollection = db.collection("bloggers");
 exports.postsCollection = db.collection("posts");
+exports.userscollection = db.collection("users");
+exports.commentsCollection = db.collection("comments");
 function runDb() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

@@ -31,7 +31,6 @@ bloggersRouter.get("/", async (req: Request, res: Response) => {
   const pageSize: number = Number(req.query.PageSize) || 10;
   const pageNumber = Number(req.query.PageNumber) || 1;
   const SearhName = req.query.SearchNameTerm || "";
-  console.log(pageSize, pageNumber);
   if (typeof SearhName === "string" || !SearhName) {
     const getBloggers = await bloggersServis.getBloggers(
       pageSize,
@@ -45,7 +44,7 @@ bloggersRouter.get("/", async (req: Request, res: Response) => {
 });
 
 bloggersRouter.get("/:bloggersid", async (req: Request, res: Response) => {
-  const blog = await bloggersServis.getBloggersById(+req.params.bloggersid);
+  const blog = await bloggersServis.getBloggersById(req.params.bloggersid);
   if (blog) {
     res.status(200).json(blog);
   } else {
@@ -57,7 +56,7 @@ bloggersRouter.delete(
   "/:id",
   basicAuth,
   async (req: Request, res: Response) => {
-    const bloggerdel = await bloggersServis.deleteBloggersById(+req.params.id);
+    const bloggerdel = await bloggersServis.deleteBloggersById(req.params.id);
     if (bloggerdel) {
       res.sendStatus(204);
     } else {
@@ -90,7 +89,7 @@ bloggersRouter.put(
   inputValidation,
   async (req: Request, res: Response) => {
     const bloggersnew = await bloggersServis.updateBloggers(
-      +req.params.id,
+      req.params.id,
       req.body.name,
       req.body.youtubeUrl
     );
@@ -103,13 +102,13 @@ bloggersRouter.put(
   }
 );
 
-bloggersRouter.get("/:bloggerId/posts", async (req: Request, res: Response) => {
+bloggersRouter.get("/:postId/posts", async (req: Request, res: Response) => {
   const pageSize: number = Number(req.query.PageSize) || 10;
   const pageNumber = Number(req.query.PageNumber) || 1;
-  const bloggerId = +req.params.bloggerId;
+  const postId = req.params.postId;
 
   const getPostBlogger = await bloggersServis.getBloggersPost(
-    bloggerId,
+    postId,
     pageSize,
     pageNumber
   );
@@ -129,7 +128,7 @@ bloggersRouter.post(
   inputValidation,
   async (req: Request, res: Response) => {
     const bloggersnew = await bloggersServis.createBloggersPost(
-      +req.params.bloggerId,
+      req.params.bloggerId,
       req.body.title,
       req.body.shortDescription,
       req.body.content

@@ -5,6 +5,8 @@ import { body, validationResult } from "express-validator";
 import { title } from "process";
 import basicAuth from "../middleware/basicAuth";
 import { postsServis } from "../domain/posts-servis";
+import { authMiddleware } from "../middleware/auth";
+import { commentsServis } from "../domain/comments-servis";
 export { titleValidation, shortDescriptionValidation, contentValidation };
 
 const titleValidation = body("title")
@@ -35,7 +37,7 @@ postsRouter.get("/", async (req: Request, res: Response) => {
 });
 
 postsRouter.get("/:postsid", async (req: Request, res: Response) => {
-  const postsid = await postsServis.getpostsId(+req.params.postsid);
+  const postsid = await postsServis.getpostsId(req.params.postsid);
   if (!postsid) {
     res.sendStatus(404);
   } else {
@@ -52,7 +54,7 @@ postsRouter.put(
   inputValidation,
   async (req: Request, res: Response) => {
     const postsnew = await postsServis.updatePostsId(
-      +req.params.id,
+      req.params.id,
       req.body.title,
       req.body.shortDescription,
       req.body.content,
@@ -108,7 +110,7 @@ postsRouter.post(
       req.body.title,
       req.body.shortDescription,
       req.body.content,
-      +req.body.bloggerId
+      req.body.bloggerId
     );
     if (postnew) {
       res.status(201).send(postnew);
@@ -144,7 +146,7 @@ postsRouter.post(
 );
 
 postsRouter.delete("/:id", basicAuth, async (req: Request, res: Response) => {
-  const isdelete = await postsServis.deletePosts(+req.params.id);
+  const isdelete = await postsServis.deletePosts(req.params.id);
   if (isdelete) {
     res.sendStatus(204);
   } else {
@@ -161,3 +163,52 @@ postsRouter.delete("/:id", basicAuth, async (req: Request, res: Response) => {
        }
        return true;
    }); */
+//comments
+
+const contentValidationComments = body("content")
+  .exists()
+  .trim()
+  .notEmpty()
+  .isLength({ min: 20, max: 300 });
+
+postsRouter.post(
+  /:postId/cemmnost,
+  authMiddleware,
+  contentValidationComments,
+  inputValidation,
+  async (req: Request, res: Response) => {
+    const content = req.body.content;
+    const userId = req.user?.id || "1";
+    const userLogin = req.user?.login || "1";
+    const postId = req.params.postId;
+
+    const findPost = await postsServis.getpostsId(postId);
+    if (findPost === null) {
+      res.sendStatus(404);
+    } else {
+      const newComment = await commentsServis.createComments(
+        userId,
+        userLogin,
+        postId,
+        content
+      );
+      res.status(201).send(newComment);
+    }
+  }
+);
+postsRouter.get(/:postId/cemmnost, async (req: Request, res: Response) => {
+  const pageSize: number = Number(req.query.PageSize) || 10;
+  const pageNumber = Number(req.query.PageNumber) || 1;
+  const postId = req.params.postId;
+
+  const getComment = await commentsServis.getCommentsPost(
+    pageSize,
+    pageNumber,
+    postId
+  );
+
+  if (getComment === false) {
+    return res.sendStatus(404);
+  }
+  res.send(getComment);
+});

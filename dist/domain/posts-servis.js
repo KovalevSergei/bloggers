@@ -48,7 +48,7 @@ exports.postsServis = {
             const nameblog = yield bloggers_repository_1.bloggersRepository.getBloggersById(bloggerId);
             if (nameblog) {
                 const postnew = {
-                    id: +new Date(),
+                    id: Number(new Date()).toString(),
                     title: title,
                     shortDescription: shortDescription,
                     content: content,

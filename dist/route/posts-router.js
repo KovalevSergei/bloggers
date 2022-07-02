@@ -19,6 +19,8 @@ const validation_1 = require("../middleware/validation");
 const express_validator_1 = require("express-validator");
 const basicAuth_1 = __importDefault(require("../middleware/basicAuth"));
 const posts_servis_1 = require("../domain/posts-servis");
+const auth_1 = require("../middleware/auth");
+const comments_servis_1 = require("../domain/comments-servis");
 const titleValidation = (0, express_validator_1.body)("title")
     .exists()
     .trim()
@@ -47,7 +49,7 @@ exports.postsRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, fun
     res.status(200).send(getPosts);
 }));
 exports.postsRouter.get("/:postsid", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const postsid = yield posts_servis_1.postsServis.getpostsId(+req.params.postsid);
+    const postsid = yield posts_servis_1.postsServis.getpostsId(req.params.postsid);
     if (!postsid) {
         res.sendStatus(404);
     }
@@ -56,7 +58,7 @@ exports.postsRouter.get("/:postsid", (req, res) => __awaiter(void 0, void 0, voi
     }
 }));
 exports.postsRouter.put("/:id", basicAuth_1.default, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const postsnew = yield posts_servis_1.postsServis.updatePostsId(+req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
+    const postsnew = yield posts_servis_1.postsServis.updatePostsId(req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postsnew === false) {
         res.sendStatus(404);
     }
@@ -96,7 +98,7 @@ exports.postsRouter.put("/:id", basicAuth_1.default, titleValidation, shortDescr
    */
 }));
 exports.postsRouter.post("/", basicAuth_1.default, titleValidation, shortDescriptionValidation, contentValidation, validation_1.inputValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const postnew = yield posts_servis_1.postsServis.createPosts(req.body.title, req.body.shortDescription, req.body.content, +req.body.bloggerId);
+    const postnew = yield posts_servis_1.postsServis.createPosts(req.body.title, req.body.shortDescription, req.body.content, req.body.bloggerId);
     if (postnew) {
         res.status(201).send(postnew);
     }
@@ -129,7 +131,7 @@ exports.postsRouter.post("/", basicAuth_1.default, titleValidation, shortDescrip
         } */
 }));
 exports.postsRouter.delete("/:id", basicAuth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const isdelete = yield posts_servis_1.postsServis.deletePosts(+req.params.id);
+    const isdelete = yield posts_servis_1.postsServis.deletePosts(req.params.id);
     if (isdelete) {
         res.sendStatus(204);
     }
@@ -146,4 +148,35 @@ exports.postsRouter.delete("/:id", basicAuth_1.default, (req, res) => __awaiter(
        }
        return true;
    }); */
+//comments
+const contentValidationComments = (0, express_validator_1.body)("content")
+    .exists()
+    .trim()
+    .notEmpty()
+    .isLength({ min: 20, max: 300 });
+exports.postsRouter.post(/:postId/cemmnost, auth_1.authMiddleware, contentValidationComments, validation_1.inputValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const content = req.body.content;
+    const userId = ((_a = req.user) === null || _a === void 0 ? void 0 : _a.id) || "1";
+    const userLogin = ((_b = req.user) === null || _b === void 0 ? void 0 : _b.login) || "1";
+    const postId = req.params.postId;
+    const findPost = yield posts_servis_1.postsServis.getpostsId(postId);
+    if (findPost === null) {
+        res.sendStatus(404);
+    }
+    else {
+        const newComment = yield comments_servis_1.commentsServis.createComments(userId, userLogin, postId, content);
+        res.status(201).send(newComment);
+    }
+}));
+exports.postsRouter.get(/:postId/cemmnost, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pageSize = Number(req.query.PageSize) || 10;
+    const pageNumber = Number(req.query.PageNumber) || 1;
+    const postId = req.params.postId;
+    const getComment = yield comments_servis_1.commentsServis.getCommentsPost(pageSize, pageNumber, postId);
+    if (getComment === false) {
+        return res.sendStatus(404);
+    }
+    res.send(getComment);
+}));
 //# sourceMappingURL=posts-router.js.map

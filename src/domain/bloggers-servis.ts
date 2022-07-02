@@ -34,11 +34,11 @@ export const bloggersServis = {
     return result;
   },
 
-  async getBloggersById(id: number): Promise<bloggersType | null> {
+  async getBloggersById(id: string): Promise<bloggersType | null> {
     return bloggersRepository.getBloggersById(id);
   },
 
-  async deleteBloggersById(id: number): Promise<boolean> {
+  async deleteBloggersById(id: string): Promise<boolean> {
     return bloggersRepository.deleteBloggersById(id);
   },
 
@@ -47,7 +47,7 @@ export const bloggersServis = {
     youtubeUrl: string
   ): Promise<bloggersType> {
     const bloggersnew = {
-      id: +new Date(),
+      id: Number(new Date()).toString(),
       name: name,
       youtubeUrl: youtubeUrl,
     };
@@ -58,7 +58,7 @@ export const bloggersServis = {
   },
 
   async updateBloggers(
-    id: number,
+    id: string,
     name: string,
     youtubeUrl: string
   ): Promise<boolean> {
@@ -66,7 +66,7 @@ export const bloggersServis = {
   },
 
   async getBloggersPost(
-    bloggerId: number,
+    bloggerId: string,
     pageSize: number,
     pageNumber: number
   ): Promise<postsDBType | boolean> {
@@ -91,7 +91,7 @@ export const bloggersServis = {
   },
 
   async createBloggersPost(
-    bloggerId: number,
+    bloggerId: string,
     title: string,
     shortDescription: string,
     content: string
@@ -102,7 +102,7 @@ export const bloggersServis = {
       return false;
     } else {
       const postsnew = {
-        id: +new Date(),
+        id: Number(new Date()).toString(),
         title: title,
         shortDescription: shortDescription,
         content: content,

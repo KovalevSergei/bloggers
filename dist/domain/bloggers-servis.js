@@ -39,7 +39,7 @@ exports.bloggersServis = {
     createBloggers(name, youtubeUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             const bloggersnew = {
-                id: +new Date(),
+                id: Number(new Date()).toString(),
                 name: name,
                 youtubeUrl: youtubeUrl,
             };
@@ -79,7 +79,7 @@ exports.bloggersServis = {
             }
             else {
                 const postsnew = {
-                    id: +new Date(),
+                    id: Number(new Date()).toString(),
                     title: title,
                     shortDescription: shortDescription,
                     content: content,

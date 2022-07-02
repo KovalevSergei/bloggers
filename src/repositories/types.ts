@@ -13,17 +13,17 @@ export type bloggersDBType = {
 export type postsWithIdType = WithId<postsType>;
 
 export type bloggersType = {
-  id: number;
+  id: string;
   name: string;
   youtubeUrl: string;
 };
 
 export type postsType = {
-  id: number;
+  id: string;
   title: string;
   shortDescription: string;
   content: string;
-  bloggerId: number;
+  bloggerId: string;
   bloggerName: string;
 };
 
@@ -33,4 +33,63 @@ export type postsDBType = {
   pageSize: number;
   totalCount: number;
   items: postsType[];
+};
+
+export type UsersDBType = {
+  id: string;
+  login: string;
+  passwordHash: string;
+  passwordSalt: string;
+};
+export type UsersDBTypeWithId = WithId<{
+  id: string;
+  login: string;
+  passwordHash: string;
+  passwordSalt: string;
+}>;
+
+export type usersGetDBType = {
+  pagesCount: number;
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  items: UsersDBType[];
+};
+
+export type UsersDBTypeReturn = {
+  id: string;
+  login: string;
+};
+
+export type commentsDBTypeWithId = WithId<{
+  id: string;
+  content: string;
+  userId: string;
+  userLogin: string;
+  addedAt: string;
+}>;
+
+export type commentsDBType = {
+  id: string;
+  content: string;
+  userId: string;
+  userLogin: string;
+  addedAt: string;
+};
+
+export type commentDBTypePagination = {
+  pagesCount: number;
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  items: commentsDBType[];
+};
+
+export type commentsDBPostIdType = {
+  id: string;
+  content: string;
+  userId: string;
+  userLogin: string;
+  addedAt: string;
+  postId: string;
 };

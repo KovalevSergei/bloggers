@@ -21,16 +21,16 @@ export const postsRepository = {
     };
   },
 
-  async getpostsId(id: number): Promise<postsType | null> {
+  async getpostsId(id: string): Promise<postsType | null> {
     return postsCollection.findOne({ id: id }, { projection: { _id: 0 } });
   },
 
   async updatePostsId(
-    id: number,
+    id: string,
     title: string,
     shortDescription: string,
     content: string,
-    bloggerId: number
+    bloggerId: string
   ): Promise<boolean | null> {
     const postsnew = await postsCollection.updateOne(
       { bloggerId: bloggerId },
@@ -49,7 +49,7 @@ export const postsRepository = {
     return postsnew;
   },
 
-  async deletePosts(id: number): Promise<boolean> {
+  async deletePosts(id: string): Promise<boolean> {
     const result = await postsCollection.deleteOne({ id: id });
     return result.deletedCount === 1;
   },

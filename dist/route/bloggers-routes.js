@@ -39,7 +39,6 @@ exports.bloggersRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, 
     const pageSize = Number(req.query.PageSize) || 10;
     const pageNumber = Number(req.query.PageNumber) || 1;
     const SearhName = req.query.SearchNameTerm || "";
-    console.log(pageSize, pageNumber);
     if (typeof SearhName === "string" || !SearhName) {
         const getBloggers = yield bloggers_servis_1.bloggersServis.getBloggers(pageSize, pageNumber, SearhName);
         return res.send(getBloggers);
@@ -47,7 +46,7 @@ exports.bloggersRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, 
     res.sendStatus(400);
 }));
 exports.bloggersRouter.get("/:bloggersid", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const blog = yield bloggers_servis_1.bloggersServis.getBloggersById(+req.params.bloggersid);
+    const blog = yield bloggers_servis_1.bloggersServis.getBloggersById(req.params.bloggersid);
     if (blog) {
         res.status(200).json(blog);
     }
@@ -56,7 +55,7 @@ exports.bloggersRouter.get("/:bloggersid", (req, res) => __awaiter(void 0, void 
     }
 }));
 exports.bloggersRouter.delete("/:id", basicAuth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const bloggerdel = yield bloggers_servis_1.bloggersServis.deleteBloggersById(+req.params.id);
+    const bloggerdel = yield bloggers_servis_1.bloggersServis.deleteBloggersById(req.params.id);
     if (bloggerdel) {
         res.sendStatus(204);
     }
@@ -71,7 +70,7 @@ exports.bloggersRouter.post("/", basicAuth_1.default, nameValidation, youtubeUrl
     }
 }));
 exports.bloggersRouter.put("/:id", basicAuth_1.default, nameValidation, youtubeUrlValidation, validation_1.inputValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const bloggersnew = yield bloggers_servis_1.bloggersServis.updateBloggers(+req.params.id, req.body.name, req.body.youtubeUrl);
+    const bloggersnew = yield bloggers_servis_1.bloggersServis.updateBloggers(req.params.id, req.body.name, req.body.youtubeUrl);
     if (bloggersnew) {
         res.sendStatus(204);
     }
@@ -79,11 +78,11 @@ exports.bloggersRouter.put("/:id", basicAuth_1.default, nameValidation, youtubeU
         res.sendStatus(404);
     }
 }));
-exports.bloggersRouter.get("/:bloggerId/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.bloggersRouter.get("/:postId/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pageSize = Number(req.query.PageSize) || 10;
     const pageNumber = Number(req.query.PageNumber) || 1;
-    const bloggerId = +req.params.bloggerId;
-    const getPostBlogger = yield bloggers_servis_1.bloggersServis.getBloggersPost(bloggerId, pageSize, pageNumber);
+    const postId = req.params.postId;
+    const getPostBlogger = yield bloggers_servis_1.bloggersServis.getBloggersPost(postId, pageSize, pageNumber);
     if (getPostBlogger === false) {
         res.status(404).send("If specific blogger is not exists");
     }
@@ -92,7 +91,7 @@ exports.bloggersRouter.get("/:bloggerId/posts", (req, res) => __awaiter(void 0, 
     }
 }));
 exports.bloggersRouter.post("/:bloggerId/posts", basicAuth_1.default, posts_router_1.titleValidation, posts_router_1.shortDescriptionValidation, posts_router_1.contentValidation, validation_1.inputValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const bloggersnew = yield bloggers_servis_1.bloggersServis.createBloggersPost(+req.params.bloggerId, req.body.title, req.body.shortDescription, req.body.content);
+    const bloggersnew = yield bloggers_servis_1.bloggersServis.createBloggersPost(req.params.bloggerId, req.body.title, req.body.shortDescription, req.body.content);
     if (bloggersnew) {
         res.status(201).send(bloggersnew);
     }

@@ -33,11 +33,11 @@ export const bloggersRepository = {
     };
   },
 
-  async getBloggersById(id: number): Promise<bloggersType | null> {
+  async getBloggersById(id: string): Promise<bloggersType | null> {
     return bloggersCollection.findOne({ id: id }, { projection: { _id: 0 } });
   },
 
-  async deleteBloggersById(id: number): Promise<boolean> {
+  async deleteBloggersById(id: string): Promise<boolean> {
     const result = await bloggersCollection.deleteOne({ id: id });
 
     return result.deletedCount === 1;
@@ -52,7 +52,7 @@ export const bloggersRepository = {
   },
 
   async updateBloggers(
-    id: number,
+    id: string,
     name: string,
     youtubeUrl: string
   ): Promise<boolean> {
@@ -65,7 +65,7 @@ export const bloggersRepository = {
   },
 
   async getBloggersPost(
-    bloggerId: number,
+    bloggerId: string,
     pageSize: number,
     pageNumber: number
   ): Promise<postsReturn> {
