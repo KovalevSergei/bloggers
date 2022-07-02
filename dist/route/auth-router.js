@@ -21,7 +21,7 @@ exports.authRouter.post("/login", (req, res) => __awaiter(void 0, void 0, void 0
     const areCredentialsCorrect = yield Users_servis_1.UsersServis.checkCredentials(user, req.body.login, req.body.password);
     if (areCredentialsCorrect) {
         const token = yield jwt_service_1.jwtService.createJWT(user);
-        res.status(200).send(token);
+        res.status(200).send({ token });
     }
     else {
         res.sendStatus(401);
