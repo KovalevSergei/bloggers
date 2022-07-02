@@ -8,12 +8,7 @@ export const jwtService = {
     const token = jwt.sign({ userId: user.id }, settings.JWT_SECRET, {
       expiresIn: "1h",
     });
-    return {
-      resultCode: 0,
-      data: {
-        token: token,
-      },
-    };
+    return token;
   },
   async getUserIdByToken(token: string) {
     try {

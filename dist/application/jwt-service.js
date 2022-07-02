@@ -22,12 +22,7 @@ exports.jwtService = {
             const token = jsonwebtoken_1.default.sign({ userId: user.id }, settings_1.settings.JWT_SECRET, {
                 expiresIn: "1h",
             });
-            return {
-                resultCode: 0,
-                data: {
-                    token: token,
-                },
-            };
+            return token;
         });
     },
     getUserIdByToken(token) {
