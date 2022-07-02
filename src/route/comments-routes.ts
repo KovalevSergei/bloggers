@@ -1,4 +1,3 @@
-export const commentsRouter = Router();
 import { Router, Request, Response } from "express";
 import { inputValidation } from "../middleware/validation";
 import { body, validationResult } from "express-validator";
@@ -7,6 +6,7 @@ import { commentsServis } from "../domain/comments-servis";
 import { jwtService } from "../application/jwt-service";
 import { UsersServis } from "../domain/Users-servis";
 import { ObjectId } from "mongodb";
+export const commentsRouter = Router();
 
 const contentValidation = body("content")
   .exists()

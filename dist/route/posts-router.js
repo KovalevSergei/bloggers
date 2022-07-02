@@ -154,7 +154,7 @@ const contentValidationComments = (0, express_validator_1.body)("content")
     .trim()
     .notEmpty()
     .isLength({ min: 20, max: 300 });
-exports.postsRouter.post(/:postId/cemmnost, auth_1.authMiddleware, contentValidationComments, validation_1.inputValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.postsRouter.post("/:postId/comments", auth_1.authMiddleware, contentValidationComments, validation_1.inputValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const content = req.body.content;
     const userId = ((_a = req.user) === null || _a === void 0 ? void 0 : _a.id) || "1";
@@ -169,7 +169,7 @@ exports.postsRouter.post(/:postId/cemmnost, auth_1.authMiddleware, contentValida
         res.status(201).send(newComment);
     }
 }));
-exports.postsRouter.get(/:postId/cemmnost, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.postsRouter.get("/:postId/comments", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pageSize = Number(req.query.PageSize) || 10;
     const pageNumber = Number(req.query.PageNumber) || 1;
     const postId = req.params.postId;

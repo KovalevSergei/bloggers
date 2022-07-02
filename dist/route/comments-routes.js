@@ -10,12 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentsRouter = void 0;
-exports.commentsRouter = (0, express_1.Router)();
 const express_1 = require("express");
 const validation_1 = require("../middleware/validation");
 const express_validator_1 = require("express-validator");
 const auth_1 = require("../middleware/auth");
 const comments_servis_1 = require("../domain/comments-servis");
+exports.commentsRouter = (0, express_1.Router)();
 const contentValidation = (0, express_validator_1.body)("content")
     .exists()
     .trim()

@@ -172,7 +172,7 @@ const contentValidationComments = body("content")
   .isLength({ min: 20, max: 300 });
 
 postsRouter.post(
-  /:postId/cemmnost,
+  "/:postId/comments",
   authMiddleware,
   contentValidationComments,
   inputValidation,
@@ -196,7 +196,7 @@ postsRouter.post(
     }
   }
 );
-postsRouter.get(/:postId/cemmnost, async (req: Request, res: Response) => {
+postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
   const pageSize: number = Number(req.query.PageSize) || 10;
   const pageNumber = Number(req.query.PageNumber) || 1;
   const postId = req.params.postId;
