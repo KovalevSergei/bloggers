@@ -34,7 +34,7 @@ exports.usersRouter.post("/", basicAuth_1.default, loginValidation, passwordVali
     const password = req.body.password;
     const newUser = yield Users_servis_1.UsersServis.createUser(login, password);
     if (newUser) {
-        res.status(200).send(newUser);
+        res.status(201).send(newUser);
     }
     else {
         res.status(400).json({
