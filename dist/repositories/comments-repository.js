@@ -54,6 +54,7 @@ exports.commentsRepository = {
     createComment(comment) {
         return __awaiter(this, void 0, void 0, function* () {
             yield db_1.commentsCollection.insertOne(Object.assign(Object.assign({}, comment), { _id: new mongodb_1.ObjectId() }));
+            //const {postId,...rest}=comment
             return {
                 id: comment.id,
                 content: comment.content,
