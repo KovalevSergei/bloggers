@@ -47,7 +47,7 @@ commentsRouter.get("/:id", async (req: Request, res: Response) => {
   if (commentId.length === 0) {
     res.sendStatus(404);
   } else {
-    res.status(200).send(commentId);
+    res.status(200).json(commentId);
   }
 });
 
