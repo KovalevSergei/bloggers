@@ -208,7 +208,7 @@ postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
     postId
   );
 
-  if (getComment === false) {
+  if (getComment === false || getComment === undefined) {
     return res.sendStatus(404);
   }
 
