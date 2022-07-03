@@ -79,7 +79,7 @@ export const UsersServis = {
   async deleteUserId(id: string): Promise<boolean> {
     return UsersRepository.deleteUsersId(id);
   },
-  async findUserById(id: ObjectId): Promise<UsersDBTypeWithId | null> {
+  async findUserById(id: string): Promise<UsersDBTypeWithId | null> {
     const result = await UsersRepository.findUserById(id);
     return result;
   },

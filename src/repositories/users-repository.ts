@@ -46,7 +46,7 @@ export const UsersRepository = {
     return usersFind;
   },
   async findUserById(id: string): Promise<UsersDBTypeWithId | null> {
-    const usersFind = await userscollection.findOne({ id });
+    const usersFind = await userscollection.findOne({ id: id });
     return usersFind;
   },
   async getUserById(id: string): Promise<UsersDBType | null> {
