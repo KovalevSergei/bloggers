@@ -70,7 +70,7 @@ export const commentsRepository = {
       .limit(pageSize)
       .skip((pageNumber - 1) * pageSize)
       .toArray();
-
+    console.log(postId, "postId", items);
     return { items: items, totalCount: totalCount };
   },
 };
