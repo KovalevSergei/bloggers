@@ -59,7 +59,7 @@ export const commentsServis = {
       postId
     );
 
-    if (totalCount === 0) {
+    if (totalCount === null) {
       return false;
     }
     let pagesCount = Number(Math.ceil(totalCount / pageSize));
