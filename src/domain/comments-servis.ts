@@ -58,7 +58,7 @@ export const commentsServis = {
       pageNumber,
       postId
     );
-    console.log(totalCount);
+
     if (totalCount === 0) {
       return false;
     }
