@@ -192,6 +192,7 @@ postsRouter.post(
         postId,
         content
       );
+      const commentReturn = { postId, ...newComment };
       res.status(201).send(newComment);
     }
   }
@@ -210,5 +211,6 @@ postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
   if (getComment === false) {
     return res.sendStatus(404);
   }
+
   res.send(getComment);
 });
