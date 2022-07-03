@@ -47,10 +47,11 @@ usersRouter.get("/", async (req: Request, res: Response) => {
 });
 
 usersRouter.delete("/:id", basicAuth, async (req: Request, res: Response) => {
-  const userDel = await UsersServis.deleteUserId(req.params.id);
+  const id = req.params.id;
+  const userDel = await UsersServis.deleteUserId(id);
   if (userDel) {
     res.sendStatus(204);
   } else {
-    res.sendStatus(404);
+    res.status(404).send("If specified user is not exists");
   }
 });

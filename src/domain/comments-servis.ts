@@ -46,7 +46,6 @@ export const commentsServis = {
       postId: postId,
     };
     const result = await commentsRepository.createComment(commentNew);
-    console.log("naSHA RASHA", result);
     return result;
   },
   async getCommentsPost(

@@ -192,7 +192,7 @@ postsRouter.post(
         postId,
         content
       );
-      const commentReturn = { postId, ...newComment };
+
       res.status(201).send(newComment);
     }
   }
