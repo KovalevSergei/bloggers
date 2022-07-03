@@ -58,18 +58,18 @@ export const commentsServis = {
       pageNumber,
       postId
     );
+    console.log(totalCount);
     if (totalCount === 0) {
       return false;
-    } else {
-      let pagesCount = Number(Math.ceil(totalCount / pageSize));
-      const result: commentDBTypePagination = {
-        pagesCount: pagesCount,
-        page: pageNumber,
-        pageSize: pageSize,
-        totalCount: totalCount,
-        items: items,
-      };
-      return result;
     }
+    let pagesCount = Number(Math.ceil(totalCount / pageSize));
+    const result: commentDBTypePagination = {
+      pagesCount: pagesCount,
+      page: pageNumber,
+      pageSize: pageSize,
+      totalCount: totalCount,
+      items: items,
+    };
+    return result;
   },
 };

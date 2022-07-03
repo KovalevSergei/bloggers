@@ -62,7 +62,7 @@ export const commentsRepository = {
     postId: string
   ): Promise<commentReturn> {
     const totalCount = await commentsCollection.countDocuments({
-      postId: { $regex: postId },
+      postId: postId,
     });
 
     const items = await commentsCollection
