@@ -8,12 +8,11 @@ interface commentReturn {
 }
 
 export const commentsRepository = {
-  async getComment(id: string): Promise<commentsDBType[]> {
-    const comment = await commentsCollection
-      .find({ id: id }, { projection: { _id: 0, postId: 0 } })
-      .toArray();
-
-    return comment;
+  async getComment(id: string): Promise<commentsDBType | null> {
+    return commentsCollection.findOne(
+      { id: id },
+      { projection: { _id: 0, postId: 0 } }
+    );
   },
   async deleteComment(id: string, userId: string): Promise<boolean | null> {
     const delComment = await commentsCollection.findOne({ id: id });

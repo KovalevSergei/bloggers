@@ -10,8 +10,8 @@ import {
 import { UsersServis } from "./Users-servis";
 
 export const commentsServis = {
-  async getComment(commentId: string): Promise<commentsDBType[]> {
-    const comment = await commentsRepository.getComment(commentId);
+  async getComment(id: string): Promise<commentsDBType | null> {
+    const comment = await commentsRepository.getComment(id);
     return comment;
   },
 
