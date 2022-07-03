@@ -56,7 +56,8 @@ commentsRouter.delete(
   authMiddleware,
   async (req: Request, res: Response) => {
     const userId = req.user?.id || "1";
-    const isdelete = await commentsServis.deleteComment(req.params.id, userId);
+    const id = req.params.id;
+    const isdelete = await commentsServis.deleteComment(id, userId);
     if (isdelete === null) {
       res.sendStatus(403);
     }
