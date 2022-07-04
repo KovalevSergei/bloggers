@@ -181,6 +181,7 @@ postsRouter.post(
     const userId = req.user?.id || "1";
     const userLogin = req.user?.login || "1";
     const postId = req.params.postId;
+    console.log(req.user?.login);
 
     const findPost = await postsServis.getpostsId(postId);
     if (!findPost) {
@@ -208,7 +209,7 @@ postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
     postId
   );
 
-  if (getComment === false) {
+  if (!getComment) {
     return res.sendStatus(404);
   }
 
