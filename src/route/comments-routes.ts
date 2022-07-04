@@ -40,7 +40,7 @@ commentsRouter.put(
 );
 commentsRouter.get("/:id", async (req: Request, res: Response) => {
   const commentId = await commentsServis.getComment(req.params.id);
-  console.log("proverka", req.params.id, commentId);
+  console.log("proverkaA", req.params.id, commentId);
   if (commentId === null) {
     res.sendStatus(404);
   } else {
