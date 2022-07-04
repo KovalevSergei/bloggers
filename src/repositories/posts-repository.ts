@@ -29,11 +29,10 @@ export const postsRepository = {
     id: string,
     title: string,
     shortDescription: string,
-    content: string,
-    bloggerId: string
+    content: string
   ): Promise<boolean | null> {
     const postsnew = await postsCollection.updateOne(
-      { bloggerId: bloggerId },
+      { id: id },
       {
         $set: {
           title: title,
