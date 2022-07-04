@@ -210,8 +210,8 @@ postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
     pageNumber,
     postId
   );
-  console.log(getComment, "proverka 2");
-  if (!getComment) {
+
+  if (getComment === false) {
     return res.sendStatus(404);
   }
 
