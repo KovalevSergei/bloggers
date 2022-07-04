@@ -29,12 +29,12 @@ commentsRouter.put(
       useriD
     );
     if (contentnew === null) {
-      return res.sendStatus(403);
+      return res.sendStatus(404);
     }
     if (contentnew === true) {
       res.sendStatus(204);
     } else {
-      res.sendStatus(404);
+      res.sendStatus(403);
     }
   }
 );
