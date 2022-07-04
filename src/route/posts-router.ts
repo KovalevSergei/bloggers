@@ -183,7 +183,7 @@ postsRouter.post(
     const postId = req.params.postId;
 
     const findPost = await postsServis.getpostsId(postId);
-    if (findPost === null) {
+    if (!findPost) {
       res.sendStatus(404);
     } else {
       const newComment = await commentsServis.createComments(

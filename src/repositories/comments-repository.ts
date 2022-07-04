@@ -32,7 +32,7 @@ export const commentsRepository = {
     userId: string
   ): Promise<boolean | null> {
     const user = await commentsCollection.findOne({ id: commentId });
-    if (user === null) {
+    if (!user) {
       return null;
     }
     if (user.userId === userId) {

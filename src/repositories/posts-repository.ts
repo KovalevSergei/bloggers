@@ -41,7 +41,7 @@ export const postsRepository = {
         },
       }
     );
-    return postsnew.matchedCount === 1;
+    return postsnew.modifiedCount === 1;
   },
   async createPosts(postsnew: postsType): Promise<postsType> {
     await postsCollection.insertOne({ ...postsnew, _id: new ObjectId() });
