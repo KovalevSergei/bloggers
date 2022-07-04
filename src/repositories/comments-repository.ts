@@ -15,16 +15,15 @@ export const commentsRepository = {
     );
   },
   async deleteComment(id: string, userId: string): Promise<boolean | null> {
-    const delComment = await commentsCollection.findOne({ id: id });
+    /*  const delComment = await commentsCollection.findOne({ id: id });
     if (delComment === null) {
       return false;
     }
     if (delComment.userId !== userId) {
       return null;
-    } else {
-      const result = await commentsCollection.deleteOne({ id: id });
-      return result.deletedCount === 1;
-    }
+    } else { */
+    const result = await commentsCollection.deleteOne({ id: id });
+    return result.deletedCount === 1;
   },
   async updateComment(
     content: string,
@@ -32,7 +31,7 @@ export const commentsRepository = {
     userId: string
   ): Promise<boolean | null> {
     const user = await commentsCollection.findOne({ id: commentId });
-    if (!user) {
+    /*   if (!user) {
       return null;
     }
     if (user.userId === userId) {
@@ -43,7 +42,12 @@ export const commentsRepository = {
       return true;
     } else {
       return false;
-    }
+    } */
+    await commentsCollection.updateOne(
+      { id: commentId },
+      { $set: { content: content } }
+    );
+    return true;
   },
   async createComment(comment: commentsDBPostIdType): Promise<commentsDBType> {
     await commentsCollection.insertOne({ ...comment, _id: new ObjectId() });

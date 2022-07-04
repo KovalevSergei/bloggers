@@ -7,6 +7,7 @@ import { jwtService } from "../application/jwt-service";
 import { UsersServis } from "../domain/Users-servis";
 import { ObjectId } from "mongodb";
 export const commentsRouter = Router();
+import { UserFind } from "../middleware/FindUser";
 
 const contentValidation = body("content")
   .exists()
@@ -17,6 +18,7 @@ const contentValidation = body("content")
 commentsRouter.put(
   "/:commentId",
   authMiddleware,
+  UserFind,
   contentValidation,
   inputValidation,
   async (req: Request, res: Response) => {
@@ -28,14 +30,15 @@ commentsRouter.put(
       commentId,
       useriD
     );
-    if (contentnew === null) {
+    res.sendStatus(204);
+    /*  if (contentnew === null) {
       return res.sendStatus(404);
     }
     if (contentnew === true) {
       res.sendStatus(204);
     } else {
       res.sendStatus(403);
-    }
+    } */
   }
 );
 commentsRouter.get("/:id", async (req: Request, res: Response) => {
@@ -51,11 +54,13 @@ commentsRouter.get("/:id", async (req: Request, res: Response) => {
 commentsRouter.delete(
   "/:id",
   authMiddleware,
+  UserFind,
   async (req: Request, res: Response) => {
     const userId = req.user?.id || "1";
     const id = req.params.id;
     const isdelete = await commentsServis.deleteComment(id, userId);
-    if (isdelete === null) {
+    res.sendStatus(204);
+    /* if (isdelete === null) {
       res.sendStatus(403);
       return;
     }
@@ -63,6 +68,6 @@ commentsRouter.delete(
       res.sendStatus(204);
     } else {
       res.sendStatus(404);
-    }
+    } */
   }
 );
