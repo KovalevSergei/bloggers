@@ -208,16 +208,15 @@ postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
   console.log(postId, "postId");
   console.log(pageSize, "pageSize");
   console.log(pageNumber, "pageNumber");
-
+  const post = await postsServis.getpostsId(postId);
+  if (!post) {
+    return res.sendStatus(404);
+  }
   const getComment = await commentsServis.getCommentsPost(
     pageSize,
     pageNumber,
     postId
   );
-
-  if (getComment === false) {
-    return res.sendStatus(404);
-  }
 
   res.status(200).send(getComment);
 });

@@ -61,9 +61,7 @@ export const commentsServis = {
 
     console.log(totalCount, "totalCount");
     console.log(items, "items");
-    if (!totalCount) {
-      return false;
-    }
+
     let pagesCount = Number(Math.ceil(totalCount / pageSize));
     const result: commentDBTypePagination = {
       pagesCount: pagesCount,
