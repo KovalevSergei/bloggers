@@ -57,6 +57,7 @@ commentsRouter.delete(
     const isdelete = await commentsServis.deleteComment(id, userId);
     if (isdelete === null) {
       res.sendStatus(403);
+      return;
     }
     if (isdelete) {
       res.sendStatus(204);
