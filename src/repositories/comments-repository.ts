@@ -14,7 +14,7 @@ export const commentsRepository = {
       { projection: { _id: 0, postId: 0 } }
     );
   },
-  async deleteComment(id: string, userId: string): Promise<boolean | null> {
+  async deleteComment(id: string): Promise<boolean | null> {
     /*  const delComment = await commentsCollection.findOne({ id: id });
     if (delComment === null) {
       return false;

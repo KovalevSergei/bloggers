@@ -15,8 +15,8 @@ export const commentsServis = {
     return comment;
   },
 
-  async deleteComment(id: string, userId: string): Promise<boolean | null> {
-    const isdelete = await commentsRepository.deleteComment(id, userId);
+  async deleteComment(id: string): Promise<boolean | null> {
+    const isdelete = await commentsRepository.deleteComment(id);
     return isdelete;
   },
   async updateContent(

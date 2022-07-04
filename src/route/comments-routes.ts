@@ -41,24 +41,23 @@ commentsRouter.put(
     } */
   }
 );
-commentsRouter.get("/:id", async (req: Request, res: Response) => {
-  const commentId = await commentsServis.getComment(req.params.id);
-  console.log("proverkaA", req.params.id, commentId);
-  if (!commentId) {
+commentsRouter.get("/:commentId", async (req: Request, res: Response) => {
+  const commentById = await commentsServis.getComment(req.params.commentId);
+  console.log("proverkaA", req.params.id, commentById);
+  if (!commentById) {
     res.sendStatus(404);
   } else {
-    res.status(200).json(commentId);
+    res.status(200).json(commentById);
   }
 });
 
 commentsRouter.delete(
-  "/:id",
+  "/:commentId",
   authMiddleware,
   UserFind,
   async (req: Request, res: Response) => {
-    const userId = req.user?.id || "1";
-    const id = req.params.id;
-    const isdelete = await commentsServis.deleteComment(id, userId);
+    const id = req.params.commentId;
+    const isdelete = await commentsServis.deleteComment(id);
     res.sendStatus(204);
     /* if (isdelete === null) {
       res.sendStatus(403);

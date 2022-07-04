@@ -7,8 +7,12 @@ export const UserFind = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = req.user?.id || "1";
+  const userId = req.user?.id;
   const id = req.params.commentId;
+  if (!userId) {
+    res.sendStatus(401);
+    return;
+  }
   const Comment = await commentsCollection.findOne({ id: id });
   console.log(Comment);
   if (!Comment) {
