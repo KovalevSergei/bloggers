@@ -29,16 +29,12 @@ commentsRouter.put(
       useriD
     );
     if (contentnew === null) {
-      return res.sendStatus(404);
+      return res.sendStatus(403);
     }
     if (contentnew === true) {
       res.sendStatus(204);
     } else {
-      res
-        .status(403)
-        .send(
-          "try to update or delete the entity that was created by another user"
-        );
+      res.sendStatus(404);
     }
   }
 );
