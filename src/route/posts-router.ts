@@ -178,10 +178,13 @@ postsRouter.post(
   inputValidation,
   async (req: Request, res: Response) => {
     const content = req.body.content;
-    const userId = req.user?.id || "1";
-    const userLogin = req.user?.login || "1";
+    const userId = req.user?.id;
+    const userLogin = req.user?.login;
     const postId = req.params.postId;
     console.log(req.user?.login);
+    if (!userId || !userLogin) {
+      return res.sendStatus(401);
+    }
 
     const findPost = await postsServis.getpostsId(postId);
     if (!findPost) {
@@ -202,9 +205,10 @@ postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
   const pageSize = req.query.PageSize ? Number(req.query.PageSize) : 10;
   const pageNumber = req.query.PageNumber ? Number(req.query.PageNumber) : 1;
   const postId = req.params.postId;
-  console.log(postId, "proverka 12");
+  console.log(postId, "postId");
   console.log(pageSize, "pageSize");
   console.log(pageNumber, "pageNumber");
+
   const getComment = await commentsServis.getCommentsPost(
     pageSize,
     pageNumber,
