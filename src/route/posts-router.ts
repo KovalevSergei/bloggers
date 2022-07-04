@@ -199,10 +199,12 @@ postsRouter.post(
   }
 );
 postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
-  const pageSize: number = Number(req.query.PageSize) || 10;
-  const pageNumber = Number(req.query.PageNumber) || 1;
+  const pageSize = req.query.PageSize ? Number(req.query.PageSize) : 10;
+  const pageNumber = req.query.PageNumber ? Number(req.query.PageNumber) : 1;
   const postId = req.params.postId;
   console.log(postId, "proverka 12");
+  console.log(pageSize, "pageSize");
+  console.log(pageNumber, "pageNumber");
   const getComment = await commentsServis.getCommentsPost(
     pageSize,
     pageNumber,
