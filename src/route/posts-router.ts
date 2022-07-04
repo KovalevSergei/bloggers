@@ -181,7 +181,7 @@ postsRouter.post(
     const userId = req.user?.id;
     const userLogin = req.user?.login;
     const postId = req.params.postId;
-    console.log(req.user?.login);
+
     if (!userId || !userLogin) {
       return res.sendStatus(401);
     }
@@ -196,7 +196,7 @@ postsRouter.post(
         postId,
         content
       );
-
+      console.log("PROVERKA!%)", newComment);
       res.status(201).send(newComment);
     }
   }
