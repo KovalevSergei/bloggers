@@ -42,8 +42,7 @@ export const postsServis = {
         id,
         title,
         shortDescription,
-        content,
-        bloggerId
+        content
       );
     }
   },
