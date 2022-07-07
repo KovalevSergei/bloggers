@@ -13,7 +13,11 @@ export const UsersRepository = {
       ...newUser,
       _id: new ObjectId(),
     });
-    return { id: newUser.id, login: newUser.login };
+    return {
+      id: newUser.id,
+      email: newUser.accountData.email,
+      login: newUser.accountData.login,
+    };
   },
 
   //filters: { page: number, size: number, name: string }
@@ -55,5 +59,33 @@ export const UsersRepository = {
       { projection: { _id: 0 } }
     );
     return result;
+  },
+  async updateConfirmation(id: string) {
+    const result = await userscollection.updateOne(
+      { id },
+      { $set: { "emailConfirmation.isConfirmed": true } }
+    );
+    return result.modifiedCount === 1;
+  },
+  async findByLoginOrEmail(loginOrEmail: string) {
+    const user = await userscollection.findOne({
+      $or: [
+        { "accountData.email": loginOrEmail },
+        { "accountData.userName": loginOrEmail },
+      ],
+    });
+    return user;
+  },
+  async findByConfirmationCode(code: string) {
+    const user = await userscollection.findOne({
+      "emailConfirmation.confirmationCode": code,
+    });
+    return user;
+  },
+  async findByEmail(email: string) {
+    const user = await userscollection.findOne({
+      "accountData.email": email,
+    });
+    return user;
   },
 };

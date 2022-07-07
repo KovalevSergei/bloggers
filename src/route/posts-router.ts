@@ -179,7 +179,7 @@ postsRouter.post(
   async (req: Request, res: Response) => {
     const content = req.body.content;
     const userId = req.user?.id;
-    const userLogin = req.user?.login;
+    const userLogin = req.user?.accountData.login;
     const postId = req.params.postId;
 
     if (!userId || !userLogin) {
@@ -196,7 +196,6 @@ postsRouter.post(
         postId,
         content
       );
-      console.log("PROVERKA!%)", newComment);
       res.status(201).send(newComment);
     }
   }

@@ -37,15 +37,33 @@ export type postsDBType = {
 
 export type UsersDBType = {
   id: string;
-  login: string;
-  passwordHash: string;
-  passwordSalt: string;
+  accountData: {
+    login: string;
+    email: string;
+    passwordHash: string;
+    passwordSalt: string;
+    createdAt: Date;
+  };
+  emailConfirmation: {
+    confirmationCode: string;
+    expirationDate: Date;
+    isConfirmed: boolean;
+  };
 };
 export type UsersDBTypeWithId = WithId<{
   id: string;
-  login: string;
-  passwordHash: string;
-  passwordSalt: string;
+  accountData: {
+    login: string;
+    email: string;
+    passwordHash: string;
+    passwordSalt: string;
+    createdAt: Date;
+  };
+  emailConfirmation: {
+    confirmationCode: string;
+    expirationDate: Date;
+    isConfirmed: boolean;
+  };
 }>;
 
 export type usersGetDBType = {
@@ -58,6 +76,7 @@ export type usersGetDBType = {
 
 export type UsersDBTypeReturn = {
   id: string;
+  email: string;
   login: string;
 };
 

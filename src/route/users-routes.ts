@@ -25,8 +25,9 @@ usersRouter.post(
   async (req: Request, res: Response) => {
     const login: string = req.body.login;
     const password: string = req.body.password;
+    const email: string = req.body.email;
 
-    const newUser = await UsersServis.createUser(login, password);
+    const newUser = await UsersServis.createUser(login, email, password);
     if (newUser) {
       res.status(201).send(newUser);
     } else {

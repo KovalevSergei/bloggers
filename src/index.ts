@@ -19,7 +19,6 @@ app.use("/bloggers", bloggersRouter);
 app.use("/posts", postsRouter);
 app.use("/comments", commentsRouter);
 app.use("/auth", authRouter);
-//app.use('/auth', authRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

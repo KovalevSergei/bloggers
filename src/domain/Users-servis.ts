@@ -12,10 +12,13 @@ import {
 } from "../repositories/types";
 import bcrypt from "bcrypt";
 import { UsersRepository } from "../repositories/users-repository";
+import { v4 as uuidv4 } from "uuid";
+import { compareAsc, format, add } from "date-fns";
 
 export const UsersServis = {
   async createUser(
     login: string,
+    email: string,
     password: string
   ): Promise<UsersDBTypeReturn | boolean> {
     const loginFind = await UsersRepository.userGetLogin(login);
@@ -27,10 +30,23 @@ export const UsersServis = {
 
       const newUser: UsersDBType = {
         id: Number(new Date()).toString(),
-        login: login,
-        passwordHash,
-        passwordSalt,
+        accountData: {
+          login: login,
+          email: email,
+          passwordHash,
+          passwordSalt,
+          createdAt: new Date(),
+        },
+        emailConfirmation: {
+          confirmationCode: uuidv4(),
+          expirationDate: add(new Date(), {
+            hours: 1,
+            minutes: 3,
+          }),
+          isConfirmed: false,
+        },
       };
+
       return UsersRepository.createUser(newUser);
     }
   },
@@ -41,8 +57,11 @@ export const UsersServis = {
   ) {
     const user = await UsersRepository.FindUserLogin(login);
     if (!user) return false;
-    const passwordHash = await this._generateHash(password, user.passwordSalt);
-    if (user.passwordHash !== passwordHash) {
+    const passwordHash = await this._generateHash(
+      password,
+      user.accountData.passwordSalt
+    );
+    if (user.accountData.passwordHash !== passwordHash) {
       return false;
     }
     return user;
