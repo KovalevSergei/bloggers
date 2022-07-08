@@ -3,12 +3,11 @@ import { UsersServis } from "../domain/Users-servis";
 import { jwtService } from "../application/jwt-service";
 import { authService } from "../domain/auth-servis";
 import { body, validationResult } from "express-validator";
+import { Mistake429 } from "../middleware/Mistake429";
 
 export const authRouter = Router({});
 import rateLimit from "express-rate-limit";
 import { inputValidation } from "../middleware/validation";
-
-const emailSee = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const loginValidation = body("login")
   .exists()
@@ -25,18 +24,18 @@ const emailValidation = body("email")
   .trim()
   .notEmpty()
   .isString()
-  .matches(emailSee);
+  .isEmail();
 const codeValidation = body("code").exists().trim().notEmpty().isString();
 
 const limiter = rateLimit({
   windowMs: 10 * 1000, //  10sec
-  max: 5, // Limit each IP to 5 requests per `window` (here, per 10 sec )
+  max: 2, // Limit each IP to 5 requests per `window` (here, per 10 sec )
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   statusCode: 429,
 });
 
-authRouter.post("/login", limiter, async (req: Request, res: Response) => {
+authRouter.post("/login", Mistake429, async (req: Request, res: Response) => {
   const user = await UsersServis.getUserByLogin(req.body.login);
   if (!user) return res.sendStatus(401);
   // req.ip or req.headers['x-forwarder-for'] or req.connection.remoteAddress
@@ -77,7 +76,7 @@ authRouter.post(
 
 authRouter.post(
   "/registration-email-resending",
-  limiter,
+  Mistake429,
   emailValidation,
   inputValidation,
   async (req: Request, res: Response) => {
@@ -91,7 +90,7 @@ authRouter.post(
 ),
   authRouter.post(
     "/registration-confirmation",
-    limiter,
+    Mistake429,
     codeValidation,
     inputValidation,
     async (req: Request, res: Response) => {

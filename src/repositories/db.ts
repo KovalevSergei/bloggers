@@ -5,6 +5,7 @@ import {
   postsWithIdType,
   UsersDBTypeWithId,
   commentsDBTypeWithId,
+  ipDBTypeWithId,
 } from "./types";
 
 const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
@@ -18,6 +19,7 @@ export const postsCollection = db.collection<postsWithIdType>("posts");
 export const userscollection = db.collection<UsersDBTypeWithId>("users");
 export const commentsCollection =
   db.collection<commentsDBTypeWithId>("comments");
+export const ipCollection = db.collection<ipDBTypeWithId>("ip");
 
 export async function runDb() {
   try {

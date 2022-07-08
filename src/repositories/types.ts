@@ -112,3 +112,9 @@ export type commentsDBPostIdType = {
   addedAt: string;
   postId: string;
 };
+
+export type ipDBTypeWithId = WithId<{
+  point: string;
+  ip: string;
+  data: Date;
+}>;
