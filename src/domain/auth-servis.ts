@@ -12,7 +12,7 @@ export const authService = {
     login: string,
     email: string,
     password: string
-  ): Promise<UsersDBTypeReturn | boolean> {
+  ): Promise<UsersDBType | boolean> {
     /*    const passwordSalt = await bcrypt.genSalt(10)
     const passwordHash = await UsersServis._generateHash(password, passwordSalt);
     const user: UsersDBType = {
@@ -33,12 +33,13 @@ export const authService = {
         isConfirmed: false,
       },
     }; */
-    const createResult = UsersServis.createUser(login, email, password);
-    if (!createResult) {
-      return createResult;
-    } else {
-      await emailAdapter.sendEmail(email, "Return new service", "sv");
-    }
+    const createResult = await UsersServis.createUser(login, email, password);
+
+    await emailAdapter.sendEmail(
+      email,
+      "Return new service",
+      createResult.emailConfirmation.confirmationCode
+    );
     return createResult;
   },
   async confirmEmail(email: string): Promise<boolean> {
@@ -50,7 +51,7 @@ export const authService = {
     await emailAdapter.sendEmail(
       email,
       "Return new service",
-      `<div>https://some-front.com/confirm-registration?code=youtcodehere</div>`
+      user.emailConfirmation.confirmationCode
     );
     let result = await UsersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
     return result;
@@ -64,7 +65,7 @@ export const authService = {
     await emailAdapter.sendEmail(
       user.accountData.email,
       "Return new service",
-      "Avtorizacia"
+      user.emailConfirmation.confirmationCode
     );
     let result = await UsersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
     return result;
