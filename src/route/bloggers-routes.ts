@@ -4,6 +4,7 @@ export const bloggersRouter = Router();
 import { body, validationResult } from "express-validator";
 import { inputValidation } from "../middleware/validation";
 import basicAuth from "../middleware/basicAuth";
+import { emailAdapter } from "../adapters/email-adapter";
 import {
   titleValidation,
   shortDescriptionValidation,

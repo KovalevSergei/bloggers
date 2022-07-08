@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { bloggersCollection, postsCollection } from "../repositories/db";
+import { emailAdapter } from "../adapters/email-adapter";
 import {
   bloggersType,
   bloggersDBType,

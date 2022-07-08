@@ -24,6 +24,7 @@ const emailValidation = body("email")
   .notEmpty()
   .isString()
   .matches("^[w-.]+@([w-]+.)+[w-]{2,4}$");
+const codeValidation = body("code").exists().trim().notEmpty().isString();
 
 const limiter = rateLimit({
   windowMs: 10 * 1000, //  minutes
@@ -77,7 +78,7 @@ authRouter.post(
   emailValidation,
   inputValidation,
   async (req: Request, res: Response) => {
-    const result = await authService.confirmEmail(req.body.code);
+    const result = await authService.confirmEmail(req.body.email);
     if (result) {
       res.status(204).send("code in the you email");
     } else {
@@ -88,6 +89,8 @@ authRouter.post(
   authRouter.post(
     "/registration-confirmation",
     limiter,
+    codeValidation,
+    inputValidation,
     async (req: Request, res: Response) => {
       const result = await authService.confirmCode(req.body.code);
       if (result) {

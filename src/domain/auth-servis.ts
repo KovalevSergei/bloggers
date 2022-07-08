@@ -34,7 +34,11 @@ export const authService = {
       },
     }; */
     const createResult = UsersServis.createUser(login, email, password);
-    await emailAdapter.sendEmail(email, "Return new service", "Avtorizacia");
+    if (!createResult) {
+      return createResult;
+    } else {
+      await emailAdapter.sendEmail(email, "Return new service", "sv");
+    }
     return createResult;
   },
   async confirmEmail(email: string): Promise<boolean> {
@@ -43,7 +47,11 @@ export const authService = {
     if (user.emailConfirmation.isConfirmed) return false;
     if (user.emailConfirmation.expirationDate < new Date()) return false;
 
-    await emailAdapter.sendEmail(email, "Return new service", "Avtorizacia");
+    await emailAdapter.sendEmail(
+      email,
+      "Return new service",
+      `<div>https://some-front.com/confirm-registration?code=youtcodehere</div>`
+    );
     let result = await UsersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
     return result;
   },
