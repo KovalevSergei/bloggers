@@ -20,35 +20,32 @@ export const UsersServis = {
     login: string,
     email: string,
     password: string
-  ): Promise<UsersDBTypeReturn | boolean> {
-    const loginFind = await UsersRepository.userGetLogin(login);
-    if (loginFind === true) {
-      return false;
-    } else {
-      const passwordSalt = await bcrypt.genSalt(10);
-      const passwordHash = await this._generateHash(password, passwordSalt);
+  ): Promise<UsersDBType> {
+    const passwordSalt = await bcrypt.genSalt(10);
+    const passwordHash = await this._generateHash(password, passwordSalt);
 
-      const newUser: UsersDBType = {
-        id: Number(new Date()).toString(),
-        accountData: {
-          login: login,
-          email: email,
-          passwordHash,
-          passwordSalt,
-          createdAt: new Date(),
-        },
-        emailConfirmation: {
-          confirmationCode: uuidv4(),
-          expirationDate: add(new Date(), {
-            hours: 1,
-            minutes: 3,
-          }),
-          isConfirmed: false,
-        },
-      };
+    const newUser: UsersDBType = {
+      id: Number(new Date()).toString(),
+      accountData: {
+        login: login,
+        email: email,
+        passwordHash,
+        passwordSalt,
+        createdAt: new Date(),
+      },
+      emailConfirmation: {
+        confirmationCode: uuidv4(),
+        expirationDate: add(new Date(), {
+          hours: 1,
+          minutes: 3,
+        }),
+        isConfirmed: false,
+      },
+    };
 
-      return UsersRepository.createUser(newUser);
-    }
+    const User = await UsersRepository.createUser(newUser);
+
+    return User;
   },
   async checkCredentials(
     users: UsersDBTypeWithId,

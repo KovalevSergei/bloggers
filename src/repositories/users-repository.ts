@@ -8,16 +8,12 @@ interface usersReturn {
 }
 
 export const UsersRepository = {
-  async createUser(newUser: UsersDBType): Promise<UsersDBTypeReturn> {
+  async createUser(newUser: UsersDBType): Promise<UsersDBType> {
     const createUser = await userscollection.insertOne({
       ...newUser,
       _id: new ObjectId(),
     });
-    return {
-      id: newUser.id,
-      email: newUser.accountData.email,
-      login: newUser.accountData.login,
-    };
+    return newUser;
   },
 
   //filters: { page: number, size: number, name: string }

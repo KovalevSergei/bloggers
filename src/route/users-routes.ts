@@ -28,12 +28,13 @@ usersRouter.post(
     const email: string = req.body.email;
 
     const newUser = await UsersServis.createUser(login, email, password);
-    if (newUser) {
-      res.status(201).send(newUser);
-    } else {
+    if (!newUser) {
       res.status(400).json({
         errorsMessages: { message: "login is use", field: "give new login" },
       });
+    } else {
+      const user = { id: newUser.id, login: newUser.accountData.login };
+      res.status(201).send(user);
     }
   }
 );

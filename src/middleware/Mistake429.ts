@@ -17,9 +17,14 @@ export const Mistake429 = async (
     data: new Date(),
   };
   await ipCollection.insertOne({ ...newCRUD, _id: new ObjectId() });
-  const totalCount = await ipCollection.find({ point: point }).toArray();
+  const fromData = new Date();
+  fromData.setSeconds(fromData.getSeconds() - 10);
+  const totalCount = await ipCollection.count({
+    point: point,
+    data: { $gt: fromData },
+  });
 
-  if (totalCount.length >= 5) {
+  if (totalCount >= 5) {
     res.sendStatus(429);
     return;
   } else {
