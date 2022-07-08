@@ -8,7 +8,7 @@ export const authRouter = Router({});
 import rateLimit from "express-rate-limit";
 import { inputValidation } from "../middleware/validation";
 
-const emailSee = /^[w-.]+@([w-]+.)+[w-]{2,4}$/;
+const emailSee = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const loginValidation = body("login")
   .exists()
