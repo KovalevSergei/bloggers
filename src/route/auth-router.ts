@@ -27,13 +27,13 @@ const emailValidation = body("email")
   .isEmail();
 const codeValidation = body("code").exists().trim().notEmpty().isString();
 
-const limiter = rateLimit({
+/* const limiter = rateLimit({
   windowMs: 10 * 1000, //  10sec
   max: 2, // Limit each IP to 5 requests per `window` (here, per 10 sec )
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   statusCode: 429,
-});
+}); */
 
 authRouter.post("/login", Mistake429, async (req: Request, res: Response) => {
   const user = await UsersServis.getUserByLogin(req.body.login);
@@ -55,7 +55,7 @@ authRouter.post("/login", Mistake429, async (req: Request, res: Response) => {
 
 authRouter.post(
   "/registration",
-  limiter,
+  Mistake429,
   loginValidation,
   emailValidation,
   passwordValidation,
