@@ -8,7 +8,7 @@ export const authRouter = Router({});
 import rateLimit from "express-rate-limit";
 import { inputValidation } from "../middleware/validation";
 
-const emailSee = "^[w-.]+@([w-]+.)+[w-]{2,4}$";
+const emailSee = /^[w-.]+@([w-]+.)+[w-]{2,4}$/;
 
 const loginValidation = body("login")
   .exists()
@@ -29,8 +29,8 @@ const emailValidation = body("email")
 const codeValidation = body("code").exists().trim().notEmpty().isString();
 
 const limiter = rateLimit({
-  windowMs: 10 * 1000, //  minutes
-  max: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  windowMs: 10 * 1000, //  10sec
+  max: 5, // Limit each IP to 5 requests per `window` (here, per 10 sec )
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   statusCode: 429,
