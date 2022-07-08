@@ -70,7 +70,7 @@ authRouter.post(
     if (user) {
       res.status(204).send("code in the you email");
     } else {
-      res.status(400).send({});
+      res.status(400).send();
     }
   }
 );
