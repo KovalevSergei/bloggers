@@ -8,6 +8,9 @@ export const authRouter = Router({});
 import rateLimit from "express-rate-limit";
 import { inputValidation } from "../middleware/validation";
 
+const emailSee =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const loginValidation = body("login")
   .exists()
   .trim()
@@ -23,7 +26,7 @@ const emailValidation = body("email")
   .trim()
   .notEmpty()
   .isString()
-  .matches("^[w-.]+@([w-]+.)+[w-]{2,4}$");
+  .matches(emailSee);
 const codeValidation = body("code").exists().trim().notEmpty().isString();
 
 const limiter = rateLimit({
