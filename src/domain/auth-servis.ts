@@ -61,12 +61,7 @@ export const authService = {
     let user = await UsersRepository.findByConfirmationCode(code);
     if (!user) return false;
     if (user.emailConfirmation.isConfirmed) return false;
-    if (user.emailConfirmation.expirationDate < new Date()) return false;
-    await emailAdapter.sendEmail(
-      user.accountData.email,
-      "Return new service",
-      user.emailConfirmation.confirmationCode
-    );
+
     let result = await UsersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
     return result;
   },
