@@ -82,15 +82,18 @@ export const UsersServis = {
     );
 
     //const userDtos = items.map(i => ({...i, id: i.id.toString()}))
-
-    const a = [{ id: items[0].id, login: items[0].accountData.login }];
+    const userRet = [];
+    for (let i = 0; i < items.length; ++i) {
+      const a = { id: items[i].id, login: items[i].accountData.login };
+      userRet.push(a);
+    }
     let pagesCount = Number(Math.ceil(totalCount / PageSize));
     const result: usersGetDBType = {
       pagesCount: pagesCount,
       page: PageNumber,
       pageSize: PageSize,
       totalCount: totalCount,
-      items: a,
+      items: userRet,
     };
     return result;
   },

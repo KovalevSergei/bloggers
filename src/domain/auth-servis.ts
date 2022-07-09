@@ -34,12 +34,13 @@ export const authService = {
       },
     }; */
     const createResult = await UsersServis.createUser(login, email, password);
-
-    await emailAdapter.sendEmail(
-      email,
-      "Return new service",
-      createResult.emailConfirmation.confirmationCode
-    );
+    if (createResult) {
+      await emailAdapter.sendEmail(
+        email,
+        "Registration",
+        createResult.emailConfirmation.confirmationCode
+      );
+    }
     return createResult;
   },
   async confirmEmail(email: string): Promise<boolean> {
@@ -49,7 +50,7 @@ export const authService = {
 
     await emailAdapter.sendEmail(
       email,
-      "Return new service",
+      "email",
       user.emailConfirmation.confirmationCode
     );
 
