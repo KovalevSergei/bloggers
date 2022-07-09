@@ -27,3 +27,6 @@ app.use("/testing", testingRouter);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+//netstat -ano | findstr :3000
+//tskill 3000

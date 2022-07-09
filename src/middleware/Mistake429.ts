@@ -8,7 +8,8 @@ export const Mistake429 = async (
   res: Response,
   next: NextFunction
 ) => {
-  const point = req.method;
+  const point = req.method + req.baseUrl;
+
   const ip = req.ip;
 
   const newCRUD = {

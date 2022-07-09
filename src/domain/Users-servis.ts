@@ -81,7 +81,7 @@ export const UsersServis = {
       PageNumber
     );
 
-    //const userDtos = items.map(i => ({...i, id: i.id.toString()}))
+    //const userDtos = items.map(i => ({id: i.id,login:i.accountData.login}))
     const userRet = [];
     for (let i = 0; i < items.length; ++i) {
       const a = { id: items[i].id, login: items[i].accountData.login };

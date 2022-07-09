@@ -27,7 +27,7 @@ usersRouter.post(
     const login: string = req.body.login;
     const password: string = req.body.password;
     const email: string = req.body.email;
-
+    console.log(req.baseUrl);
     const newUser = await UsersServis.createUser(login, email, password);
 
     const user = { id: newUser.id, login: newUser.accountData.login };
