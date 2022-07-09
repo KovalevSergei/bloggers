@@ -8,6 +8,7 @@ import { Mistake429 } from "../middleware/Mistake429";
 export const authRouter = Router({});
 import rateLimit from "express-rate-limit";
 import { inputValidation } from "../middleware/validation";
+import { codeFind } from "../middleware/codeFind";
 
 const loginValidation = body("login")
   .exists()
@@ -88,14 +89,9 @@ authRouter.post(
   authRouter.post(
     "/registration-confirmation",
     Mistake429,
-    codeValidation,
-    inputValidation,
+    codeFind,
     async (req: Request, res: Response) => {
       const result = await authService.confirmCode(req.body.code);
-      if (result) {
-        res.status(204).send("code in the you email");
-      } else {
-        res.sendStatus(400);
-      }
+      res.sendStatus(204);
     }
   );
