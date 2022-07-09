@@ -71,7 +71,7 @@ export type usersGetDBType = {
   page: number;
   pageSize: number;
   totalCount: number;
-  items: UsersDBType[];
+  items: { id: string; login: string }[];
 };
 
 export type UsersDBTypeReturn = {

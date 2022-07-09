@@ -20,7 +20,7 @@ export const UsersRepository = {
   async getUsers(PageSize: number, PageNumber: number): Promise<usersReturn> {
     const totalCount = await userscollection.countDocuments();
     const items = await userscollection
-      .find({}, { projection: { _id: 0, passwordHash: 0, passwordSalt: 0 } })
+      .find({}, { projection: { _id: 0, emailConfirmation: 0 } })
       .skip((PageNumber - 1) * PageSize)
       .limit(PageSize)
       .toArray();
@@ -41,7 +41,9 @@ export const UsersRepository = {
     }
   },
   async FindUserLogin(login: string): Promise<UsersDBTypeWithId | null> {
-    const usersFind = await userscollection.findOne({ login: login });
+    const usersFind = await userscollection.findOne({
+      "accountData.login": login,
+    });
     return usersFind;
   },
   async findUserById(id: string): Promise<UsersDBTypeWithId | null> {
