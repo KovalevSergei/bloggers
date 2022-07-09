@@ -64,15 +64,7 @@ export const UsersRepository = {
     );
     return result.modifiedCount === 1;
   },
-  async findByLoginOrEmail(loginOrEmail: string) {
-    const user = await userscollection.findOne({
-      $or: [
-        { "accountData.email": loginOrEmail },
-        { "accountData.userName": loginOrEmail },
-      ],
-    });
-    return user;
-  },
+
   async findByConfirmationCode(code: string) {
     const user = await userscollection.findOne({
       "emailConfirmation.confirmationCode": code,

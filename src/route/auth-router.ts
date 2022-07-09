@@ -80,9 +80,16 @@ authRouter.post(
   async (req: Request, res: Response) => {
     const result = await authService.confirmEmail(req.body.email);
     if (result) {
-      res.status(204).send("code in the you email");
+      res.sendStatus(204);
     } else {
-      res.sendStatus(400);
+      res.status(400).send({
+        errorsMessages: [
+          {
+            message: "string",
+            field: "string",
+          },
+        ],
+      });
     }
   }
 ),
