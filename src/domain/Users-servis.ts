@@ -14,6 +14,7 @@ import bcrypt from "bcrypt";
 import { UsersRepository } from "../repositories/users-repository";
 import { v4 as uuidv4 } from "uuid";
 import { compareAsc, format, add } from "date-fns";
+import { id } from "date-fns/locale";
 
 export const UsersServis = {
   async createUser(
@@ -81,14 +82,14 @@ export const UsersServis = {
     );
 
     //const userDtos = items.map(i => ({...i, id: i.id.toString()}))
-
+    const a = [items[0], items[1]];
     let pagesCount = Number(Math.ceil(totalCount / PageSize));
     const result: usersGetDBType = {
       pagesCount: pagesCount,
       page: PageNumber,
       pageSize: PageSize,
       totalCount: totalCount,
-      items,
+      items: a,
     };
     return result;
   },

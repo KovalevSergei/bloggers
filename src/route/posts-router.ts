@@ -204,9 +204,6 @@ postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
   const pageSize = req.query.PageSize ? Number(req.query.PageSize) : 10;
   const pageNumber = req.query.PageNumber ? Number(req.query.PageNumber) : 1;
   const postId = req.params.postId;
-  console.log(postId, "postId");
-  console.log(pageSize, "pageSize");
-  console.log(pageNumber, "pageNumber");
   const post = await postsServis.getpostsId(postId);
   if (!post) {
     return res.sendStatus(404);

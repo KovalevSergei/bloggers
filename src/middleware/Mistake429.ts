@@ -21,10 +21,11 @@ export const Mistake429 = async (
   fromData.setSeconds(fromData.getSeconds() - 10);
   const totalCount = await ipCollection.count({
     point: point,
+    ip: ip,
     data: { $gt: fromData },
   });
 
-  if (totalCount >= 5) {
+  if (totalCount > 5) {
     res.sendStatus(429);
     return;
   } else {

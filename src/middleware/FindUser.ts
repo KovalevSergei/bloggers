@@ -14,7 +14,6 @@ export const UserFind = async (
     return;
   }
   const Comment = await commentsCollection.findOne({ id: id });
-  console.log(Comment);
   if (!Comment) {
     res.sendStatus(404);
     return;

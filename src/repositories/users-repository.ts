@@ -24,7 +24,6 @@ export const UsersRepository = {
       .skip((PageNumber - 1) * PageSize)
       .limit(PageSize)
       .toArray();
-
     return { totalCount: totalCount, items: items };
   },
   async deleteUsersId(id: string): Promise<boolean> {

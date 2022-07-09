@@ -61,17 +61,13 @@ authRouter.post(
   passwordValidation,
   inputValidation,
   async (req: Request, res: Response) => {
-    const method = 2;
     const user = await authService.createUser(
       req.body.login,
       req.body.email,
       req.body.password
     );
-    if (user) {
-      res.sendStatus(204);
-    } else {
-      res.sendStatus(400);
-    }
+
+    res.sendStatus(204);
   }
 );
 

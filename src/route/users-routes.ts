@@ -4,6 +4,7 @@ export const usersRouter = Router();
 import { body, validationResult } from "express-validator";
 import { inputValidation } from "../middleware/validation";
 import basicAuth from "../middleware/basicAuth";
+import { id } from "date-fns/locale";
 
 const loginValidation = body("login")
   .exists()
@@ -28,20 +29,13 @@ usersRouter.post(
     const email: string = req.body.email;
 
     const newUser = await UsersServis.createUser(login, email, password);
-    if (!newUser) {
-      res.status(400).json({
-        errorsMessages: { message: "login is use", field: "give new login" },
-      });
-    } else {
-      const user = { id: newUser.id, login: newUser.accountData.login };
-      res.status(201).send(user);
-    }
+
+    const user = { id: newUser.id, login: newUser.accountData.login };
+    res.status(201).send(user);
   }
 );
 
 usersRouter.get("/", async (req: Request, res: Response) => {
-  console.log("users");
-
   const PageNumber: number = Number(req.query.PageNumber) || 1;
   const PageSize: number = Number(req.query.PageSize) || 10;
   const getUsers = await UsersServis.getUsers(PageNumber, PageSize);
