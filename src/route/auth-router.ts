@@ -79,6 +79,7 @@ authRouter.post(
   Mistake429,
   emailValidation,
   inputValidation,
+  mailFind,
   async (req: Request, res: Response) => {
     const result = await authService.confirmEmail(req.body.email);
     if (result) {
