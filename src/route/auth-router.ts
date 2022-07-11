@@ -58,11 +58,11 @@ authRouter.post("/login", Mistake429, async (req: Request, res: Response) => {
 authRouter.post(
   "/registration",
   Mistake429,
-  mailFind,
   loginValidation,
   emailValidation,
   passwordValidation,
   inputValidation,
+  mailFind,
   async (req: Request, res: Response) => {
     const user = await authService.createUser(
       req.body.login,
