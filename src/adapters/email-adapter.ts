@@ -16,7 +16,7 @@ export const emailAdapter = {
       to: email, // list of receivers
       subject: subject, // Subject line
       text: `https://some-front.com/confirm-registration?code=${code}`,
-      //html: `<div>https://some-front.com/confirm-registration?code=${code}</div>`, // html body
+      //html: `<div><a href=https://some-front.com/confirm-registration?code=${code}>https://some-front.com/confirm-registration?code=${code}</a></div>`, // html body
     });
 
     return info;

@@ -63,11 +63,7 @@ export const authService = {
     if (user.emailConfirmation.isConfirmed) return false;
 
     let result = await UsersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
-    await emailAdapter.sendEmail(
-      user.accountData.email,
-      "email",
-      "Account was activated"
-    );
+
     return result;
   },
 };

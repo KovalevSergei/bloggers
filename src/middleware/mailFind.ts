@@ -13,7 +13,7 @@ export const mailFind = async (
   if (mailReturn) {
     res
       .status(400)
-      .send({ errorsMessages: [{ message: "mail is used", field: "mail" }] });
+      .send({ errorsMessages: [{ message: "mail is used", field: "email" }] });
     return;
   } else {
     next();
