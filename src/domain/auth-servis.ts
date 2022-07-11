@@ -35,7 +35,7 @@ export const authService = {
     }; */
     const createResult = await UsersServis.createUser(login, email, password);
     if (createResult) {
-      await emailAdapter.sendEmail2(
+      await emailAdapter.sendEmail(
         email,
         "Registration",
         createResult.emailConfirmation.confirmationCode
