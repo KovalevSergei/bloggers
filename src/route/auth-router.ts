@@ -11,6 +11,7 @@ import { inputValidation } from "../middleware/validation";
 import { codeFind } from "../middleware/codeFind";
 import { mailFind } from "../middleware/mailFind";
 import { loginFind } from "../middleware/loginFind";
+import { emailExist } from "../middleware/emailExist";
 
 const loginValidation = body("login")
   .exists()
@@ -87,7 +88,7 @@ authRouter.post(
   "/registration-email-resending",
   Mistake429,
   emailValidation,
-  mailFind,
+  emailExist,
   inputValidation,
   async (req: Request, res: Response) => {
     const result = await authService.confirmEmail(req.body.email);
