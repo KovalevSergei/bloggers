@@ -32,6 +32,7 @@ export const codeValidationConfirmed = async (
         },
       ],
     });
+    return;
   }
   next();
 };
