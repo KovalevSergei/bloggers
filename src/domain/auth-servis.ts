@@ -47,12 +47,10 @@ export const authService = {
     let user = await UsersRepository.findByEmail(email);
 
     if (!user) return false;
-
-    await emailAdapter.sendEmail(
-      email,
-      "email",
-      user.emailConfirmation.confirmationCode
-    );
+    const id = user.id;
+    const code = uuidv4();
+    await UsersRepository.updateCode(id, code);
+    await emailAdapter.sendEmail(email, "email", code);
 
     return true;
   },

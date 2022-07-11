@@ -10,6 +10,7 @@ import rateLimit from "express-rate-limit";
 import { inputValidation } from "../middleware/validation";
 import { codeFind } from "../middleware/codeFind";
 import { mailFind } from "../middleware/mailFind";
+import { loginFind } from "../middleware/loginFind";
 
 const loginValidation = body("login")
   .exists()
@@ -37,23 +38,30 @@ const codeValidation = body("code").exists().trim().notEmpty().isString();
   statusCode: 429,
 }); */
 
-authRouter.post("/login", Mistake429, async (req: Request, res: Response) => {
-  const user = await UsersServis.getUserByLogin(req.body.login);
-  if (!user) return res.sendStatus(401);
-  // req.ip or req.headers['x-forwarder-for'] or req.connection.remoteAddress
+authRouter.post(
+  "/login",
+  Mistake429,
+  loginValidation,
+  passwordValidation,
+  inputValidation,
+  async (req: Request, res: Response) => {
+    const user = await UsersServis.getUserByLogin(req.body.login);
+    if (!user) return res.sendStatus(401);
+    // req.ip or req.headers['x-forwarder-for'] or req.connection.remoteAddress
 
-  const areCredentialsCorrect = await UsersServis.checkCredentials(
-    user,
-    req.body.login,
-    req.body.password
-  );
-  if (areCredentialsCorrect) {
-    const token = await jwtService.createJWT(user);
-    res.status(200).send({ token });
-  } else {
-    res.sendStatus(401);
+    const areCredentialsCorrect = await UsersServis.checkCredentials(
+      user,
+      req.body.login,
+      req.body.password
+    );
+    if (areCredentialsCorrect) {
+      const token = await jwtService.createJWT(user);
+      res.status(200).send({ token });
+    } else {
+      res.sendStatus(401);
+    }
   }
-});
+);
 
 authRouter.post(
   "/registration",
@@ -63,6 +71,7 @@ authRouter.post(
   passwordValidation,
   inputValidation,
   mailFind,
+  loginFind,
   async (req: Request, res: Response) => {
     const user = await authService.createUser(
       req.body.login,
@@ -78,6 +87,7 @@ authRouter.post(
   "/registration-email-resending",
   Mistake429,
   emailValidation,
+  mailFind,
   inputValidation,
   async (req: Request, res: Response) => {
     const result = await authService.confirmEmail(req.body.email);

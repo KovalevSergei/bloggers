@@ -77,4 +77,11 @@ export const UsersRepository = {
     });
     return user;
   },
+  async updateCode(id: string, code: string) {
+    const result = await userscollection.updateOne(
+      { id },
+      { $set: { "emailConfirmation.confirmationCode": code } }
+    );
+    return result.modifiedCount === 1;
+  },
 };
