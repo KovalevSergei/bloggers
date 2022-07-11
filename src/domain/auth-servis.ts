@@ -35,7 +35,7 @@ export const authService = {
     }; */
     const createResult = await UsersServis.createUser(login, email, password);
     if (createResult) {
-      await emailAdapter.sendEmail(
+      await emailAdapter.sendEmail2(
         email,
         "Registration",
         createResult.emailConfirmation.confirmationCode
@@ -48,7 +48,7 @@ export const authService = {
 
     if (!user) return false;
 
-    await emailAdapter.sendEmail2(
+    await emailAdapter.sendEmail(
       email,
       "email",
       user.emailConfirmation.confirmationCode
@@ -63,6 +63,11 @@ export const authService = {
     if (user.emailConfirmation.isConfirmed) return false;
 
     let result = await UsersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
+    await emailAdapter.sendEmail(
+      user.accountData.email,
+      "email",
+      "Account was activated"
+    );
     return result;
   },
 };
