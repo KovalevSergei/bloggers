@@ -48,7 +48,7 @@ export const authService = {
 
     if (!user) return false;
 
-    await emailAdapter.sendEmail(
+    await emailAdapter.sendEmail2(
       email,
       "email",
       user.emailConfirmation.confirmationCode
