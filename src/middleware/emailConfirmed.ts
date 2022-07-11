@@ -10,15 +10,9 @@ export const emailExist = async (
   const mailReturn = await userscollection.findOne({
     "accountData.email": email,
   });
-  if (!mailReturn) {
+  if (mailReturn?.emailConfirmation.isConfirmed) {
     res.status(400).send({
       errorsMessages: [{ message: "mail not exist", field: "email" }],
-    });
-    return;
-  }
-  if (mailReturn.emailConfirmation.isConfirmed) {
-    res.status(400).send({
-      errorsMessages: [{ message: "mail is confirmed", field: "email" }],
     });
     return;
   }
