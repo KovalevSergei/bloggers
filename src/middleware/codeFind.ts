@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userscollection } from "../repositories/db";
 
-export const codeFind = async (
+export const codeValidationConfirmed = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -16,12 +16,22 @@ export const codeFind = async (
       errorsMessages: [
         {
           message: "string",
-          field: "string",
+          field: "code",
         },
       ],
     });
+
     return;
-  } else {
-    next();
   }
+  if (codeRetrun.emailConfirmation.isConfirmed) {
+    res.status(400).send({
+      errorsMessages: [
+        {
+          message: "user is confirmed",
+          field: "code",
+        },
+      ],
+    });
+  }
+  next();
 };
