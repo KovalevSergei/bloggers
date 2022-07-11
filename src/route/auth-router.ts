@@ -9,6 +9,7 @@ export const authRouter = Router({});
 import rateLimit from "express-rate-limit";
 import { inputValidation } from "../middleware/validation";
 import { codeFind } from "../middleware/codeFind";
+import { mailFind } from "../middleware/mailFind";
 
 const loginValidation = body("login")
   .exists()
@@ -57,6 +58,7 @@ authRouter.post("/login", Mistake429, async (req: Request, res: Response) => {
 authRouter.post(
   "/registration",
   Mistake429,
+  mailFind,
   loginValidation,
   emailValidation,
   passwordValidation,
