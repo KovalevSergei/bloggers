@@ -65,7 +65,7 @@ authRouter.post(
         secure: true,
         maxAge: 20 * 1000,
       });
-      res.status(200).send({ token });
+      res.status(200).send({ accessToken: token });
     } else {
       res.sendStatus(401);
     }
@@ -139,7 +139,7 @@ authRouter.post("/refresh-token", async (req: Request, res: Response) => {
       secure: true,
       maxAge: 20 * 1000,
     });
-    res.status(200).send({ token });
+    res.status(200).send({ accessToken: token });
   }
 });
 
