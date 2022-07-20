@@ -86,4 +86,12 @@ export const authService = {
       return true;
     }
   },
+  async refreshTokenKill(token: string): Promise<boolean> {
+    let result = await jwtService.getUserIdByToken(token);
+    if (result === null) {
+      return false;
+    } else {
+      return true;
+    }
+  },
 };
