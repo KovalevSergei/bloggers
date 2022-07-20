@@ -7,13 +7,12 @@ import { usersRouter } from "./route/users-routes";
 import { commentsRouter } from "./route/comments-routes";
 import { authRouter } from "./route/auth-router";
 import { testingRouter } from "./route/testing-route";
-
-//import { authRouter } from "./route/auth-routes";
-//import { ReadableStreamBYOBRequest } from 'stream/web';
-//import { request } from 'http';
+//import cookieparser from "../node_modules/cookie-parser";
+import cookieparser from "cookie-parser";
 
 const app = express();
 app.set("trust proxy", true);
+app.use(cookieparser());
 
 const port = process.env.PORT || 3000;
 app.use(bodyParser.json());

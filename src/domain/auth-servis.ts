@@ -5,7 +5,12 @@ import { UsersRepository } from "../repositories/users-repository";
 import { Result } from "express-validator";
 import bcrypt from "bcrypt";
 import { emailAdapter } from "../adapters/email-adapter";
-import { UsersDBType, UsersDBTypeReturn } from "../repositories/types";
+import {
+  UsersDBType,
+  UsersDBTypeReturn,
+  refreshToken,
+} from "../repositories/types";
+import { jwtService } from "../application/jwt-service";
 
 export const authService = {
   async createUser(
@@ -63,5 +68,22 @@ export const authService = {
     let result = await UsersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
 
     return result;
+  },
+  async refreshTokenSave(token: string): Promise<boolean | string> {
+    let refreshToken = await UsersRepository.refreshTokenSave(token);
+    return refreshToken;
+  },
+  async refreshTokenFind(token: string): Promise<boolean> {
+    let refreshTokenFind = await UsersRepository.refreshTokenFind(token);
+    if (refreshTokenFind === null) {
+      return false;
+    }
+    let refreshTokenTimeOut = await jwtService.getUserIdByToken(token);
+
+    if (refreshTokenTimeOut === null) {
+      return false;
+    } else {
+      return true;
+    }
   },
 };

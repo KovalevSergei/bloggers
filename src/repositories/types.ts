@@ -118,3 +118,5 @@ export type ipDBTypeWithId = WithId<{
   ip: string;
   data: Date;
 }>;
+
+export type refreshToken = WithId<{ token: string }>;

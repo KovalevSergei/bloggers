@@ -1,6 +1,11 @@
 import { ObjectId } from "mongodb";
-import { userscollection } from "./db";
-import { UsersDBType, UsersDBTypeReturn, UsersDBTypeWithId } from "./types";
+import { refreshTokencollection, userscollection } from "./db";
+import {
+  UsersDBType,
+  UsersDBTypeReturn,
+  UsersDBTypeWithId,
+  refreshToken,
+} from "./types";
 
 interface usersReturn {
   items: UsersDBType[];
@@ -83,5 +88,16 @@ export const UsersRepository = {
       { $set: { "emailConfirmation.confirmationCode": code } }
     );
     return result.modifiedCount === 1;
+  },
+  async refreshTokenSave(token: string) {
+    const result = await refreshTokencollection.insertOne({
+      token: token,
+      _id: new ObjectId(),
+    });
+    return true;
+  },
+  async refreshTokenFind(token: string): Promise<refreshToken | null> {
+    const result = await refreshTokencollection.findOne({ token: token });
+    return result;
   },
 };
