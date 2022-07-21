@@ -90,8 +90,9 @@ export const UsersRepository = {
     return result.modifiedCount === 1;
   },
   async refreshTokenSave(token: string) {
+    let a = `refreshToken=${token}`;
     const result = await refreshTokencollection.insertOne({
-      token: token,
+      token: a,
       _id: new ObjectId(),
     });
     return true;
