@@ -56,21 +56,18 @@ authRouter.post(
       req.body.login,
       req.body.password
     );
-    if (areCredentialsCorrect) {
-      const token = await jwtService.createJWT(user);
-      const RefreshToken = await jwtService.createJWTrefresh(user);
-
-      res.cookie(RefreshToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 20 * 1000,
-      });
-      res.status(200).send({ accessToken: token });
-      return;
-    } else {
+    if (!areCredentialsCorrect) {
       res.sendStatus(401);
       return;
     }
+    const token = await jwtService.createJWT(user);
+    const refreshToken = await jwtService.createJWTrefresh(user);
+
+    res.cookie(refreshToken, {
+      httpOnly: true,
+      secure: true,
+    });
+    return res.status(200).send({ accessToken: token });
   }
 );
 
