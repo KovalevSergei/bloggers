@@ -13,6 +13,7 @@ import { mailFind } from "../middleware/mailFind";
 import { loginFind } from "../middleware/loginFind";
 import { emailExist } from "../middleware/emailExist";
 import { authMiddleware } from "../middleware/auth";
+import { userscollection } from "../repositories/db";
 
 const loginValidation = body("login")
   .exists()
@@ -66,6 +67,7 @@ authRouter.post(
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
+      maxAge: 20 * 1000,
     });
     return res.status(200).send({ accessToken: token });
   }
@@ -125,21 +127,33 @@ authRouter.post(
 
 authRouter.post("/refresh-token", async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
-  const findToken = await authService.refreshTokenFind(refreshToken);
-  let token2 = refreshToken.split("refreshToken=");
-  if (findToken === false || !refreshToken) {
+  console.log(refreshToken);
+  if (!refreshToken) {
     res.sendStatus(401);
-  } else {
-    const token = await jwtService.createJWT(token2[1]);
-    const RefreshToken = await jwtService.createJWTrefresh(token2[1]);
-
-    res.cookie("refreshToken", RefreshToken, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 20 * 1000,
-    });
-    res.status(200).send({ accessToken: token });
+    return;
   }
+
+  const findToken = await authService.refreshTokenFind(refreshToken);
+
+  if (findToken === false) {
+    res.sendStatus(401);
+    return;
+  }
+  const userId = await jwtService.getUserIdByToken(refreshToken);
+  const user = await UsersServis.findUserById(userId);
+  if (!user) {
+    res.sendStatus(401);
+    return;
+  }
+  const token = await jwtService.createJWT(user);
+  const RefreshToken = await jwtService.createJWTrefresh(user);
+
+  res.cookie("refreshToken", RefreshToken, {
+    httpOnly: true,
+    secure: true,
+    maxAge: 20 * 1000,
+  });
+  res.status(200).send({ accessToken: token });
 });
 
 authRouter.post("/logout", async (req: Request, res: Response) => {
