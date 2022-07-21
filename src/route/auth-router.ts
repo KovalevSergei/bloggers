@@ -131,7 +131,11 @@ authRouter.post("/refresh-token", async (req: Request, res: Response) => {
     res.sendStatus(401);
     return;
   }
-
+  const tokenExpire = await jwtService.getUserIdByToken(refreshToken);
+  if (tokenExpire === null) {
+    res.sendStatus(401);
+    return;
+  }
   const findToken = await authService.refreshTokenFind(refreshToken);
 
   if (findToken === false) {
