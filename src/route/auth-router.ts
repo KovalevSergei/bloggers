@@ -140,6 +140,7 @@ authRouter.post("/refresh-token", async (req: Request, res: Response) => {
     res.sendStatus(401);
     return;
   }
+  await authService.refreshTokenKill(refreshToken);
   const userId = await jwtService.getUserIdByToken(refreshToken);
   const user = await UsersServis.findUserById(userId);
   if (!user) {
@@ -159,10 +160,11 @@ authRouter.post("/refresh-token", async (req: Request, res: Response) => {
 
 authRouter.post("/logout", async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
-  console.log(refreshToken, "Proverka");
+
   const result = await authService.refreshTokenKill(refreshToken);
   if (result === true) {
     res.sendStatus(204);
+    return;
   } else {
     res.sendStatus(401);
   }
