@@ -91,7 +91,7 @@ export const UsersRepository = {
   },
   async refreshTokenSave(token: string) {
     const result = await refreshTokencollection.insertOne({
-      token: token,
+      token: `refreshToken=${token}`,
       _id: new ObjectId(),
     });
     return true;
@@ -99,5 +99,9 @@ export const UsersRepository = {
   async refreshTokenFind(token: string): Promise<refreshToken | null> {
     const result = await refreshTokencollection.findOne({ token: token });
     return result;
+  },
+  async refreshTokenKill(token: string): Promise<boolean> {
+    const result = await refreshTokencollection.deleteOne({ token: token });
+    return result.deletedCount === 1;
   },
 };
