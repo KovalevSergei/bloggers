@@ -162,7 +162,11 @@ authRouter.post("/refresh-token", async (req: Request, res: Response) => {
 
 authRouter.post("/logout", async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
-
+  const tokenExpire = await jwtService.getUserIdByToken(refreshToken);
+  if (tokenExpire === null) {
+    res.sendStatus(401);
+    return;
+  }
   const result = await authService.refreshTokenKill(refreshToken);
   if (result === true) {
     res.sendStatus(204);
