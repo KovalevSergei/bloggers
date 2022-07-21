@@ -160,7 +160,7 @@ authRouter.post("/logout", async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
   const result = await authService.refreshTokenKill(refreshToken);
   if (result === true) {
-    res.sendStatus(201);
+    res.sendStatus(204);
   } else {
     res.sendStatus(401);
   }
