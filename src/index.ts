@@ -12,10 +12,11 @@ import cookieparser from "cookie-parser";
 
 const app = express();
 app.set("trust proxy", true);
+app.use(bodyParser.json());
 app.use(cookieparser());
 
 const port = process.env.PORT || 3000;
-app.use(bodyParser.json());
+
 app.use("/users", usersRouter);
 app.use("/bloggers", bloggersRouter);
 app.use("/posts", postsRouter);
