@@ -66,8 +66,10 @@ authRouter.post(
         maxAge: 20 * 1000,
       });
       res.status(200).send({ accessToken: token });
+      return;
     } else {
       res.sendStatus(401);
+      return;
     }
   }
 );
