@@ -11,6 +11,7 @@ import {
   refreshToken,
 } from "../repositories/types";
 import { jwtService } from "../application/jwt-service";
+import { userscollection } from "../repositories/db";
 
 export const authService = {
   async createUser(
@@ -87,8 +88,9 @@ export const authService = {
     }
   },
   async refreshTokenKill(token: string): Promise<boolean> {
-    let result = await jwtService.getUserIdByToken(token);
-    if (result === null) {
+    //let result = await jwtService.getUserIdByToken(token);
+    let result = await UsersRepository.refreshTokenKill(token);
+    if (result === false) {
       return false;
     } else {
       return true;
