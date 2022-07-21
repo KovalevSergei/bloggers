@@ -126,7 +126,7 @@ authRouter.post(
 authRouter.post("/refresh-token", async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
   const findToken = await authService.refreshTokenFind(refreshToken);
-  let token2 = refreshToken.split(" ");
+  let token2 = refreshToken.split("refreshToken=");
   if (findToken === false || !refreshToken) {
     res.sendStatus(401);
   } else {
