@@ -159,6 +159,7 @@ authRouter.post("/refresh-token", async (req: Request, res: Response) => {
 
 authRouter.post("/logout", async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
+  console.log(refreshToken, "Proverka");
   const result = await authService.refreshTokenKill(refreshToken);
   if (result === true) {
     res.sendStatus(204);
