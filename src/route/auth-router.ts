@@ -126,12 +126,12 @@ authRouter.post(
 authRouter.post("/refresh-token", async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
   const findToken = await authService.refreshTokenFind(refreshToken);
-  refreshToken.split(" ");
+  let token2 = refreshToken.split(" ");
   if (findToken === false || !refreshToken) {
     res.sendStatus(401);
   } else {
-    const token = await jwtService.createJWT(refreshToken[1]);
-    const RefreshToken = await jwtService.createJWTrefresh(refreshToken[1]);
+    const token = await jwtService.createJWT(token2[1]);
+    const RefreshToken = await jwtService.createJWTrefresh(token2[1]);
 
     res.cookie("refreshToken", RefreshToken, {
       httpOnly: true,
