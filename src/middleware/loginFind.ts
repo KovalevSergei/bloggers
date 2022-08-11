@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { userscollection } from "../repositories/db";
+import { usersModel } from "../repositories/db";
 
 export const loginFind = async (
   req: Request,
@@ -7,7 +7,7 @@ export const loginFind = async (
   next: NextFunction
 ) => {
   const login = req.body.login;
-  const mailReturn = await userscollection.findOne({
+  const mailReturn = await usersModel.findOne({
     "accountData.login": login,
   });
   if (mailReturn) {

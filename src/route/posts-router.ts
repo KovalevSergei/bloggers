@@ -4,9 +4,13 @@ import { inputValidation } from "../middleware/validation";
 import { body, validationResult } from "express-validator";
 import { title } from "process";
 import basicAuth from "../middleware/basicAuth";
-import { postsServis } from "../domain/posts-servis";
+import { PostsService } from "../domain/posts-servis";
 import { authMiddleware } from "../middleware/auth";
-import { commentsServis } from "../domain/comments-servis";
+import { CommentsService } from "../domain/comments-servis";
+import { container } from "../ioc-container";
+import { injectable } from "inversify";
+import { userIdMiddleware } from "../middleware/userId";
+
 export { titleValidation, shortDescriptionValidation, contentValidation };
 
 const titleValidation = body("title")
@@ -27,33 +31,64 @@ const contentValidation = body("content")
   .trim()
   .notEmpty()
   .isLength({ min: 1, max: 1000 });
+let status = ["None", "Like", "Dislike"];
+const likeStatusvalidation = body("likeStatus").isIn(status);
 
-postsRouter.get("/", async (req: Request, res: Response) => {
-  const pageNumber = Number(req.query.PageNumber) || 1;
-  const pageSize = Number(req.query.PageSize) || 10;
-  const getPosts = await postsServis.getPosts(pageNumber, pageSize);
-
-  res.status(200).send(getPosts);
-});
-
-postsRouter.get("/:postsid", async (req: Request, res: Response) => {
-  const postsid = await postsServis.getpostsId(req.params.postsid);
-  if (!postsid) {
-    res.sendStatus(404);
-  } else {
-    res.status(200).json(postsid);
+@injectable()
+export class PostController {
+  constructor(
+    protected postsServis: PostsService,
+    protected commentsServis: CommentsService
+  ) {
+    console.log("const", this);
   }
-});
+  async getPosts(req: Request, res: Response) {
+    const pageNumber = Number(req.query.PageNumber) || 1;
+    const pageSize = Number(req.query.PageSize) || 10;
+    const getPosts = await this.postsServis.getPosts(pageNumber, pageSize);
 
-postsRouter.put(
-  "/:id",
-  basicAuth,
-  titleValidation,
-  shortDescriptionValidation,
-  contentValidation,
-  inputValidation,
-  async (req: Request, res: Response) => {
-    const postsnew = await postsServis.updatePostsId(
+    res.status(200).send(getPosts);
+  }
+  async getpostsId(req: Request, res: Response) {
+    const postsid = await this.postsServis.getpostsId(req.params.postsid);
+    const userId = req.user?.id || "1";
+
+    if (!postsid) {
+      res.sendStatus(404);
+    } else {
+      const likesInformation = await this.postsServis.getLike(
+        req.params.postid,
+        userId
+      );
+      const newestLikes = await this.postsServis.getNewestLikes(
+        req.params.postid
+      );
+      const newestLikesMap = newestLikes.map((v) => ({
+        addedAt: v.addedAt,
+        userId: v.userId,
+        login: v.login,
+      }));
+
+      const result = {
+        id: postsid.id,
+        title: postsid.title,
+        shortDescription: postsid.shortDescription,
+        content: postsid.content,
+        bloggerId: postsid.bloggerId,
+        bloggerName: postsid.bloggerName,
+        addedAt: postsid.addedAt,
+        extendedLikesInfo: {
+          likesCount: likesInformation.likesCount,
+          dislikesCount: likesInformation.disLikesCount,
+          myStatus: likesInformation.myStatus,
+          newestLikes: newestLikesMap,
+        },
+      };
+      res.status(200).json(result);
+    }
+  }
+  async updatePostsId(req: Request, res: Response) {
+    const postsnew = await this.postsServis.updatePostsId(
       req.params.id,
       req.body.title,
       req.body.shortDescription,
@@ -69,7 +104,109 @@ postsRouter.put(
     } else {
       res.status(204).send(postsnew);
     }
-    /*     let title= req.body.title;
+  }
+  async createPosts(req: Request, res: Response) {
+    const postnew = await this.postsServis.createPosts(
+      req.body.title,
+      req.body.shortDescription,
+      req.body.content,
+      req.body.bloggerId
+    );
+    if (postnew) {
+      res.status(201).send(postnew);
+    } else {
+      res
+        .status(400)
+        .send({ errorsMessages: [{ message: "bloger", field: "bloggerId" }] });
+    }
+  }
+  async deletePosts(req: Request, res: Response) {
+    const isdelete = await this.postsServis.deletePosts(req.params.id);
+    if (isdelete) {
+      res.sendStatus(204);
+    } else {
+      res.sendStatus(404);
+    }
+  }
+  async createComments(req: Request, res: Response) {
+    const content = req.body.content;
+    const userId = req.user?.id;
+    const userLogin = req.user?.accountData.login;
+    const postId = req.params.postId;
+
+    if (!userId || !userLogin) {
+      return res.sendStatus(401);
+    }
+
+    const findPost = await this.postsServis.getpostsId(postId);
+    if (!findPost) {
+      res.sendStatus(404);
+    } else {
+      const newComment = await this.commentsServis.createComments(
+        userId,
+        userLogin,
+        postId,
+        content
+      );
+      res.status(201).send(newComment);
+    }
+  }
+  async getCommentsPost(req: Request, res: Response) {
+    const pageSize = req.query.PageSize ? Number(req.query.PageSize) : 10;
+    const pageNumber = req.query.PageNumber ? Number(req.query.PageNumber) : 1;
+    const postId = req.params.postId;
+    const post = await this.postsServis.getpostsId(postId);
+    if (!post) {
+      return res.sendStatus(404);
+    }
+    const getComment = await this.commentsServis.getCommentsPost(
+      pageSize,
+      pageNumber,
+      postId
+    );
+
+    res.status(200).send(getComment);
+  }
+  async updateLikePosts(req: Request, res: Response) {
+    const postId = req.params.postId;
+    const status = req.body.likeStatus;
+    const userId = req.user?.id || "1";
+    const postById = await this.postsServis.getpostsId(postId);
+    if (!postById) {
+      res.sendStatus(404);
+    }
+    const result = await this.postsServis.updateLikePost(
+      postId,
+      userId,
+      status
+    );
+    res.sendStatus(204);
+  }
+}
+container.bind(PostController).to(PostController);
+const postControllerInstans = container.resolve(PostController);
+
+postsRouter.get(
+  "/",
+  postControllerInstans.getPosts.bind(postControllerInstans)
+);
+
+postsRouter.get(
+  "/:postsid",
+  userIdMiddleware,
+  postControllerInstans.getpostsId.bind(postControllerInstans)
+);
+
+postsRouter.put(
+  "/:id",
+  basicAuth,
+  titleValidation,
+  shortDescriptionValidation,
+  contentValidation,
+  inputValidation,
+  postControllerInstans.updatePostsId.bind(postControllerInstans)
+);
+/*     let title= req.body.title;
     let title2= req.body.shortDescription;
     let title3= req.body.content;
     let title4= req.body.bloggerId;
@@ -95,8 +232,6 @@ postsRouter.put(
         return
       }
    */
-  }
-);
 
 postsRouter.post(
   "/",
@@ -105,22 +240,10 @@ postsRouter.post(
   shortDescriptionValidation,
   contentValidation,
   inputValidation,
-  async (req: Request, res: Response) => {
-    const postnew = await postsServis.createPosts(
-      req.body.title,
-      req.body.shortDescription,
-      req.body.content,
-      req.body.bloggerId
-    );
-    if (postnew) {
-      res.status(201).send(postnew);
-    } else {
-      res
-        .status(400)
-        .send({ errorsMessages: [{ message: "bloger", field: "bloggerId" }] });
-    }
+  postControllerInstans.createPosts.bind(postControllerInstans)
+);
 
-    /* let title= req.body.title;
+/* let title= req.body.title;
     let title2= req.body.shortDescription;
     let title3= req.body.content;
     let title4= req.body.bloggerId;
@@ -142,17 +265,12 @@ postsRouter.post(
           })
           return
         } */
-  }
-);
 
-postsRouter.delete("/:id", basicAuth, async (req: Request, res: Response) => {
-  const isdelete = await postsServis.deletePosts(req.params.id);
-  if (isdelete) {
-    res.sendStatus(204);
-  } else {
-    res.sendStatus(404);
-  }
-});
+postsRouter.delete(
+  "/:id",
+  basicAuth,
+  postControllerInstans.deletePosts.bind(postControllerInstans)
+);
 
 /*   export const bloggerIdValidation = body('bloggerId')
    .trim().notEmpty().withMessage('Missing a required parameter')
@@ -176,43 +294,16 @@ postsRouter.post(
   authMiddleware,
   contentValidationComments,
   inputValidation,
-  async (req: Request, res: Response) => {
-    const content = req.body.content;
-    const userId = req.user?.id;
-    const userLogin = req.user?.accountData.login;
-    const postId = req.params.postId;
-
-    if (!userId || !userLogin) {
-      return res.sendStatus(401);
-    }
-
-    const findPost = await postsServis.getpostsId(postId);
-    if (!findPost) {
-      res.sendStatus(404);
-    } else {
-      const newComment = await commentsServis.createComments(
-        userId,
-        userLogin,
-        postId,
-        content
-      );
-      res.status(201).send(newComment);
-    }
-  }
+  postControllerInstans.createComments.bind(postControllerInstans)
 );
-postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
-  const pageSize = req.query.PageSize ? Number(req.query.PageSize) : 10;
-  const pageNumber = req.query.PageNumber ? Number(req.query.PageNumber) : 1;
-  const postId = req.params.postId;
-  const post = await postsServis.getpostsId(postId);
-  if (!post) {
-    return res.sendStatus(404);
-  }
-  const getComment = await commentsServis.getCommentsPost(
-    pageSize,
-    pageNumber,
-    postId
-  );
-
-  res.status(200).send(getComment);
-});
+postsRouter.get(
+  "/:postId/comments",
+  postControllerInstans.getCommentsPost.bind(postControllerInstans)
+);
+postsRouter.put(
+  "/:postId/like-status",
+  authMiddleware,
+  likeStatusvalidation,
+  inputValidation,
+  postControllerInstans.updateLikePosts.bind(postControllerInstans)
+);

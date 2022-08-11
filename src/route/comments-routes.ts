@@ -1,72 +1,107 @@
+import { injectable } from "inversify";
 import { Router, Request, Response } from "express";
 import { inputValidation } from "../middleware/validation";
 import { body, validationResult } from "express-validator";
 import { authMiddleware } from "../middleware/auth";
-import { commentsServis } from "../domain/comments-servis";
+import { CommentsService } from "../domain/comments-servis";
 import { jwtService } from "../application/jwt-service";
-import { UsersServis } from "../domain/Users-servis";
 import { ObjectId } from "mongodb";
 export const commentsRouter = Router();
 import { UserFind } from "../middleware/FindUser";
+import { container } from "../ioc-container"; //import { commentInstance } from "../compositions-root";
 
 const contentValidation = body("content")
   .exists()
   .trim()
   .notEmpty()
   .isLength({ min: 20, max: 300 });
+let status = ["None", "Like", "Dislike"];
+const likeStatusvalidation = body("likeStatus").isIn(status);
 
+@injectable()
+export class CommentsController {
+  constructor(protected commentsServis: CommentsService) {}
+  async updateContent(req: Request, res: Response) {
+    const content = req.body.content;
+    const commentId = req.params.commentId;
+    const useriD = req.user?.id || "1";
+    const contentnew = await this.commentsServis.updateContent(
+      content,
+      commentId,
+      useriD
+    );
+    res.sendStatus(204);
+  }
+  async getCommentById(req: Request, res: Response) {
+    const commentById = await this.commentsServis.getComment(
+      req.params.commentId
+    );
+    const userId = req.user?.id || "1";
+
+    if (!commentById) {
+      res.sendStatus(404);
+    } else {
+      const likesInformation = await this.commentsServis.getLike(
+        req.params.commentId,
+        userId
+      );
+      const result = {
+        id: commentById.id,
+        content: commentById.content,
+        userId: commentById.userId,
+        userLogin: commentById.userLogin,
+        addedAt: commentById.addedAt,
+        likesInfo: likesInformation,
+      };
+      res.status(200).json(result);
+    }
+  }
+  async deleteComment(req: Request, res: Response) {
+    const id = req.params.commentId;
+    const isdelete = await this.commentsServis.deleteComment(id);
+    res.sendStatus(204);
+  }
+  async updateLikeComments(req: Request, res: Response) {
+    const status = req.body.likeStatus;
+    const commentsId = req.params.commentId;
+    const commentById = await this.commentsServis.getComment(commentsId);
+    if (!commentById) {
+      res.sendStatus(404);
+    }
+    const userId = req.user?.id || "1";
+    const result = await this.commentsServis.updateLikeComments(
+      commentsId,
+      userId,
+      status
+    );
+    res.sendStatus(204);
+  }
+}
+container.bind(CommentsController).to(CommentsController);
+const commentInstance = container.resolve(CommentsController);
 commentsRouter.put(
   "/:commentId",
   authMiddleware,
   UserFind,
   contentValidation,
   inputValidation,
-  async (req: Request, res: Response) => {
-    const content = req.body.content;
-    const commentId = req.params.commentId;
-    const useriD = req.user?.id || "1";
-    const contentnew = await commentsServis.updateContent(
-      content,
-      commentId,
-      useriD
-    );
-    res.sendStatus(204);
-    /*  if (contentnew === null) {
-      return res.sendStatus(404);
-    }
-    if (contentnew === true) {
-      res.sendStatus(204);
-    } else {
-      res.sendStatus(403);
-    } */
-  }
+  commentInstance.updateContent.bind(commentInstance)
 );
-commentsRouter.get("/:commentId", async (req: Request, res: Response) => {
-  const commentById = await commentsServis.getComment(req.params.commentId);
-
-  if (!commentById) {
-    res.sendStatus(404);
-  } else {
-    res.status(200).json(commentById);
-  }
-});
+commentsRouter.get(
+  "/:commentId",
+  commentInstance.getCommentById.bind(commentInstance)
+);
 
 commentsRouter.delete(
   "/:commentId",
   authMiddleware,
   UserFind,
-  async (req: Request, res: Response) => {
-    const id = req.params.commentId;
-    const isdelete = await commentsServis.deleteComment(id);
-    res.sendStatus(204);
-    /* if (isdelete === null) {
-      res.sendStatus(403);
-      return;
-    }
-    if (isdelete) {
-      res.sendStatus(204);
-    } else {
-      res.sendStatus(404);
-    } */
-  }
+  commentInstance.deleteComment.bind(commentInstance)
+);
+commentsRouter.put(
+  "/:commentId/like-status",
+  authMiddleware,
+  likeStatusvalidation,
+  inputValidation,
+  commentInstance.updateLikeComments.bind(commentInstance)
 );

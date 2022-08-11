@@ -1,6 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { UsersServis } from "../domain/Users-servis";
-import { commentsCollection } from "../repositories/db";
+import { commentsModel } from "../repositories/db";
 
 export const UserFind = async (
   req: Request,
@@ -13,7 +12,7 @@ export const UserFind = async (
     res.sendStatus(401);
     return;
   }
-  const Comment = await commentsCollection.findOne({ id: id });
+  const Comment = await commentsModel.findOne({ id: id });
   if (!Comment) {
     res.sendStatus(404);
     return;

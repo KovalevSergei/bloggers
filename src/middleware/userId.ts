@@ -3,13 +3,14 @@ import { UserService } from "../domain/Users-servis";
 import { jwtService } from "../application/jwt-service";
 import { UsersRepository } from "../repositories/users-repository";
 
-export const authMiddleware = async (
+export const userIdMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   if (!req.headers.authorization) {
-    res.send(401);
+    req.user = null;
+    next();
     return;
   }
   const token = req.headers.authorization?.split(" ")[1];
@@ -23,5 +24,4 @@ export const authMiddleware = async (
     next();
     return;
   }
-  res.send(401);
 };

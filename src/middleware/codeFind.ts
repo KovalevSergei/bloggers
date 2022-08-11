@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { userscollection } from "../repositories/db";
+import { usersModel } from "../repositories/db";
 
 export const codeValidationConfirmed = async (
   req: Request,
@@ -8,7 +8,7 @@ export const codeValidationConfirmed = async (
 ) => {
   const code = req.body.code;
 
-  const codeRetrun = await userscollection.findOne({
+  const codeRetrun = await usersModel.findOne({
     "emailConfirmation.confirmationCode": code,
   });
   if (!codeRetrun) {

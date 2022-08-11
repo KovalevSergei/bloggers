@@ -1,6 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { UsersServis } from "../domain/Users-servis";
-import { commentsCollection, ipCollection } from "../repositories/db";
+import { commentsModel, ipModel } from "../repositories/db";
 import { ObjectId } from "mongodb";
 
 export const Mistake429 = async (
@@ -17,10 +16,10 @@ export const Mistake429 = async (
     ip: ip,
     data: new Date(),
   };
-  await ipCollection.insertOne({ ...newCRUD, _id: new ObjectId() });
+  await ipModel.insertMany({ ...newCRUD, _id: new ObjectId() });
   const fromData = new Date();
   fromData.setSeconds(fromData.getSeconds() - 10);
-  const totalCount = await ipCollection.count({
+  const totalCount = await ipModel.count({
     point: point,
     ip: ip,
     data: { $gt: fromData },

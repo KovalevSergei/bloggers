@@ -1,15 +1,44 @@
 import { ObjectId, WithId } from "mongodb";
 
 export type bloggersWithIdType = WithId<bloggersType>;
+export class bloggersDBType {
+  constructor(
+    public pagesCount: number,
+    public page: number,
+    public pageSize: number,
+    public totalCount: number,
+    public items: bloggersType[]
+  ) {}
+}
+export class likePosts {
+  constructor(
+    public postsId: string,
+    public userId: string,
+    public login: string,
+    public myStatus: string,
+    public addedAt: Date
+  ) {}
+}
 
-export type bloggersDBType = {
+export type likeCommentsWithId = WithId<likeComments>;
+export type likePostWithId = WithId<likePosts>;
+export class likeComments {
+  constructor(
+    public commentsId: string,
+    public userId: string,
+    public login: string,
+    public myStatus: string,
+    public addedAt: Date
+  ) {}
+}
+/* export type bloggersDBType = {
   pagesCount: number;
   page: number;
   pageSize: number;
   totalCount: number;
   items: bloggersType[];
 };
-
+ */
 export type postsWithIdType = WithId<postsType>;
 
 export type bloggersType = {
@@ -25,6 +54,7 @@ export type postsType = {
   content: string;
   bloggerId: string;
   bloggerName: string;
+  addedAt: Date;
 };
 
 export type postsDBType = {

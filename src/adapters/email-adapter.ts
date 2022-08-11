@@ -1,4 +1,6 @@
+import { injectable } from "inversify";
 import nodemailer from "nodemailer";
+import { container } from "../ioc-container";
 
 let transporter = nodemailer.createTransport({
   service: "gmail",
@@ -7,8 +9,8 @@ let transporter = nodemailer.createTransport({
     pass: "ywaxyxzuhsunaukw",
   },
 });
-
-export const emailAdapter = {
+@injectable()
+export class EmailAdapter {
   async sendEmail(email: string, subject: string, code: string) {
     // send mail with defined transport object
     let info = await transporter.sendMail({
@@ -20,7 +22,7 @@ export const emailAdapter = {
     });
 
     return info;
-  },
+  }
 
   async sendEmail2(email: string, subject: string, code: string) {
     // send mail with defined transport object
@@ -32,5 +34,6 @@ export const emailAdapter = {
     });
 
     return info;
-  },
-};
+  }
+}
+container.bind(EmailAdapter).to(EmailAdapter);

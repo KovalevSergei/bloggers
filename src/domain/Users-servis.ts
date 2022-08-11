@@ -1,10 +1,5 @@
 import { ObjectId } from "mongodb";
 import {
-  bloggersCollection,
-  postsCollection,
-  userscollection,
-} from "../repositories/db";
-import {
   UsersDBType,
   usersGetDBType,
   UsersDBTypeReturn,
@@ -15,8 +10,12 @@ import { UsersRepository } from "../repositories/users-repository";
 import { v4 as uuidv4 } from "uuid";
 import { compareAsc, format, add } from "date-fns";
 import { id } from "date-fns/locale";
+import { injectable } from "inversify";
+import { container } from "../ioc-container";
 
-export const UsersServis = {
+@injectable()
+export class UserService {
+  constructor(protected usersRepository: UsersRepository) {}
   async createUser(
     login: string,
     email: string,
@@ -44,16 +43,16 @@ export const UsersServis = {
       },
     };
 
-    const User = await UsersRepository.createUser(newUser);
+    const User = await this.usersRepository.createUser(newUser);
 
     return User;
-  },
+  }
   async checkCredentials(
     users: UsersDBTypeWithId,
     login: string,
     password: string
   ) {
-    const user = await UsersRepository.FindUserLogin(login);
+    const user = await this.usersRepository.FindUserLogin(login);
     if (!user) return false;
     const passwordHash = await this._generateHash(
       password,
@@ -63,20 +62,20 @@ export const UsersServis = {
       return false;
     }
     return user;
-  },
+  }
   async getUserByLogin(login: string) {
-    return UsersRepository.FindUserLogin(login);
-  },
+    return this.usersRepository.FindUserLogin(login);
+  }
 
   async _generateHash(password: string, salt: string) {
     const hash = await bcrypt.hash(password, salt);
     return hash;
-  },
+  }
   async getUsers(
     PageNumber: number,
     PageSize: number
   ): Promise<usersGetDBType> {
-    const { items, totalCount } = await UsersRepository.getUsers(
+    const { items, totalCount } = await this.usersRepository.getUsers(
       PageSize,
       PageNumber
     );
@@ -96,17 +95,18 @@ export const UsersServis = {
       items: userRet,
     };
     return result;
-  },
+  }
   async deleteUserId(id: string): Promise<boolean> {
-    return UsersRepository.deleteUsersId(id);
-  },
+    return this.usersRepository.deleteUsersId(id);
+  }
   async findUserById(id: string): Promise<UsersDBTypeWithId | null> {
-    const result = await UsersRepository.findUserById(id);
+    const result = await this.usersRepository.findUserById(id);
     return result;
-  },
+  }
 
   async getUserById(id: string): Promise<UsersDBType | null> {
-    const result = await UsersRepository.getUserById(id);
+    const result = await this.usersRepository.getUserById(id);
     return result;
-  },
-};
+  }
+}
+container.bind(UserService).to(UserService);

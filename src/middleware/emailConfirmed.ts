@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { userscollection } from "../repositories/db";
+import { usersModel } from "../repositories/db";
 
 export const emailExist = async (
   req: Request,
@@ -7,7 +7,7 @@ export const emailExist = async (
   next: NextFunction
 ) => {
   const email = req.body.email;
-  const mailReturn = await userscollection.findOne({
+  const mailReturn = await usersModel.findOne({
     "accountData.email": email,
   });
   if (mailReturn?.emailConfirmation.isConfirmed) {

@@ -1,47 +1,61 @@
-import { ObjectId } from "mongodb";
-import { bloggersCollection, postsCollection } from "../repositories/db";
-import { emailAdapter } from "../adapters/email-adapter";
+import { injectable } from "inversify";
 import {
   bloggersType,
   bloggersDBType,
   postsDBType,
   postsType,
 } from "../repositories/types";
-
-import { bloggersRepository } from "../repositories/bloggers-repository";
-import { postsRepository } from "../repositories/posts-repository";
-import { postsRouter } from "../route/posts-router";
-
-export const bloggersServis = {
+import { BloggersRepository } from "../repositories/bloggers-repository";
+import { container } from "../ioc-container";
+@injectable()
+export class BloggersService {
+  postsServis: any;
+  postsRepository: any;
+  constructor(protected bloggersRepository: BloggersRepository) {}
   async getBloggers(
     pageSize: number,
     pageNumber: number,
     SearhName: string
   ): Promise<bloggersDBType> {
-    const { items, totalCount } = await bloggersRepository.getBloggers(
+    const { items, totalCount } = await this.bloggersRepository.getBloggers(
       pageSize,
       pageNumber,
       SearhName
     );
+    let items2 = items.map((v) => ({
+      id: v.id,
+      name: v.name,
+      youtubeUrl: v.youtubeUrl,
+    }));
 
     let pagesCount = Number(Math.ceil(totalCount / pageSize));
-    const result: bloggersDBType = {
-      pagesCount: pagesCount,
-      page: pageNumber,
-      pageSize: pageSize,
-      totalCount: totalCount,
-      items: items,
-    };
+    const result: bloggersDBType = new bloggersDBType(
+      pagesCount,
+      pageNumber,
+      pageSize,
+      totalCount,
+      items2
+    );
     return result;
-  },
+  }
 
   async getBloggersById(id: string): Promise<bloggersType | null> {
-    return bloggersRepository.getBloggersById(id);
-  },
+    const bloggers = await this.bloggersRepository.getBloggersById(id);
+    if (!bloggers) {
+      return null;
+    } else {
+      const bloggers2 = {
+        id: bloggers.id,
+        name: bloggers.name,
+        youtubeUrl: bloggers.youtubeUrl,
+      };
+      return bloggers2;
+    }
+  }
 
   async deleteBloggersById(id: string): Promise<boolean> {
-    return bloggersRepository.deleteBloggersById(id);
-  },
+    return this.bloggersRepository.deleteBloggersById(id);
+  }
 
   async createBloggers(
     name: string,
@@ -53,32 +67,72 @@ export const bloggersServis = {
       youtubeUrl: youtubeUrl,
     };
 
-    const result = bloggersRepository.createBloggers(bloggersnew);
+    const result = this.bloggersRepository.createBloggers(bloggersnew);
 
     return result;
-  },
+  }
 
   async updateBloggers(
     id: string,
     name: string,
     youtubeUrl: string
   ): Promise<boolean> {
-    return await bloggersRepository.updateBloggers(id, name, youtubeUrl);
-  },
+    return await this.bloggersRepository.updateBloggers(id, name, youtubeUrl);
+  }
 
   async getBloggersPost(
     bloggerId: string,
     pageSize: number,
-    pageNumber: number
+    pageNumber: number,
+    userId: string
   ): Promise<postsDBType | boolean> {
-    const { items, totalCount } = await bloggersRepository.getBloggersPost(
+    const { items, totalCount } = await this.bloggersRepository.getBloggersPost(
       bloggerId,
       pageSize,
       pageNumber
     );
+
+    /*    const postIds = items.map(p => p.id)
+const likes= await this.postsRepository.getLikesBloggersPost(postIds)
+const dislikes=await this.postsRepository.getDislikeBloggersPost(postIds)
+    items.forEach(p => {
+      const postLikes = likes.filter(l => l.postId === p.id)
+
+    }) */
+
+    const items2 = [];
     if (totalCount === 0) {
       return false;
     } else {
+      for (let i = 0; i < totalCount; i++) {
+        const postItt = items[i];
+        const postId = postItt.id;
+        const likesInformation = await this.postsServis.getLike(postId, userId);
+        const newestLikes = await this.postsServis.getNewestLikes(postId);
+        const newestLikesMap = newestLikes.map(
+          (v: { addedAt: any; userId: any; login: any }) => ({
+            addedAt: v.addedAt,
+            userId: v.userId,
+            login: v.login,
+          })
+        );
+        const a = {
+          id: items[i].id,
+          title: items[i].title,
+          shortDescription: items[i].shortDescription,
+          content: items[i].content,
+          bloggerId: items[i].bloggerId,
+          bloggerName: items[i].bloggerName,
+          addedAt: items[i].addedAt,
+          extendedLikesInfo: {
+            likesCount: likesInformation.likesCount,
+            dislikesCount: likesInformation.dislikesCoun,
+            myStatus: likesInformation.myStatus,
+            newestLikes: newestLikesMap,
+          },
+        };
+        items2.push(a);
+      }
       let pagesCount = Number(Math.ceil(totalCount / pageSize));
       const result: postsDBType = {
         pagesCount: pagesCount,
@@ -89,7 +143,7 @@ export const bloggersServis = {
       };
       return result;
     }
-  },
+  }
 
   async createBloggersPost(
     bloggerId: string,
@@ -97,7 +151,7 @@ export const bloggersServis = {
     shortDescription: string,
     content: string
   ): Promise<postsType | boolean> {
-    const findName = await bloggersRepository.getBloggersById(bloggerId);
+    const findName = await this.bloggersRepository.getBloggersById(bloggerId);
 
     if (!findName) {
       return false;
@@ -109,11 +163,13 @@ export const bloggersServis = {
         content: content,
         bloggerId: bloggerId,
         bloggerName: findName.name,
+        addedAt: new Date(),
       };
 
-      const result = await bloggersRepository.createBloggersPost(postsnew);
+      const result = await this.bloggersRepository.createBloggersPost(postsnew);
 
       return result;
     }
-  },
-};
+  }
+}
+container.bind(BloggersService).to(BloggersService);

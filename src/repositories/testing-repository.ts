@@ -1,18 +1,18 @@
 import {
-  bloggersCollection,
-  commentsCollection,
-  postsCollection,
-  userscollection,
-  ipCollection,
+  bloggersModel,
+  commentsModel,
+  postsModel,
+  usersModel,
+  ipModel,
 } from "./db";
 
 export const testingRepository = {
   async deleteAll(): Promise<boolean> {
-    await bloggersCollection.deleteMany({});
-    await userscollection.deleteMany({});
-    await commentsCollection.deleteMany({});
-    await postsCollection.deleteMany({});
-    await ipCollection.deleteMany({});
+    await bloggersModel.deleteMany({});
+    await usersModel.deleteMany({});
+    await commentsModel.deleteMany({});
+    await postsModel.deleteMany({});
+    await ipModel.deleteMany({});
 
     return true;
   },

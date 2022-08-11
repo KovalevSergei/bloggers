@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express, { application, Request, Response } from "express";
 import bodyParser from "body-parser";
 import { send } from "process";
@@ -9,6 +10,7 @@ import { authRouter } from "./route/auth-router";
 import { testingRouter } from "./route/testing-route";
 //import cookieparser from "../node_modules/cookie-parser";
 import cookieparser from "cookie-parser";
+import { runDb } from "./repositories/db";
 
 const app = express();
 app.set("trust proxy", true);
@@ -26,6 +28,7 @@ app.use("/testing", testingRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+  runDb();
 });
 
 //netstat -ano | findstr :3000

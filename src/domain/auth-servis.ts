@@ -1,19 +1,26 @@
-import { UsersServis } from "./Users-servis";
+import { UserService } from "./Users-servis";
 import { v4 as uuidv4 } from "uuid";
 import { compareAsc, format, add } from "date-fns";
 import { UsersRepository } from "../repositories/users-repository";
 import { Result } from "express-validator";
 import bcrypt from "bcrypt";
-import { emailAdapter } from "../adapters/email-adapter";
+import { EmailAdapter } from "../adapters/email-adapter";
 import {
   UsersDBType,
   UsersDBTypeReturn,
   refreshToken,
 } from "../repositories/types";
 import { jwtService } from "../application/jwt-service";
-import { userscollection } from "../repositories/db";
+import { container } from "../ioc-container";
+import { injectable } from "inversify";
 
-export const authService = {
+@injectable()
+export class AuthService {
+  constructor(
+    protected usersRepository: UsersRepository,
+    protected userService: UserService,
+    protected emailAdapter: EmailAdapter
+  ) {}
   async createUser(
     login: string,
     email: string,
@@ -39,43 +46,47 @@ export const authService = {
         isConfirmed: false,
       },
     }; */
-    const createResult = await UsersServis.createUser(login, email, password);
+    const createResult = await this.userService.createUser(
+      login,
+      email,
+      password
+    );
     if (createResult) {
-      await emailAdapter.sendEmail(
+      this.emailAdapter.sendEmail(
         email,
         "Registration",
         createResult.emailConfirmation.confirmationCode
       );
     }
     return createResult;
-  },
+  }
   async confirmEmail(email: string): Promise<boolean> {
-    let user = await UsersRepository.findByEmail(email);
+    let user = await this.usersRepository.findByEmail(email);
 
     if (!user) return false;
     const id = user.id;
     const code = uuidv4();
-    await UsersRepository.updateCode(id, code);
-    await emailAdapter.sendEmail(email, "email", code);
+    await this.usersRepository.updateCode(id, code);
+    this.emailAdapter.sendEmail(email, "email", code);
 
     return true;
-  },
+  }
 
   async confirmCode(code: string): Promise<boolean> {
-    let user = await UsersRepository.findByConfirmationCode(code);
+    let user = await this.usersRepository.findByConfirmationCode(code);
     if (!user) return false;
     if (user.emailConfirmation.isConfirmed) return false;
 
-    let result = await UsersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
+    let result = await this.usersRepository.updateConfirmation(user.id); //подтвердить пользователя с таким айди
 
     return result;
-  },
+  }
   async refreshTokenSave(token: string): Promise<boolean | string> {
     let refreshToken = await UsersRepository.refreshTokenSave(token);
     return refreshToken;
-  },
+  }
   async refreshTokenFind(token: string): Promise<boolean> {
-    let refreshTokenFind = await UsersRepository.refreshTokenFind(token);
+    let refreshTokenFind = await this.usersRepository.refreshTokenFind(token);
     if (refreshTokenFind === null) {
       return false;
     }
@@ -86,14 +97,15 @@ export const authService = {
     } else {
       return true;
     }
-  },
+  }
   async refreshTokenKill(token: string): Promise<boolean> {
     //let result = await jwtService.getUserIdByToken(token);
-    let result = await UsersRepository.refreshTokenKill(token);
+    let result = await this.usersRepository.refreshTokenKill(token);
     if (result === false) {
       return false;
     } else {
       return true;
     }
-  },
-};
+  }
+}
+container.bind(AuthService).to(AuthService);

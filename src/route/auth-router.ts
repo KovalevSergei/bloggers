@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
-import { UsersServis } from "../domain/Users-servis";
+import { UserService } from "../domain/Users-servis";
 import { jwtService } from "../application/jwt-service";
-import { authService } from "../domain/auth-servis";
+//import { authService } from "../domain/auth-servis";
 import { body, validationResult } from "express-validator";
 import { Mistake429 } from "../middleware/Mistake429";
 
@@ -13,8 +13,11 @@ import { mailFind } from "../middleware/mailFind";
 import { loginFind } from "../middleware/loginFind";
 import { emailExist } from "../middleware/emailExist";
 import { authMiddleware } from "../middleware/auth";
-import { userscollection } from "../repositories/db";
-
+//import { authControllerInstans } from "../compositions-root";
+import { AuthService } from "../domain/auth-servis";
+//import { userscollection } from "../repositories/db";
+import { injectable } from "inversify";
+import { container } from "../ioc-container";
 const loginValidation = body("login")
   .exists()
   .trim()
@@ -40,19 +43,18 @@ const codeValidation = body("code").exists().trim().notEmpty().isString();
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   statusCode: 429,
 }); */
-
-authRouter.post(
-  "/login",
-  Mistake429,
-  loginValidation,
-  passwordValidation,
-  inputValidation,
-  async (req: Request, res: Response) => {
-    const user = await UsersServis.getUserByLogin(req.body.login);
+@injectable()
+export class AuthController {
+  constructor(
+    protected usersServis: UserService,
+    protected authService: AuthService
+  ) {}
+  async loginPost(req: Request, res: Response) {
+    const user = await this.usersServis.getUserByLogin(req.body.login);
     if (!user) return res.sendStatus(401);
     // req.ip or req.headers['x-forwarder-for'] or req.connection.remoteAddress
 
-    const areCredentialsCorrect = await UsersServis.checkCredentials(
+    const areCredentialsCorrect = await this.usersServis.checkCredentials(
       user,
       req.body.login,
       req.body.password
@@ -71,19 +73,8 @@ authRouter.post(
     });
     return res.status(200).send({ accessToken: token });
   }
-);
-
-authRouter.post(
-  "/registration",
-  Mistake429,
-  loginValidation,
-  emailValidation,
-  passwordValidation,
-  inputValidation,
-  mailFind,
-  loginFind,
-  async (req: Request, res: Response) => {
-    const user = await authService.createUser(
+  async createUser(req: Request, res: Response) {
+    const user = await this.authService.createUser(
       req.body.login,
       req.body.email,
       req.body.password
@@ -91,16 +82,8 @@ authRouter.post(
 
     res.sendStatus(204);
   }
-);
-
-authRouter.post(
-  "/registration-email-resending",
-  Mistake429,
-  emailValidation,
-  emailExist,
-  inputValidation,
-  async (req: Request, res: Response) => {
-    const result = await authService.confirmEmail(req.body.email);
+  async registrationEmailResending(req: Request, res: Response) {
+    const result = await this.authService.confirmEmail(req.body.email);
     if (result) {
       res.sendStatus(204);
     } else {
@@ -114,81 +97,126 @@ authRouter.post(
       });
     }
   }
+  async confirmCode(req: Request, res: Response) {
+    const result = await this.authService.confirmCode(req.body.code);
+    res.sendStatus(204);
+  }
+  async refreshToken(req: Request, res: Response) {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      res.sendStatus(401);
+      return;
+    }
+    const tokenExpire = await jwtService.getUserIdByToken(refreshToken);
+    if (tokenExpire === null) {
+      res.sendStatus(401);
+      return;
+    }
+    const findToken = await this.authService.refreshTokenFind(refreshToken);
+
+    if (findToken === false) {
+      res.sendStatus(401);
+      return;
+    }
+    await this.authService.refreshTokenKill(refreshToken);
+    const userId = await jwtService.getUserIdByToken(refreshToken);
+    const user = await this.usersServis.findUserById(userId);
+    if (!user) {
+      res.sendStatus(401);
+      return;
+    }
+    const token = await jwtService.createJWT(user);
+    const RefreshToken = await jwtService.createJWTrefresh(user);
+
+    res.cookie("refreshToken", RefreshToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 20 * 1000,
+    });
+    res.status(200).send({ accessToken: token });
+  }
+  async logout(req: Request, res: Response) {
+    const refreshToken = req.cookies?.refreshToken;
+    const tokenExpire = await jwtService.getUserIdByToken(refreshToken);
+    if (tokenExpire === null) {
+      res.sendStatus(401);
+      return;
+    }
+    const result = await this.authService.refreshTokenKill(refreshToken);
+    if (result === true) {
+      res.sendStatus(204);
+      return;
+    } else {
+      res.sendStatus(401);
+    }
+  }
+  async me(req: Request, res: Response) {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      res.sendStatus(401);
+    } else {
+      const userId = await jwtService.getUserIdByToken(token);
+      const user = await this.usersServis.findUserById(userId);
+
+      const result = {
+        email: user?.accountData.email,
+        login: user?.accountData.login,
+        userId: user?.id,
+      };
+      res.status(200).send(result);
+    }
+  }
+}
+container.bind(AuthController).to(AuthController);
+let authControllerInstans = container.resolve(AuthController);
+authRouter.post(
+  "/login",
+  Mistake429,
+  loginValidation,
+  passwordValidation,
+  inputValidation,
+  authControllerInstans.loginPost.bind(authControllerInstans)
+);
+
+authRouter.post(
+  "/registration",
+  Mistake429,
+  loginValidation,
+  emailValidation,
+  passwordValidation,
+  inputValidation,
+  mailFind,
+  loginFind,
+  authControllerInstans.createUser.bind(authControllerInstans)
+);
+
+authRouter.post(
+  "/registration-email-resending",
+  Mistake429,
+  emailValidation,
+  emailExist,
+  inputValidation,
+  authControllerInstans.registrationEmailResending
 ),
   authRouter.post(
     "/registration-confirmation",
     Mistake429,
     codeValidationConfirmed,
-    async (req: Request, res: Response) => {
-      const result = await authService.confirmCode(req.body.code);
-      res.sendStatus(204);
-    }
+    authControllerInstans.confirmCode.bind(authControllerInstans)
   );
 
-authRouter.post("/refresh-token", async (req: Request, res: Response) => {
-  const refreshToken = req.cookies?.refreshToken;
-  if (!refreshToken) {
-    res.sendStatus(401);
-    return;
-  }
-  const tokenExpire = await jwtService.getUserIdByToken(refreshToken);
-  if (tokenExpire === null) {
-    res.sendStatus(401);
-    return;
-  }
-  const findToken = await authService.refreshTokenFind(refreshToken);
+authRouter.post(
+  "/refresh-token",
+  authControllerInstans.refreshToken.bind(authControllerInstans)
+);
 
-  if (findToken === false) {
-    res.sendStatus(401);
-    return;
-  }
-  await authService.refreshTokenKill(refreshToken);
-  const userId = await jwtService.getUserIdByToken(refreshToken);
-  const user = await UsersServis.findUserById(userId);
-  if (!user) {
-    res.sendStatus(401);
-    return;
-  }
-  const token = await jwtService.createJWT(user);
-  const RefreshToken = await jwtService.createJWTrefresh(user);
+authRouter.post(
+  "/logout",
+  authControllerInstans.logout.bind(authControllerInstans)
+);
 
-  res.cookie("refreshToken", RefreshToken, {
-    httpOnly: true,
-    secure: true,
-    maxAge: 20 * 1000,
-  });
-  res.status(200).send({ accessToken: token });
-});
-
-authRouter.post("/logout", async (req: Request, res: Response) => {
-  const refreshToken = req.cookies?.refreshToken;
-  const tokenExpire = await jwtService.getUserIdByToken(refreshToken);
-  if (tokenExpire === null) {
-    res.sendStatus(401);
-    return;
-  }
-  const result = await authService.refreshTokenKill(refreshToken);
-  if (result === true) {
-    res.sendStatus(204);
-    return;
-  } else {
-    res.sendStatus(401);
-  }
-});
-
-authRouter.get("/me", authMiddleware, async (req: Request, res: Response) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    res.sendStatus(401);
-  } else {
-    const userId = await jwtService.getUserIdByToken(token);
-    const user = await UsersServis.findUserById(userId);
-
-    const result = {
-      email: user?.accountData.email,
-      login: user?.accountData.login,
-      userId: user?.id,
-    };
-    res.status(200).send(result);
-  }
-});
+authRouter.get(
+  "/me",
+  authMiddleware,
+  authControllerInstans.me.bind(authControllerInstans)
+);
