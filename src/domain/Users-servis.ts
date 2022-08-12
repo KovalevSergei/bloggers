@@ -14,7 +14,7 @@ import { injectable } from "inversify";
 import { container } from "../ioc-container";
 
 @injectable()
-export class UserService {
+export class UsersService {
   constructor(protected usersRepository: UsersRepository) {}
   async createUser(
     login: string,
@@ -109,4 +109,4 @@ export class UserService {
     return result;
   }
 }
-container.bind(UserService).to(UserService);
+container.bind(UsersService).to(UsersService);

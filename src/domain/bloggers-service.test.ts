@@ -1,10 +1,9 @@
-import "reflect-metadata";
+/* import "reflect-metadata";
 
 import { AuthService } from "./auth-servis";
 import { AuthController } from "../route/auth-router";
 import { container } from "../ioc-container";
 import { UsersRepository } from "../repositories/users-repository";
-import { UserService } from "../domain/Users-servis";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import { BloggersService } from "./bloggers-servis";
@@ -70,3 +69,4 @@ describe("proverka bloggera", () => {
     expect(result).toBeTruthy;
   });
 });
+ */

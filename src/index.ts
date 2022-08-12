@@ -33,3 +33,7 @@ app.listen(port, () => {
 
 //netstat -ano | findstr :3000
 //tskill 3000
+
+//d:
+//cd \mongo\mongodb\bin
+//mongod.exe --dbpath .\data

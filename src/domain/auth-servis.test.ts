@@ -1,10 +1,9 @@
-import "reflect-metadata";
+/* import "reflect-metadata";
 
 import { AuthService } from "./auth-servis";
 import { AuthController } from "../route/auth-router";
 import { container } from "../ioc-container";
 import { UsersRepository } from "../repositories/users-repository";
-import { UserService } from "../domain/Users-servis";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import { BloggersService } from "./bloggers-servis";
@@ -24,7 +23,7 @@ describe("super tests for auth ", () => {
   const authService = new AuthService(usersRepository, usersServis);
   const authControllerInstans = new AuthController(usersServis, authService); */
 
-  const authService = container.get(AuthService);
+/*   const authService = container.get(AuthService);
 
   describe("createUser", () => {
     it("should return", async () => {
@@ -38,4 +37,4 @@ describe("super tests for auth ", () => {
       expect(result.emailConfirmation.isConfirmed).toBeFalsy();
     });
   });
-});
+}); */

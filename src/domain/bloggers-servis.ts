@@ -139,7 +139,7 @@ const dislikes=await this.postsRepository.getDislikeBloggersPost(postIds)
         page: pageNumber,
         pageSize: pageSize,
         totalCount: totalCount,
-        items: items,
+        items: items2,
       };
       return result;
     }

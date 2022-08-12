@@ -2,7 +2,6 @@ import { UsersDBType } from "../repositories/types";
 import { ObjectId } from "mongodb";
 import jwt from "jsonwebtoken";
 import { settings } from "../settings";
-import { UserService } from "../domain/Users-servis";
 import { UsersRepository } from "../repositories/users-repository";
 
 export const jwtService = {

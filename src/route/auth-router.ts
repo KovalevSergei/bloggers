@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { UserService } from "../domain/Users-servis";
 import { jwtService } from "../application/jwt-service";
 //import { authService } from "../domain/auth-servis";
 import { body, validationResult } from "express-validator";
@@ -18,6 +17,7 @@ import { AuthService } from "../domain/auth-servis";
 //import { userscollection } from "../repositories/db";
 import { injectable } from "inversify";
 import { container } from "../ioc-container";
+import { UsersService } from "../domain/Users-servis";
 const loginValidation = body("login")
   .exists()
   .trim()
@@ -46,7 +46,7 @@ const codeValidation = body("code").exists().trim().notEmpty().isString();
 @injectable()
 export class AuthController {
   constructor(
-    protected usersServis: UserService,
+    protected usersServis: UsersService,
     protected authService: AuthService
   ) {}
   async loginPost(req: Request, res: Response) {

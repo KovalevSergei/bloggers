@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { UserService } from "../domain/Users-servis";
 import { jwtService } from "../application/jwt-service";
+import { UsersService } from "../domain/Users-servis";
 import { UsersRepository } from "../repositories/users-repository";
 
 export const userIdMiddleware = async (
@@ -18,7 +18,7 @@ export const userIdMiddleware = async (
   const userId = await jwtService.getUserIdByToken(token);
 
   if (userId) {
-    const usersService = new UserService(new UsersRepository());
+    const usersService = new UsersService(new UsersRepository());
     req.user = await usersService.findUserById(userId);
 
     next();

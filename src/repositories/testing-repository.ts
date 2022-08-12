@@ -4,6 +4,8 @@ import {
   postsModel,
   usersModel,
   ipModel,
+  likeCommentsModel,
+  likePostsModel,
 } from "./db";
 
 export const testingRepository = {
@@ -13,7 +15,8 @@ export const testingRepository = {
     await commentsModel.deleteMany({});
     await postsModel.deleteMany({});
     await ipModel.deleteMany({});
-
+    await likeCommentsModel.deleteMany({});
+    await likePostsModel.deleteMany({});
     return true;
   },
 };

@@ -1,4 +1,4 @@
-import { UserService } from "./Users-servis";
+import { UsersService } from "./Users-servis";
 import { v4 as uuidv4 } from "uuid";
 import { compareAsc, format, add } from "date-fns";
 import { UsersRepository } from "../repositories/users-repository";
@@ -18,7 +18,7 @@ import { injectable } from "inversify";
 export class AuthService {
   constructor(
     protected usersRepository: UsersRepository,
-    protected userService: UserService,
+    protected usersService: UsersService,
     protected emailAdapter: EmailAdapter
   ) {}
   async createUser(
@@ -46,7 +46,7 @@ export class AuthService {
         isConfirmed: false,
       },
     }; */
-    const createResult = await this.userService.createUser(
+    const createResult = await this.usersService.createUser(
       login,
       email,
       password

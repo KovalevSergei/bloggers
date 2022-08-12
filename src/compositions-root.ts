@@ -9,7 +9,7 @@ import { CommentsController } from "./route/comments-routes";
 import { AuthService } from "./domain/auth-servis";
 import { UsersRepository } from "./repositories/users-repository";
 import { AuthController } from "./route/auth-router";
-import { UserService } from "./domain/Users-servis";
+import { UsersService } from "./domain/Users-servis";
 import { UserController } from "./route/users-routes";
 import { container } from "./ioc-container";
 import { PostController } from "./route/posts-router";
