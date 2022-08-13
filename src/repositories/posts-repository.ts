@@ -84,10 +84,10 @@ export class PostsRepository {
     userId: string
   ): Promise<{
     likesCount: number;
-    disLikesCount: number;
+    dislikesCount: number;
     myStatus: string;
   }> {
-    const result = { likesCount: 0, disLikesCount: 0, myStatus: "None" };
+    const result = { likesCount: 0, dislikesCount: 0, myStatus: "None" };
     const likesCount = await likePostsModel.countDocuments({
       postId: postId,
       myStatus: "Like",
@@ -97,7 +97,7 @@ export class PostsRepository {
       postId: postId,
       myStatus: "Dislike",
     });
-    result.disLikesCount = disLikes;
+    result.dislikesCount = disLikes;
     const my = await likePostsModel.findOne({
       postId: postId,
       userId: userId,

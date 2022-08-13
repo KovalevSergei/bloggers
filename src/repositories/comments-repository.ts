@@ -121,10 +121,10 @@ export class CommentsRepository {
     userId: string
   ): Promise<{
     likesCount: number;
-    disLikesCount: number;
+    dislikesCount: number;
     myStatus: string;
   }> {
-    const result = { likesCount: 0, disLikesCount: 0, myStatus: "None" };
+    const result = { likesCount: 0, dislikesCount: 0, myStatus: "None" };
     const likesCount = await likeCommentsModel.countDocuments({
       commentsId: commentsId,
       myStatus: "Like",
@@ -134,7 +134,7 @@ export class CommentsRepository {
       commentsId: commentsId,
       myStatus: "Dislike",
     });
-    result.disLikesCount = disLikes;
+    result.dislikesCount = disLikes;
     const my = await likeCommentsModel
       .findOne({
         commentsId: commentsId,

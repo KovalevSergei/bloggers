@@ -78,7 +78,7 @@ export class PostController {
         addedAt: postsid.addedAt,
         extendedLikesInfo: {
           likesCount: likesInformation.likesCount,
-          dislikesCount: likesInformation.disLikesCount,
+          dislikesCount: likesInformation.dislikesCount,
           myStatus: likesInformation.myStatus,
           newestLikes: newestLikesMap,
         },

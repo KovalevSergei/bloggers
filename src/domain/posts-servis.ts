@@ -161,7 +161,7 @@ export class PostsService {
   async getLike(
     postId: string,
     userId: string
-  ): Promise<{ likesCount: number; disLikesCount: number; myStatus: string }> {
+  ): Promise<{ likesCount: number; dislikesCount: number; myStatus: string }> {
     const result = await this.postsRepository.getLikeStatus(postId, userId);
     return result;
   }

@@ -127,7 +127,7 @@ export class CommentsService {
   async getLike(
     commentsId: string,
     userId: string
-  ): Promise<{ likesCount: number; disLikesCount: number; myStatus: string }> {
+  ): Promise<{ likesCount: number; dislikesCount: number; myStatus: string }> {
     const result = await this.commentsRepository.getLikeStatus(
       commentsId,
       userId
