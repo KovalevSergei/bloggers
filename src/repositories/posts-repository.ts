@@ -102,7 +102,7 @@ export class PostsRepository {
       postId: postId,
       userId: userId,
     });
-    if (!my) {
+    if (my === null) {
       return result;
     } else {
       const a = my as likePostWithId;
