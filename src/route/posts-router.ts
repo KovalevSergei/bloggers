@@ -10,6 +10,7 @@ import { CommentsService } from "../domain/comments-servis";
 import { container } from "../ioc-container";
 import { injectable } from "inversify";
 import { userIdMiddleware } from "../middleware/userId";
+import { idPostMistake404 } from "../middleware/idPostMistake404";
 
 export { titleValidation, shortDescriptionValidation, contentValidation };
 
@@ -39,9 +40,7 @@ export class PostController {
   constructor(
     protected postsServis: PostsService,
     protected commentsServis: CommentsService
-  ) {
-    console.log("const", this);
-  }
+  ) {}
   async getPosts(req: Request, res: Response) {
     const pageNumber = Number(req.query.PageNumber) || 1;
     const pageSize = Number(req.query.PageSize) || 10;
@@ -303,6 +302,7 @@ postsRouter.get(
 postsRouter.put(
   "/:postId/like-status",
   authMiddleware,
+  idPostMistake404,
   likeStatusvalidation,
   inputValidation,
   postControllerInstans.updateLikePosts.bind(postControllerInstans)

@@ -99,6 +99,12 @@ export class PostsService {
         bloggerId: bloggerId,
         bloggerName: nameblog.name,
         addedAt: new Date(),
+        extendedLikesInfo: {
+          likesCount: 0,
+          dislikesCount: 0,
+          myStatus: "None",
+          newestLikes: [{}],
+        },
       };
 
       await this.postsRepository.createPosts(postnew);
