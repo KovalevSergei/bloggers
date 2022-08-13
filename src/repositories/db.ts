@@ -32,6 +32,7 @@ const postsSchema = new mongoose.Schema<postsType>({
   content: String,
   bloggerId: String,
   bloggerName: String,
+  addedAt: Date,
 });
 
 const usersSchema = new mongoose.Schema<UsersDBType>({

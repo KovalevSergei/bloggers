@@ -7,11 +7,15 @@ import {
 } from "../repositories/types";
 import { BloggersRepository } from "../repositories/bloggers-repository";
 import { container } from "../ioc-container";
+import { PostsService } from "./posts-servis";
+import { PostsRepository } from "../repositories/posts-repository";
 @injectable()
 export class BloggersService {
-  postsServis: any;
-  postsRepository: any;
-  constructor(protected bloggersRepository: BloggersRepository) {}
+  constructor(
+    protected bloggersRepository: BloggersRepository,
+    protected postsServis: PostsService,
+    protected postsRepository: PostsRepository
+  ) {}
   async getBloggers(
     pageSize: number,
     pageNumber: number,
@@ -126,7 +130,7 @@ const dislikes=await this.postsRepository.getDislikeBloggersPost(postIds)
           addedAt: items[i].addedAt,
           extendedLikesInfo: {
             likesCount: likesInformation.likesCount,
-            dislikesCount: likesInformation.dislikesCoun,
+            dislikesCount: likesInformation.dislikesCount,
             myStatus: likesInformation.myStatus,
             newestLikes: newestLikesMap,
           },
