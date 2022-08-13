@@ -9,6 +9,7 @@ import { ObjectId } from "mongodb";
 export const commentsRouter = Router();
 import { UserFind } from "../middleware/FindUser";
 import { container } from "../ioc-container"; //import { commentInstance } from "../compositions-root";
+import { idPostMistake404 } from "../middleware/idPostMistake404";
 
 const contentValidation = body("content")
   .exists()
@@ -101,6 +102,7 @@ commentsRouter.delete(
 commentsRouter.put(
   "/:commentId/like-status",
   authMiddleware,
+  idPostMistake404,
   likeStatusvalidation,
   inputValidation,
   commentInstance.updateLikeComments.bind(commentInstance)

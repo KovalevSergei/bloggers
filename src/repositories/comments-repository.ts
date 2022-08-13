@@ -135,12 +135,11 @@ export class CommentsRepository {
       myStatus: "Dislike",
     });
     result.dislikesCount = disLikes;
-    const my = await likeCommentsModel
-      .findOne({
-        commentsId: commentsId,
-        userId: userId,
-      })
-      .lean();
+    const my = await likeCommentsModel.findOne({
+      commentsId: commentsId,
+      userId: userId,
+    });
+    console.log(my, "commentsStatus");
     if (!my) {
       return result;
     } else {
