@@ -91,6 +91,7 @@ export class CommentsRepository {
     likeInstance.userId = likeCommentForm.userId;
     likeInstance.myStatus = likeCommentForm.myStatus;
     likeInstance.addedAt = likeCommentForm.addedAt;
+    likeInstance.login = likeCommentForm.login;
     await likeInstance.save();
     return true;
   }
