@@ -69,6 +69,7 @@ export class PostsRepository {
     likeInstance.userId = likePostForm.userId;
     likeInstance.myStatus = likePostForm.myStatus;
     likeInstance.addedAt = likePostForm.addedAt;
+    likeInstance.login = likePostForm.login;
     await likeInstance.save();
     return true;
   }
