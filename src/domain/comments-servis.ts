@@ -52,7 +52,15 @@ export class CommentsService {
       postId: postId,
     };
     const result = await this.commentsRepository.createComment(commentNew);
-    return result;
+    const result2 = {
+      ...result,
+      likesInfo: {
+        likesCount: 0,
+        dislikesCount: 0,
+        myStatus: "None",
+      },
+    };
+    return result2;
   }
   async getCommentsPost(
     pageSize: number,
