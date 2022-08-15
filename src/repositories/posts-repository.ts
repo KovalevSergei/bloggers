@@ -58,7 +58,7 @@ export class PostsRepository {
     userId: string
   ): Promise<likePostWithId | null> {
     const result = await likePostsModel.findOne({
-      postId: postId,
+      postsId: postId,
       userId: userId,
     });
     return result;
@@ -75,7 +75,7 @@ export class PostsRepository {
   }
   async deleteLike(postId: string, userId: string): Promise<boolean> {
     const result = await likePostsModel.deleteOne({
-      postId: postId,
+      postsId: postId,
       userId: userId,
     });
     return true;
@@ -127,14 +127,14 @@ export class PostsRepository {
   async getLikesBloggersPost(postsId: any): Promise<likePostWithId[]> {
     const result = await likePostsModel.find({
       myStatus: "Like",
-      postId: { $in: postsId },
+      postsId: { $in: postsId },
     });
     return result;
   }
   async getDislikeBloggersPost(postsId: any): Promise<likePostWithId[]> {
     const result = await likePostsModel.find({
       myStatus: "Dislike",
-      postId: { $in: postsId },
+      postsId: { $in: postsId },
     });
     return result;
   }
