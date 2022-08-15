@@ -93,11 +93,6 @@ export class PostsRepository {
       postsId: postId,
       myStatus: "Like",
     });
-    const proverka = await likePostsModel.find({
-      postsId: postId,
-      myStatus: "Like",
-    });
-    console.log(proverka, postId, "postId");
 
     result.likesCount = likesCount;
     const disLikes = await likePostsModel.countDocuments({
@@ -108,7 +103,7 @@ export class PostsRepository {
     result.dislikesCount = disLikes;
 
     const my = await likePostsModel.findOne({
-      postId: postId,
+      postsId: postId,
       userId: userId,
     });
 
