@@ -22,6 +22,7 @@ export const userIdMiddleware = async (
 
   if (!req.headers.authorization) {
     req.user = null;
+
     next();
     return;
   }
