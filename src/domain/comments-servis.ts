@@ -112,10 +112,10 @@ export class CommentsService {
       return true;
     }
 
-    await this.commentsRepository.deleteLike(commentsId, userId);
     if (findLike?.myStatus === myStatus) {
       return true;
     } else {
+      await this.commentsRepository.deleteLike(commentsId, userId);
       const login = await this.usersRepository.getUserById(userId);
       const login2 = login as UsersDBType;
       const likeCommentForm = new likeComments(

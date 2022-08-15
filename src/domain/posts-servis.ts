@@ -157,10 +157,10 @@ export class PostsService {
       return true;
     }
 
-    await this.postsRepository.deleteLike(postId, userId);
     if (findLike?.myStatus === status) {
       return true;
     } else {
+      await this.postsRepository.deleteLike(postId, userId);
       const login = await this.usersRepository.getUserById(userId);
       const login2 = login as UsersDBType;
       const likePostForm = new likePosts(
