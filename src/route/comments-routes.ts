@@ -11,6 +11,7 @@ import { UserFind } from "../middleware/FindUser";
 import { container } from "../ioc-container"; //import { commentInstance } from "../compositions-root";
 import { idPostMistake404 } from "../middleware/idPostMistake404";
 import { idCommentsMistake404 } from "../middleware/idCommentsMistake404";
+import { userIdMiddleware } from "../middleware/userId";
 
 const contentValidation = body("content")
   .exists()
@@ -91,6 +92,7 @@ commentsRouter.put(
 );
 commentsRouter.get(
   "/:commentId",
+  userIdMiddleware,
   commentInstance.getCommentById.bind(commentInstance)
 );
 
