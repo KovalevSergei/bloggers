@@ -45,6 +45,7 @@ export class PostController {
     const pageNumber = Number(req.query.PageNumber) || 1;
     const pageSize = Number(req.query.PageSize) || 10;
     const userId = req.user?.id || "1";
+    console.log(userId, "userId");
     const getPosts = await this.postsServis.getPosts(pageNumber, pageSize);
 
     const likesInformation = await this.postsServis.getLike("", userId);
