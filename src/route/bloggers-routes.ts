@@ -20,6 +20,7 @@ import {
   contentValidation,
 } from "../route/posts-router";
 import { BloggersRepository } from "../repositories/bloggers-repository";
+import { userIdMiddleware } from "../middleware/userId";
 
 const maxNameLength = 15;
 const urlRegExp =
@@ -193,6 +194,7 @@ bloggersRouter.get(
 bloggersRouter.post(
   "/:bloggerId/posts",
   basicAuth,
+  userIdMiddleware,
   titleValidation,
   shortDescriptionValidation,
   contentValidation,
