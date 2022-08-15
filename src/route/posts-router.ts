@@ -194,7 +194,6 @@ postsRouter.get(
 
 postsRouter.get(
   "/:postsid",
-  authMiddleware,
   userIdMiddleware,
   postControllerInstans.getpostsId.bind(postControllerInstans)
 );
