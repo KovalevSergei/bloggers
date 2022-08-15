@@ -140,6 +140,7 @@ export class CommentsRepository {
       commentsId: commentsId,
       userId: userId,
     });
+    console.log(userId);
     console.log(my, "commentsStatus");
     if (!my) {
       return result;

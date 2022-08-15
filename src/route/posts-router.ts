@@ -61,6 +61,7 @@ export class PostController {
   async getpostsId(req: Request, res: Response) {
     const postsid = await this.postsServis.getpostsId(req.params.postsid);
     const userId = req.user?.id || "1";
+    console.log(userId);
 
     if (!postsid) {
       res.sendStatus(404);
@@ -202,6 +203,7 @@ postsRouter.get(
 
 postsRouter.get(
   "/:postsid",
+
   userIdMiddleware,
   postControllerInstans.getpostsId.bind(postControllerInstans)
 );
