@@ -10,6 +10,7 @@ export const commentsRouter = Router();
 import { UserFind } from "../middleware/FindUser";
 import { container } from "../ioc-container"; //import { commentInstance } from "../compositions-root";
 import { idPostMistake404 } from "../middleware/idPostMistake404";
+import { idCommentsMistake404 } from "../middleware/idCommentsMistake404";
 
 const contentValidation = body("content")
   .exists()
@@ -102,9 +103,9 @@ commentsRouter.delete(
 commentsRouter.put(
   "/:commentId/like-status",
   authMiddleware,
-  idPostMistake404,
+  idCommentsMistake404,
   likeStatusvalidation,
   inputValidation,
-  idPostMistake404,
+
   commentInstance.updateLikeComments.bind(commentInstance)
 );

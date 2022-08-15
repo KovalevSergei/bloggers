@@ -7,14 +7,14 @@ import { UsersRepository } from "../repositories/users-repository";
 export const jwtService = {
   async createJWT(user: UsersDBType) {
     const token = jwt.sign({ userId: user.id }, settings.JWT_SECRET, {
-      expiresIn: "600s",
+      expiresIn: "66660000000s",
     });
     return token;
   },
 
   async createJWTrefresh(user: UsersDBType) {
     const tokenRefresh = jwt.sign({ userId: user.id }, settings.JWT_SECRET, {
-      expiresIn: "700s",
+      expiresIn: "70000000s",
     });
     await UsersRepository.refreshTokenSave(tokenRefresh);
 

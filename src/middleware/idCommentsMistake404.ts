@@ -7,7 +7,7 @@ import { CommentsRepository } from "../repositories/comments-repository";
 import { PostsRepository } from "../repositories/posts-repository";
 import { UsersRepository } from "../repositories/users-repository";
 
-export const idPostMistake404 = async (
+export const idCommentsMistake404 = async (
   req: Request,
   res: Response,
   next: NextFunction
