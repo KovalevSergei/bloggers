@@ -105,5 +105,6 @@ commentsRouter.put(
   idPostMistake404,
   likeStatusvalidation,
   inputValidation,
+  idPostMistake404,
   commentInstance.updateLikeComments.bind(commentInstance)
 );

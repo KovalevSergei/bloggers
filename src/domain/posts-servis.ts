@@ -24,6 +24,7 @@ export class PostsService {
       pageNumber,
       pageSize
     );
+
     let items2 = items.map((v) => ({
       id: v.id,
       title: v.title,

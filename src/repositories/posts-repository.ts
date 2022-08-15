@@ -103,7 +103,6 @@ export class PostsRepository {
       postId: postId,
       userId: userId,
     });
-    console.log(my, "postStatus");
     if (my === null) {
       return result;
     } else {

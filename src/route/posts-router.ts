@@ -44,7 +44,17 @@ export class PostController {
   async getPosts(req: Request, res: Response) {
     const pageNumber = Number(req.query.PageNumber) || 1;
     const pageSize = Number(req.query.PageSize) || 10;
+    const userId = req.user?.id || "1";
     const getPosts = await this.postsServis.getPosts(pageNumber, pageSize);
+
+    const likesInformation = await this.postsServis.getLike("", userId);
+
+    const newestLikes = await this.postsServis.getNewestLikes("");
+    const newestLikesMap = newestLikes.map((v) => ({
+      addedAt: v.addedAt,
+      userId: v.userId,
+      login: v.login,
+    }));
 
     res.status(200).send(getPosts);
   }
@@ -59,11 +69,9 @@ export class PostController {
         req.params.postid,
         userId
       );
-      console.log(likesInformation, "status");
       const newestLikes = await this.postsServis.getNewestLikes(
         req.params.postid
       );
-      console.log(newestLikes);
       const newestLikesMap = newestLikes.map((v) => ({
         addedAt: v.addedAt,
         userId: v.userId,
