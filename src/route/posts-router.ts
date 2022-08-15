@@ -59,9 +59,11 @@ export class PostController {
         req.params.postid,
         userId
       );
+      console.log(likesInformation, "status");
       const newestLikes = await this.postsServis.getNewestLikes(
         req.params.postid
       );
+      console.log(newestLikes);
       const newestLikesMap = newestLikes.map((v) => ({
         addedAt: v.addedAt,
         userId: v.userId,
