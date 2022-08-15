@@ -100,6 +100,22 @@ export class PostsService {
         bloggerId: bloggerId,
         bloggerName: nameblog.name,
         addedAt: new Date(),
+        //extendedLikesInfo: {
+        //likesCount: 0,
+        //dislikesCount: 0,
+        //myStatus: "None",
+        // newestLikes: [],},
+      };
+
+      await this.postsRepository.createPosts(postnew);
+      const postnew2 = {
+        id: postnew.id,
+        title: title,
+        shortDescription: shortDescription,
+        content: content,
+        bloggerId: bloggerId,
+        bloggerName: nameblog.name,
+        addedAt: postnew.addedAt,
         extendedLikesInfo: {
           likesCount: 0,
           dislikesCount: 0,
@@ -108,8 +124,7 @@ export class PostsService {
         },
       };
 
-      await this.postsRepository.createPosts(postnew);
-      return postnew;
+      return postnew2;
     } else {
       return false;
     }

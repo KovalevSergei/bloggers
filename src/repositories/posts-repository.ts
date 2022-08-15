@@ -90,23 +90,23 @@ export class PostsRepository {
   }> {
     const result = { likesCount: 0, dislikesCount: 0, myStatus: "None" };
     const likesCount = await likePostsModel.countDocuments({
-      postId: postId,
+      postsId: postId,
       myStatus: "Like",
     });
-    if (!likesCount) {
-      result.likesCount = 0;
-    } else {
-      result.likesCount = likesCount;
-    }
+    const proverka = await likePostsModel.find({
+      postsId: postId,
+      myStatus: "Like",
+    });
+    console.log(proverka, postId, "postId");
+
+    result.likesCount = likesCount;
     const disLikes = await likePostsModel.countDocuments({
-      postId: postId,
+      postsId: postId,
       myStatus: "Dislike",
     });
-    if (!disLikes) {
-      result.dislikesCount = 0;
-    } else {
-      result.dislikesCount = disLikes;
-    }
+
+    result.dislikesCount = disLikes;
+
     const my = await likePostsModel.findOne({
       postId: postId,
       userId: userId,

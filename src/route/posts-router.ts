@@ -45,7 +45,7 @@ export class PostController {
     const pageNumber = Number(req.query.PageNumber) || 1;
     const pageSize = Number(req.query.PageSize) || 10;
     const userId = req.user?.id || "1";
-    console.log(userId, "userId");
+
     const getPosts = await this.postsServis.getPosts(pageNumber, pageSize);
 
     const likesInformation = await this.postsServis.getLike("", userId);
@@ -60,17 +60,18 @@ export class PostController {
     res.status(200).send(getPosts);
   }
   async getpostsId(req: Request, res: Response) {
-    const postsid = await this.postsServis.getpostsId(req.params.postsid);
+    const postsid = await this.postsServis.getpostsId(req.params.postsId);
     const userId = req.user?.id || "1";
     if (!postsid) {
       res.sendStatus(404);
     } else {
       const likesInformation = await this.postsServis.getLike(
-        req.params.postsid,
+        req.params.postsId,
         userId
       );
+      console.log(likesInformation, userId, "userId");
       const newestLikes = await this.postsServis.getNewestLikes(
-        req.params.postsid
+        req.params.postsId
       );
       const newestLikesMap = newestLikes.map((v) => ({
         addedAt: v.addedAt,
@@ -201,7 +202,7 @@ postsRouter.get(
 );
 
 postsRouter.get(
-  "/:postsid",
+  "/:postsId",
 
   userIdMiddleware,
   postControllerInstans.getpostsId.bind(postControllerInstans)
