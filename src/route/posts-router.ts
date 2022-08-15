@@ -62,17 +62,15 @@ export class PostController {
   async getpostsId(req: Request, res: Response) {
     const postsid = await this.postsServis.getpostsId(req.params.postsid);
     const userId = req.user?.id || "1";
-    console.log(userId);
-
     if (!postsid) {
       res.sendStatus(404);
     } else {
       const likesInformation = await this.postsServis.getLike(
-        req.params.postid,
+        req.params.postsid,
         userId
       );
       const newestLikes = await this.postsServis.getNewestLikes(
-        req.params.postid
+        req.params.postsid
       );
       const newestLikesMap = newestLikes.map((v) => ({
         addedAt: v.addedAt,
