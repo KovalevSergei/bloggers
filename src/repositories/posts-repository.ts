@@ -123,7 +123,7 @@ export class PostsRepository {
   }
   async getNewestLikes(postId: string): Promise<likePostWithId[]> {
     const result = await likePostsModel
-      .find({ postId: postId, myStatus: "Like" })
+      .find({ postsId: postId, myStatus: "Like" })
       .sort({ addedAt: -1 })
       .limit(3)
       .lean();
