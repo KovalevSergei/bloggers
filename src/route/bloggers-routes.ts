@@ -4,7 +4,7 @@ import { BloggersService } from "../domain/bloggers-servis";
 export const bloggersRouter = Router();
 import { body, validationResult } from "express-validator";
 import { inputValidation } from "../middleware/validation";
-import basicAuth from "../middleware/basicAuth";
+import { basicAuth } from "../middleware/basicAuth";
 import {
   bloggersType,
   bloggersDBType,
@@ -202,6 +202,3 @@ bloggersRouter.post(
   inputValidation,
   bloggersControllerInstans.createBloggersPost.bind(bloggersControllerInstans)
 );
-function ingectable() {
-  throw new Error("Function not implemented.");
-}

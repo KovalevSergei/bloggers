@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 export const usersRouter = Router();
 import { body, validationResult } from "express-validator";
 import { inputValidation } from "../middleware/validation";
-import basicAuth from "../middleware/basicAuth";
+import { basicAuth } from "../middleware/basicAuth";
 import { id } from "date-fns/locale";
 //import { userInstance } from "../compositions-root";
 import { injectable } from "inversify";

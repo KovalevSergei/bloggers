@@ -8,8 +8,31 @@ export const userIdMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
+  if (!req.headers.authorization) {
+    /*  console.log("1");
+    req.user = {
+      id: "1",
+      accountData: {
+        login: "s",
+        email: "s",
+        passwordHash: "s",
+        passwordSalt: "string",
+        createdAt: new Date(),
+      },
+      emailConfirmation: {
+        confirmationCode: "string",
+        expirationDate: new Date(),
+        isConfirmed: false,
+      },
+    }; */
+
+    req.user = null;
+
+    next();
+    return;
+  }
   const token = req.headers.authorization?.split(" ")[1];
-  const a = token as string;
+  const a = token;
   const userId = await jwtService.getUserIdByToken(a);
 
   if (userId) {
@@ -18,11 +41,6 @@ export const userIdMiddleware = async (
     next();
     return;
   }
-
-  if (!req.headers.authorization) {
-    req.user = null;
-
-    next();
-    return;
-  }
+  next();
+  return;
 };

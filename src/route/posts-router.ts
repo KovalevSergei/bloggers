@@ -3,7 +3,7 @@ export const postsRouter = Router();
 import { inputValidation } from "../middleware/validation";
 import { body, validationResult } from "express-validator";
 import { title } from "process";
-import basicAuth from "../middleware/basicAuth";
+import { basicAuth } from "../middleware/basicAuth";
 import { PostsService } from "../domain/posts-servis";
 import { authMiddleware } from "../middleware/auth";
 import { CommentsService } from "../domain/comments-servis";
