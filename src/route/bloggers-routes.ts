@@ -194,7 +194,7 @@ bloggersRouter.get(
 
 bloggersRouter.post(
   "/:bloggerId/posts",
-  //basicAuth,
+  basicAuth,
   userIdMiddleware,
   titleValidation,
   shortDescriptionValidation,
