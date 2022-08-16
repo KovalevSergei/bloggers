@@ -121,6 +121,7 @@ export class BloggersController {
   }
 
   async createBloggersPost(req: Request, res: Response) {
+    console.log("Noga");
     const bloggersnew = await this.bloggersServis.createBloggersPost(
       req.params.bloggerId,
       req.body.title,
@@ -193,7 +194,7 @@ bloggersRouter.get(
 
 bloggersRouter.post(
   "/:bloggerId/posts",
-  basicAuth,
+  //basicAuth,
   userIdMiddleware,
   titleValidation,
   shortDescriptionValidation,

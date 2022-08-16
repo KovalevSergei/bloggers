@@ -1,7 +1,6 @@
-import basicAuth from 'express-basic-auth';
+import basicAuth from "express-basic-auth";
 
 export default basicAuth({
-    users:{ admin: 'qwerty'},
-    challenge: true,
+  users: { admin: "qwerty" },
+  challenge: true,
 });
-
