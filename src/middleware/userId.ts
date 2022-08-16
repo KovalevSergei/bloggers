@@ -15,7 +15,6 @@ export const userIdMiddleware = async (
   if (userId) {
     const usersService = new UsersService(new UsersRepository());
     req.user = await usersService.findUserById(userId);
-    console.log(req.user, "PROVERKA");
     next();
     return;
   }

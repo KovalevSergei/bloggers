@@ -100,7 +100,6 @@ export class BloggersRepository {
       .limit(pageSize)
       .skip((pageNumber - 1) * pageSize)
       .lean();
-    console.log(items);
     return {
       totalCount: totalCount,
       items: items,

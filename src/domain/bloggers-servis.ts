@@ -108,7 +108,7 @@ const dislikes=await this.postsRepository.getDislikeBloggersPost(postIds)
     if (totalCount === 0) {
       return false;
     } else {
-      for (let i = 0; i < totalCount; i++) {
+      for (let i = 0; i < items.length; i++) {
         const postItt = items[i];
         const postId = postItt.id;
         const likesInformation = await this.postsServis.getLike(postId, userId);
