@@ -74,11 +74,11 @@ export class CommentsRepository {
     postId: string
   ): Promise<commentReturn> {
     const totalCount = await commentsModel.countDocuments({
-      postId: postId,
+      id: postId,
     });
 
     const items = await commentsModel
-      .find({ postId: postId }, { projection: { _id: 0, postId: 0 } })
+      .find({ id: postId }, { projection: { _id: 0, postId: 0 } })
       .limit(pageSize)
       .skip((pageNumber - 1) * pageSize)
       .lean();

@@ -204,6 +204,7 @@ export class PostController {
       pageNumber,
       postId
     );
+    console.log(getComment);
 
     const Comment = getComment as commentDBTypePagination;
     const items4 = [];
