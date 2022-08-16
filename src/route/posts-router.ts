@@ -11,6 +11,7 @@ import { container } from "../ioc-container";
 import { injectable } from "inversify";
 import { userIdMiddleware } from "../middleware/userId";
 import { idPostMistake404 } from "../middleware/idPostMistake404";
+import { commentDBTypePagination } from "../repositories/types";
 
 export { titleValidation, shortDescriptionValidation, contentValidation };
 
@@ -193,6 +194,7 @@ export class PostController {
     const pageSize = req.query.PageSize ? Number(req.query.PageSize) : 10;
     const pageNumber = req.query.PageNumber ? Number(req.query.PageNumber) : 1;
     const postId = req.params.postId;
+    const userId = req.user?.id || "1";
     const post = await this.postsServis.getpostsId(postId);
     if (!post) {
       return res.sendStatus(404);
@@ -203,8 +205,39 @@ export class PostController {
       postId
     );
 
-    res.status(200).send(getComment);
+    const Comment = getComment as commentDBTypePagination;
+    const items4 = [];
+    for (let i = 0; i < Comment.items.length; i++) {
+      const commentId = Comment.items[i].id;
+      const likesInformation = await this.commentsServis.getLike(
+        commentId,
+        userId
+      );
+      const a = {
+        id: Comment.items[i].id,
+        content: Comment.items[i].content,
+        userId: Comment.items[i].userId,
+        userLogin: Comment.items[i].userLogin,
+        addedAt: Comment.items[i].addedAt,
+        likesInfo: {
+          likesCount: likesInformation.likesCount,
+          dislikesCount: likesInformation.dislikesCount,
+          myStatus: likesInformation.myStatus,
+        },
+      };
+      items4.push(a);
+    }
+    const result = {
+      pagesCount: Comment.pagesCount,
+      page: Comment.page,
+      pageSize: Comment.pageSize,
+      totalCount: Comment.totalCount,
+      items: items4,
+    };
+
+    res.status(200).send(result);
   }
+
   async updateLikePosts(req: Request, res: Response) {
     const postId = req.params.postId;
     const status = req.body.likeStatus;
@@ -221,6 +254,7 @@ export class PostController {
     res.sendStatus(204);
   }
 }
+
 container.bind(PostController).to(PostController);
 const postControllerInstans = container.resolve(PostController);
 
@@ -338,6 +372,7 @@ postsRouter.post(
 );
 postsRouter.get(
   "/:postId/comments",
+  userIdMiddleware,
   postControllerInstans.getCommentsPost.bind(postControllerInstans)
 );
 postsRouter.put(
