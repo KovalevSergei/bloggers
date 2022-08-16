@@ -53,6 +53,7 @@ const usersSchema = new mongoose.Schema<UsersDBType>({
 
 const commentsSchema = new mongoose.Schema<commentsDBType>({
   id: String,
+  postId: String,
   content: String,
   userId: String,
   userLogin: String,

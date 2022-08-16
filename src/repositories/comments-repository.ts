@@ -6,6 +6,7 @@ import {
   likeComments,
   likeCommentsWithId,
   likePostWithId,
+  commentsDBType2,
 } from "./types";
 import { injectable } from "inversify";
 import { container } from "../ioc-container";
@@ -57,7 +58,7 @@ export class CommentsRepository {
     );
     return true;
   }
-  async createComment(comment: commentsDBPostIdType): Promise<commentsDBType> {
+  async createComment(comment: commentsDBPostIdType): Promise<commentsDBType2> {
     await commentsModel.insertMany({ ...comment, _id: new ObjectId() });
     //const {postId,...rest}=comment
     return {
@@ -74,11 +75,11 @@ export class CommentsRepository {
     postId: string
   ): Promise<commentReturn> {
     const totalCount = await commentsModel.countDocuments({
-      id: postId,
+      postId: postId,
     });
 
     const items = await commentsModel
-      .find({ id: postId }, { projection: { _id: 0, postId: 0 } })
+      .find({ postId: postId }, { projection: { _id: 0, postId: 0 } })
       .limit(pageSize)
       .skip((pageNumber - 1) * pageSize)
       .lean();

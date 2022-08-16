@@ -120,6 +120,15 @@ export type commentsDBTypeWithId = WithId<{
 
 export type commentsDBType = {
   id: string;
+  postId: string;
+  content: string;
+  userId: string;
+  userLogin: string;
+  addedAt: string;
+};
+
+export type commentsDBType2 = {
+  id: string;
   content: string;
   userId: string;
   userLogin: string;

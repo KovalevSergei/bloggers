@@ -7,6 +7,7 @@ import {
   usersGetDBType,
   UsersDBType,
   likeComments,
+  commentsDBType2,
 } from "../repositories/types";
 import { container } from "../ioc-container";
 import { UsersRepository } from "../repositories/users-repository";
@@ -42,7 +43,7 @@ export class CommentsService {
     userLogin: string,
     postId: string,
     content: string
-  ): Promise<commentsDBType> {
+  ): Promise<commentsDBType2> {
     const commentNew: commentsDBPostIdType = {
       id: Number(new Date()).toString(),
       content: content,
