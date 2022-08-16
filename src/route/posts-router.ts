@@ -48,16 +48,45 @@ export class PostController {
 
     const getPosts = await this.postsServis.getPosts(pageNumber, pageSize);
 
-    const likesInformation = await this.postsServis.getLike("", userId);
+    const itemsPost = getPosts.items;
+    const items3 = [];
 
-    const newestLikes = await this.postsServis.getNewestLikes("");
-    const newestLikesMap = newestLikes.map((v) => ({
-      addedAt: v.addedAt,
-      userId: v.userId,
-      login: v.login,
-    }));
+    for (let i = 0; i < itemsPost.length; i++) {
+      const postId = itemsPost[i].id;
+      const likesInformation = await this.postsServis.getLike(postId, userId);
+      const newestLikes = await this.postsServis.getNewestLikes(postId);
+      const newestLikesMap = newestLikes.map((v) => ({
+        addedAt: v.addedAt,
+        userId: v.userId,
+        login: v.login,
+      }));
+      const a = {
+        id: itemsPost[i].id,
+        title: itemsPost[i].title,
+        shortDescription: itemsPost[i].shortDescription,
+        content: itemsPost[i].content,
+        bloggerId: itemsPost[i].bloggerId,
+        bloggerName: itemsPost[i].bloggerName,
+        addedAt: itemsPost[i].addedAt,
+        extendedLikesInfo: {
+          likesCount: likesInformation.likesCount,
+          dislikesCount: likesInformation.dislikesCount,
+          myStatus: likesInformation.myStatus,
+          newestLikes: newestLikesMap,
+        },
+      };
+      items3.push(a);
+    }
 
-    res.status(200).send(getPosts);
+    const result = {
+      pagesCount: getPosts.pagesCount,
+      page: getPosts.page,
+      pageSize: getPosts.pageSize,
+      totalCount: getPosts.totalCount,
+      items: items3,
+    };
+
+    res.status(200).send(result);
   }
   async getpostsId(req: Request, res: Response) {
     const postsid = await this.postsServis.getpostsId(req.params.postsId);
@@ -69,7 +98,6 @@ export class PostController {
         req.params.postsId,
         userId
       );
-      console.log(likesInformation, userId, "userId");
       const newestLikes = await this.postsServis.getNewestLikes(
         req.params.postsId
       );
@@ -198,6 +226,7 @@ const postControllerInstans = container.resolve(PostController);
 
 postsRouter.get(
   "/",
+  userIdMiddleware,
   postControllerInstans.getPosts.bind(postControllerInstans)
 );
 
