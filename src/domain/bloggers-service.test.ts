@@ -18,6 +18,11 @@ describe("proverka bloggera", () => {
     const mongoUri = mongoServer.getUri();
     await mongoose.connect(mongoUri);
   });
+  afterAll(async () => {
+    await mongoose.disconnect();
+    await mongoServer.stop();
+  });
+
   const bloggersService = container.get(BloggersService);
   describe("createBlogger", () => {
     it("should return", async () => {

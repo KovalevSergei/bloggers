@@ -21,6 +21,11 @@ describe("post", () => {
     const mongoUri = mongoServer.getUri();
     await mongoose.connect(mongoUri);
   });
+  afterAll(async () => {
+    await mongoose.disconnect();
+    await mongoServer.stop();
+  });
+
   const postsService = container.get(PostsService);
   const bloggersService = container.get(BloggersService);
   describe("createPost", () => {
