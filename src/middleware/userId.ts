@@ -9,23 +9,6 @@ export const userIdMiddleware = async (
   next: NextFunction
 ) => {
   if (!req.headers.authorization) {
-    /*  console.log("1");
-    req.user = {
-      id: "1",
-      accountData: {
-        login: "s",
-        email: "s",
-        passwordHash: "s",
-        passwordSalt: "string",
-        createdAt: new Date(),
-      },
-      emailConfirmation: {
-        confirmationCode: "string",
-        expirationDate: new Date(),
-        isConfirmed: false,
-      },
-    }; */
-
     req.user = null;
 
     next();

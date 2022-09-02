@@ -196,7 +196,7 @@ authRouter.post(
   emailValidation,
   emailExist,
   inputValidation,
-  authControllerInstans.registrationEmailResending
+  authControllerInstans.registrationEmailResending.bind(authControllerInstans)
 ),
   authRouter.post(
     "/registration-confirmation",

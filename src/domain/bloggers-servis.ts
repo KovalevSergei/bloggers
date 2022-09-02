@@ -105,7 +105,7 @@ const dislikes=await this.postsRepository.getDislikeBloggersPost(postIds)
     }) */
 
     const items2 = [];
-    console.log("456");
+
     if (totalCount === 0) {
       return false;
     } else {
