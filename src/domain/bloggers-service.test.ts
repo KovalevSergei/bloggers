@@ -1,4 +1,4 @@
-/* import "reflect-metadata";
+import "reflect-metadata";
 
 import { AuthService } from "./auth-servis";
 import { AuthController } from "../route/auth-router";
@@ -69,4 +69,3 @@ describe("proverka bloggera", () => {
     expect(result).toBeTruthy;
   });
 });
- */
